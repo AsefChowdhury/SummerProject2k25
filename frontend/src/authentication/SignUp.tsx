@@ -22,11 +22,22 @@ function SignUp() {
                         <h4>Email</h4>
                         <input type='email' className="email-field-signup" placeholder='Your Email' maxLength={35}/> 
                         <h4>Password</h4>
-                        <input type='password' className="password-field-signup" placeholder='Password' maxLength={35}/> 
-                        <h4>Confirm Password</h4>
-                        <input type='password' className="confirm-password-field-signup" placeholder='Confirm Password' maxLength={35}/>
+                        <input type='password' className="password-field-signup" placeholder='Password' maxLength={35}></input> 
+                        <div className="sign-up-password-visibility">
+                            {/*Implement show password functionatilty */}
+                            <input type="checkbox" className="sign-up-show-password"></input>
+                            <label>Show password</label>
+                        </div>
+                        <button className="sign-up-submit-button">Sign Up</button> {/*Implement Sign up functionality*/}
+                        <div className="divider">
+                            <span>or</span>
+                        </div>
+                        <div className="social-media-sign-up">
+                            {/*Implement Sign up functionality*/}
+                            <button className="google-sign-up">Sign up with Google</button>
+                            <button className="microsoft-sign-up">Sign up with Microsoft</button>
+                        </div>
                     </form>
-                    <button className="sign-up-submit-button">Sign Up</button>
                 </div>
                 
             </div>
