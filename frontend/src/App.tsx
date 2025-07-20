@@ -1,8 +1,12 @@
-import SignUp from './authentication/SignUp'
+// import SignUp from './authentication/SignUp'
+import SignIn from './authentication/SignIn'
 
 function App() {
   return (
-    <SignUp/>
+    <>
+    {/* <SignUp/> */}
+    <SignIn/>
+    </>
   )
 }
 
