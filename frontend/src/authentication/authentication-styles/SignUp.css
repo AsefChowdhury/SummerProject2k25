@@ -1,0 +1,207 @@
+.sign-up-body{
+    height: 100vh;
+    width: 100vw;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.sign-up-top-bar{
+    /* outline: 2px solid red; */
+    height: 5%;
+    width: 100%;
+    margin-bottom: 5em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sign-up-top-bar h3{
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.sign-up-container{
+    outline: 0.2em solid rgba(255,255,255,15%);
+    margin-left: 10%;
+    margin-right: 10%;
+    position: relative;
+    border-radius: 2%;
+    min-height: 30em;
+    min-width: 22.5em;
+    padding: 0.5em;
+}
+
+.shape{
+    height: 10em;
+    width: 10em;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 1;
+}
+
+.shape-one{
+    background: linear-gradient(
+        to left,
+        #1845ad,
+        #23a2f6
+    );
+    top: 5%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+}
+
+.shape-two{
+    background: linear-gradient(
+        to right,
+        #ff512f,
+        #f09819
+    );
+    bottom: 5%;
+    right: 0%;
+    transform: translate(50%, 50%);
+}
+
+.sign-up-form{
+    /* outline: 2px solid orange; */
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    background-color: rgba(255,255,255,5%);
+    border-radius: 2%;
+    box-shadow: 0 0 5em rgba(8,7,16,0.6);
+    backdrop-filter: blur(0.5em);
+    /* padding: 1em; */
+}
+
+.sign-up-form h2{
+    /* outline: 2px solid red; */
+    margin-top: 0.55em;
+    margin-bottom: 0.25em;
+}
+
+.sign-up-fields{
+    /* outline: 2px solid red; */
+    height: 100%;
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.username-field-signup, .email-field-signup, .password-field-signup{
+    height: 7.5%;
+    background-color: transparent;
+    border: none;
+    outline: 0.1em solid lightgray;
+    border-radius: 0.5em;
+}
+
+.sign-up-form h4{
+    /* outline: 2px solid greenyellow; */
+    margin: 0;
+}
+
+.username-field-signup::placeholder, .email.field-signup::placeholder,
+.password-field-signup::placeholder,.username-field-signup[type="username"], 
+.email-field-signup[type="email"],.password-field-signup[type="password"]{
+    text-align: center;
+}
+
+.sign-up-password-visibility{
+    /* outline: 2px solid red; */
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+}
+
+.sign-up-password-visibility label{
+    margin: 0;
+    /* outline: 2px solid red; */
+    font-size: 0.75em;
+}
+
+.sign-up-submit-button{
+    height: 3em;
+    width: 75%;
+    background-color: #ffffff;
+    color: #080710;
+    border: 0.05em solid transparent;
+    border-radius: 0.5em;
+    background-clip: padding-box;
+    /* outline: 0.1em solid grey; */
+    margin-top: 2%;
+    align-self: center;
+    font-weight: bold;
+}
+
+.sign-up-submit-button:hover{
+    cursor: pointer;
+    border: 0.05em solid transparent;
+    border-radius: 0.5em;
+    outline: 0;
+    background: linear-gradient(
+        to right,
+        #ff512f,
+        #f09819
+    );
+    color: white;
+}
+
+.divider {
+    display: flex;
+    /* outline: 2px solid red; */
+    text-align: center;
+    align-self: center;
+    align-items: center;
+    width: 100%;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 0.05em solid rgba(255,255,255,50%);
+    margin: 0 1em;
+}
+
+.social-media-sign-up{
+    display: flex;
+    height: 7em;
+    flex-direction: column;
+    gap: 1em;
+    /* outline: 2px solid slateblue; */
+}
+
+.google-sign-up, .microsoft-sign-up{
+    height: 3em;
+    width: 75%;
+    background-color: #ffffff;
+    color: #080710;    
+    border: 0.05em solid transparent;
+    border-radius: 0.5em;
+    align-self: center;
+    font-weight: bold;
+}
+
+.google-sign-up:hover, .microsoft-sign-up:hover{
+    cursor: pointer;
+    border: 0.05em solid transparent;
+    border-radius: 0.5em;
+    outline: 0;
+    background: linear-gradient(
+        to left,
+        #1845ad,
+        #23a2f6
+    );
+    color: white;
+}
