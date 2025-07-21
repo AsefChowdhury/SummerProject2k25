@@ -7,9 +7,15 @@ html, body {
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: rgba(7, 5, 15, 255);
+  --text-color: rgba(255, 255, 255, 0.87);
+  --background-color: rgba(7, 5, 15, 255);
+  --accent-color: #29282f;
+  --hover-border: #f09819;
+  --hover-fill: linear-gradient(
+    to right,
+    #ff512f,
+    #f09819
+  );
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,13 +32,12 @@ a:hover {
   color: #535bf2;
 } */
 
-/* body {
+body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-} */
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
 
 h1 {
   font-size: 3.2em;
