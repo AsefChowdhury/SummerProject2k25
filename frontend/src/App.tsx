@@ -2,6 +2,7 @@ import { Routes, Route, BrowserRouter } from "react-router";
 import Dashboard from './dashboard/Dashboard';
 import './App.css';
 import MainLayout from "./layouts/MainLayout";
+import SignIn from './authentication/SignIn'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
           <Route element={<MainLayout />}>
             <Route index element={<Dashboard />} />
           </Route>
+          <Route path="/signin" element={<SignIn/>} />
         </Routes>
       </BrowserRouter>
     </>
