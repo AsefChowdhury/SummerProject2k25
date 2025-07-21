@@ -1,0 +1,40 @@
+.profile-button {
+    background-color: white;
+    border-radius: 50%;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+}
+
+.profile-dropdown {
+    position: absolute;
+    right: 0.5em;
+    top: 4em;
+    background-color: var(--accent-color);
+    border-radius: 0.5em;
+    padding: 0.5em;
+}
+
+.dropdown-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em;
+    cursor: pointer;
+    border-radius: 0.5em;
+    background: transparent;
+    transition: background 0.2s ease;
+}
+
+.dropdown-item-icon{ 
+    aspect-ratio: 1 / 1;
+}
+
+.dropdown-item:hover{
+    background: var(--hover-fill);
+}

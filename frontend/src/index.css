@@ -3,8 +3,15 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color: rgba(255, 255, 255, 0.87);
-  background-color: rgba(7,5,15,255);
+  --text-color: rgba(255, 255, 255, 0.87);
+  --background-color: rgba(7, 5, 15, 255);
+  --accent-color: #29282f;
+  --hover-border: #f09819;
+  --hover-fill: linear-gradient(
+    to right,
+    #ff512f,
+    #f09819
+  );
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,6 +31,8 @@ a:hover {
 body {
   margin: 0;
   padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 h1 {

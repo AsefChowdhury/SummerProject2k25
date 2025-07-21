@@ -1,0 +1,19 @@
+.main-layout{
+    display: flex;
+    flex-direction: column;
+    --drawer-width: 15em;
+}
+
+.content-container{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.page-content{
+    width: 100%;
+    height: 100%;
+    padding-left: 3em;
+    padding-right: 3em;
+}
