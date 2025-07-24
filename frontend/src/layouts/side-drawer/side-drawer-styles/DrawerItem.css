@@ -8,8 +8,13 @@
     background: transparent;
     color: var(--text-color);
     border-radius: 0.5em;
+    text-decoration: none;
 }
 
 .drawer-item:hover{
     background: var(--hover-fill);
+}
+
+.drawer-item.active{
+    background: var(--accent-color);
 }

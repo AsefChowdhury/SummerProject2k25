@@ -16,6 +16,7 @@ html, body {
     #ff512f,
     #f09819
   );
+  --drawer-accent-color: #f0961975;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

@@ -14,10 +14,10 @@ function MainLayout() {
             <NavigationBar />
             <div className="content-container">
                 <SideDrawer>
-                    <DrawerItem icon={dashboard} text={'Dashboard'}/>
-                    <DrawerItem icon={flashcards} text={'Flashcards'}/>
-                    <DrawerItem icon={notes} text={'Notes'}/>
-                    <DrawerItem icon={quizzes} text={'Quizzes'}/>
+                    <DrawerItem to="/" icon={dashboard} text={'Dashboard'}/>
+                    <DrawerItem to="/flashcards" icon={flashcards} text={'Flashcards'}/>
+                    <DrawerItem to="/notes" icon={notes} text={'Notes'}/>
+                    <DrawerItem to="/quizzes" icon={quizzes} text={'Quizzes'}/>
                 </SideDrawer>
                 <div className="page-content">
                     <Outlet />
