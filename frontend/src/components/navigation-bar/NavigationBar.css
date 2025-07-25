@@ -5,7 +5,9 @@
     align-items: center;
     background-color: var(--background-color);
     padding: 0.75em;
-    height: 4em;
+    --navbar-height: 4em;
+    --button-height: 4em;
+    height: var(--navbar-height);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -13,8 +15,9 @@
 
 @media (max-width: 768px) {
     .navigation-bar {
-        flex-direction: column;
-        gap: 0.5em;
+        --navbar-height: auto;
+        flex-wrap: wrap;
+        /* align-items: flex-start; */
     }
 }
 

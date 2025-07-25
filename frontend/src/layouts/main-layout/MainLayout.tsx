@@ -17,20 +17,18 @@ function MainLayout() {
     return (
         <div className="main-layout">
             <NavigationBar>
-                <div className="navbar-top">
-                    <div className="navbar-left">
-                        <div className="menu-button">
-                            <IconButton icon={menu} onClick={() => {console.log('test')}}/>
-                        </div>
-                        <h1 className='logo'>Logo</h1>
+                <div className="navbar-left">
+                    <div className="menu-button">
+                        <IconButton icon={menu} onClick={() => {console.log('test')}}/>
                     </div>
-                    <div className="navbar-search">
-                        <ButtonSearchField />
-                    </div>
-                    <div className="navbar-right">
-                        <Notifications />
-                        <Profile />
-                    </div>
+                    <h1 className='logo'>Logo</h1>
+                </div>
+                <div className="navbar-search">
+                    <ButtonSearchField />
+                </div>
+                <div className="navbar-right">
+                    <Notifications />
+                    <Profile />
                 </div>
                 <div className="navbar-search-mobile">
                     <ButtonSearchField />

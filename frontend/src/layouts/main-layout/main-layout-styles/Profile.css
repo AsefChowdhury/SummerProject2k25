@@ -1,13 +1,17 @@
 .profile-button {
     background-color: white;
     border-radius: 50%;
-    height: 100%;
+    height: var(--button-height);
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
     cursor: pointer;
+}
+
+.profile-container{
+    position: relative;
 }
 
 .profile-dropdown {
@@ -17,6 +21,7 @@
     background-color: var(--accent-color);
     border-radius: 0.5em;
     padding: 0.5em;
+    width: 10em;
 }
 
 .dropdown-item{
