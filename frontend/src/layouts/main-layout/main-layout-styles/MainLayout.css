@@ -89,13 +89,18 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .side-drawer {
         display: none;
     }
 
     .navbar-search {
         display: none;
+    }
+
+    .page-content {
+        padding-left: 1em;
+        padding-right: 1em;
     }
 }
 

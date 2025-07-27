@@ -11,13 +11,13 @@
     position: sticky;
     top: 0;
     z-index: 1000;
+    gap: 1em;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .navigation-bar {
         --navbar-height: auto;
         flex-wrap: wrap;
-        /* align-items: flex-start; */
     }
 }
 
