@@ -1,17 +1,29 @@
 import './side-drawer-styles/SideDrawer.css'
 import DrawerItem from './DrawerItem'
-import type { ReactElement } from 'react'
+import { type ReactElement } from 'react'
 
 type SideDrawerProps = {
-    children: ReactElement<typeof DrawerItem> | ReactElement<typeof DrawerItem>[]
+    children: ReactElement<typeof DrawerItem> | ReactElement<typeof DrawerItem>[];
+    type: "permanent" | "temporary";
+    open: boolean
+    onClose?: () => void
 }
 
-function SideDrawer({children}: SideDrawerProps) {
-    
+function SideDrawer(props: SideDrawerProps) {
+    const drawer = {
+        permanent: <nav className="side-drawer">
+            {props.children}
+        </nav>,
+        temporary:
+        <>
+            <nav className={`temporary-drawer ${props.open ? 'open' : ''}`}>
+                {props.children}
+            </nav>
+            <div className={`overlay ${props.open ? 'active' : ''}` } onClick={props.onClose}></div>
+        </>
+    }
     return (
-        <nav className="side-drawer">
-            {children}
-        </nav>
+        drawer[props.type]
     )
 }
 

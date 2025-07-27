@@ -83,6 +83,10 @@
     .navbar-search-mobile {
         display: none;
     }
+
+    .temporary-drawer {
+        display: none;
+    }
 }
 
 @media (max-width: 768px) {
