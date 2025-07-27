@@ -1,6 +1,6 @@
 import { Routes, Route, BrowserRouter } from "react-router";
 import Dashboard from './dashboard/Dashboard';
-import MainLayout from "./layouts/MainLayout";
+import MainLayout from "./layouts/main-layout/MainLayout";
 import SignIn from './authentication/SignIn'
 import MyFlashcards from "./flashcards/MyFlashcards";
 import MyQuizzes from "./quizzes/MyQuizzes";

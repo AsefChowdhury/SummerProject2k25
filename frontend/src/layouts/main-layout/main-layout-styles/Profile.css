@@ -1,7 +1,7 @@
 .profile-button {
     background-color: white;
     border-radius: 50%;
-    height: 100%;
+    height: var(--button-height);
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
@@ -10,13 +10,21 @@
     cursor: pointer;
 }
 
+.profile-container{
+    position: relative;
+}
+
 .profile-dropdown {
     position: absolute;
     right: 0.5em;
     top: 4em;
-    background-color: var(--accent-color);
+    background-color: var(--glass-background);
+    backdrop-filter: blur(0.5em);
+    box-shadow: 0 0 5em rgba(8,7,16,0.6);
+    outline: 0.1em solid rgba(255,255,255,15%);
     border-radius: 0.5em;
     padding: 0.5em;
+    width: 10em;
 }
 
 .dropdown-item{
@@ -28,7 +36,6 @@
     cursor: pointer;
     border-radius: 0.5em;
     background: transparent;
-    transition: background 0.2s ease;
 }
 
 .dropdown-item-icon{ 

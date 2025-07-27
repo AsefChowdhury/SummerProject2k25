@@ -1,5 +1,5 @@
 .button-container{
-    height: 100%;
+    height: var(--button-height);
     aspect-ratio: 1 / 1;
     background-color: transparent;
     border-radius: 50%;

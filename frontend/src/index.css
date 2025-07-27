@@ -1,5 +1,6 @@
 html, body {
     margin: 0;
+    padding: 0;
 }
 
 :root {
@@ -22,6 +23,7 @@ html, body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --glass-background: rgba(255,255,255,5%);
 }
 
 /* a {
@@ -40,7 +42,7 @@ body {
   color: var(--text-color);
 }
 
-h1 {
+/* h1 {
   font-size: 3.2em;
   line-height: 1.1;
-}
+} */

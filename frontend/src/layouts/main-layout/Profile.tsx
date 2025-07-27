@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import './navigation-bar-styles/Profile.css'
-import notification from '../assets/notifications.svg'
-import settings from '../assets/settings.svg'
-import light from '../assets/light.svg'
-import dark from '../assets/dark.svg'
-import logout from '../assets/logout.svg'
+import './main-layout-styles/Profile.css'
+import settings from '../../assets/settings.svg'
+import light from '../../assets/light.svg'
+import dark from '../../assets/dark.svg'
+import logout from '../../assets/logout.svg'
 
 function ProfileDropdown() {
     type DropdownItemProps = {
@@ -24,7 +23,7 @@ function ProfileDropdown() {
     return (
         <div className="profile-dropdown">
             <DropdownItem text={'Settings'} icon={settings}/>
-            <DropdownItem text={'Dark mode'} icon={dark}/>
+            <DropdownItem text={'Light mode'} icon={light}/>
             <DropdownItem text={'Logout'} icon={logout}/>
         </div>
     )

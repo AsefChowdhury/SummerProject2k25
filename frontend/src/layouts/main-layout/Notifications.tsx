@@ -1,5 +1,5 @@
-import IconButton from "../components/IconButton";
-import notifications from '../assets/notifications.svg'
+import IconButton from '../../components/IconButton/IconButton'
+import notifications from '../../assets/notifications.svg'
 
 function Notifications(){
     return(

@@ -1,8 +1,9 @@
-import search from '../assets/search.svg';
-import close from '../assets/close.svg';
+import search from '../../assets/search.svg';
+import close from '../../assets/close.svg';
+import './ButtonSearchField.css'
 import { useState } from 'react';
 
-function SearchField () {
+function ButtonSearchField () {
     const [searchTerm, setSearchTerm] = useState('');
     
     const handleSearch = () => {
@@ -26,4 +27,4 @@ function SearchField () {
     )
 }
 
-export default SearchField
+export default ButtonSearchField
