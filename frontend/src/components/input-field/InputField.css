@@ -1,0 +1,35 @@
+.input-field-container{
+    border-radius: 0.5em;
+    border: 0.2em solid transparent;
+    width: 100%;
+    background-color: var(--accent-color);
+    height: 2em;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    margin-top: 0.5em;
+    outline: 0.1em solid var(--secondary-hover-border);
+}
+
+.input-field{
+    background-color: transparent;
+    border: none;
+    color: var(--text-color);
+    height: 100%;
+    width: 100%;
+    padding-left: 1em;
+    padding-right: 1em;
+    font-size: 1em;
+}
+
+.input-field:focus{
+    outline: none;
+}
+
+.input-field-container:hover{
+    border: 0.2em solid var(--secondary-hover-border);
+}
+
+.input-field-container:focus-within{
+    border: 0.2em solid var(--hover-border);
+}

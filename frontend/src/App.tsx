@@ -1,7 +1,7 @@
 import { Routes, Route, BrowserRouter } from "react-router";
 import Dashboard from './dashboard/Dashboard';
 import MainLayout from "./layouts/main-layout/MainLayout";
-import SignIn from './authentication/SignIn'
+import AuthPage from './authentication/AuthPage'
 import MyFlashcards from "./flashcards/MyFlashcards";
 import MyQuizzes from "./quizzes/MyQuizzes";
 import MyNotes from "./notes/MyNotes";
@@ -17,7 +17,8 @@ function App() {
             <Route path="/quizzes" element={<MyQuizzes />} />
             <Route path="/notes" element={<MyNotes />} />
           </Route>
-          <Route path="/signin" element={<SignIn/>} />
+          <Route path="/signin" element={<AuthPage mode="sign-in"/>} />
+          <Route path="/signup" element={<AuthPage mode="sign-up"/>} />
         </Routes>
       </BrowserRouter>
     </>

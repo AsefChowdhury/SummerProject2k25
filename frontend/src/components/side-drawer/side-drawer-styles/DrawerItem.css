@@ -18,3 +18,9 @@
 .drawer-item.active{
     background: var(--accent-color);
 }
+
+@media (max-width: 767px) {
+    .drawer-item.active {
+        background: var(--hover-fill);
+    }
+}
