@@ -1,4 +1,21 @@
-.button-container{
+/* .button-container, .button{
+    height: var(--button-height);
+    aspect-ratio: 1 / 1;
+    background-color: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+} */
+
+.icon-button-container{
+    position: relative;
+    display: inline-block;
+}
+
+.button{
     height: var(--button-height);
     aspect-ratio: 1 / 1;
     background-color: transparent;
@@ -14,9 +31,41 @@
     background-color: var(--accent-color);
 }
 
+
 .icon-image{
     height: 60%;
     aspect-ratio: 1 / 1;
     border: none;
     background-color: transparent;
+}
+
+.tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+  
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px
+}
+  
+.icon-button-container:hover .tooltiptext {
+    visibility: visible;
+}
+
+.tooltiptext::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
 }
