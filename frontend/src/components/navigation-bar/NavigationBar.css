@@ -12,7 +12,15 @@
     top: 0;
     z-index: 1000;
     gap: 1em;
+    transition: background-color 0.3s ease;
 }
+
+.navigation-bar.scrolled{
+    background-color: var(--glass-background);
+    outline: 0.1em solid rgba(255,255,255,15%);
+    backdrop-filter: blur(0.5em);
+}
+
 
 @media (max-width: 767px) {
     .navigation-bar {
