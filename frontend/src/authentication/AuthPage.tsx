@@ -8,14 +8,23 @@ import google from "../assets/google.svg"
 import microsoft from "../assets/microsoft.svg"
 import arrow_back from "../assets/arrow_back.svg"
 import NavigationBar from "../components/navigation-bar/NavigationBar"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import api from "../api"
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"
+import axios from "axios"
 
 type AuthPageProps = {
     mode: "sign-in" | "sign-up"
 }
 
 function AuthPage(props: AuthPageProps) {
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
     const [passwordVisible, setPasswordVisible] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate();
     const maxEmailLength = 254
 
     const togglePasswordVisibility = () => {
@@ -23,6 +32,44 @@ function AuthPage(props: AuthPageProps) {
             setPasswordVisible(false);
         } else {
             setPasswordVisible(true);
+        }
+    }
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setLoading(true);
+        try{
+            if(props.mode === "sign-in") {
+                const response = await api.post('api/token/', {
+                    identifier: username,
+                    password: password
+                })
+                console.log(response);
+                localStorage.setItem(ACCESS_TOKEN, response.data.access);
+                localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+                navigate('/dashboard')
+            } else if(props.mode === "sign-up") {
+                if (password !== confirmPassword) {
+                    throw new Error("Confirm password must match password");
+                }
+                
+                const response = await api.post('api/user/register/', {
+                    username: username,
+                    email: email,
+                    password: password,
+                    confirm_password: confirmPassword
+                });
+                
+                localStorage.setItem(ACCESS_TOKEN, response.data.access);
+                localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            if(axios.isAxiosError(error) && error.response){
+                console.log(error.response.data);
+            }
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -37,13 +84,13 @@ function AuthPage(props: AuthPageProps) {
                 {props.mode === "sign-in" &&
                     <div className="auth-link">
                         <p>Not a member?</p>
-                        <Link className="button" to="/signup">Sign up</Link>
+                        <Link className="button" to="/sign-up">Sign up</Link>
                     </div>
                 }
                 {props.mode === "sign-up" &&
                     <div className="auth-link">
                         <p>Already a member?</p>
-                        <Link className="button" to="/signin">Sign in</Link>
+                        <Link className="button" to="/sign-in">Sign in</Link>
                     </div>
                 }
 
@@ -52,33 +99,33 @@ function AuthPage(props: AuthPageProps) {
                 <div className="auth-page-wrapper">
                     <div className="shape shape-one"/>
                     <div className="shape shape-two"/>
-                    <form className="auth-page-form">
+                    <form className="auth-page-form" onSubmit={handleSubmit}>
                         <h1>{props.mode === "sign-in" ? "Sign in" : "Sign up"}</h1><br/>
 
                         {props.mode === "sign-in" &&
                             <>
                                 <label>Username or email</label>
-                                <InputField type="text" placeholder="Username or email" maxLength={maxEmailLength} required/><br/>
+                                <InputField value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Username or email" maxLength={maxEmailLength} required/><br/>
                             </>
                         }
                         {props.mode === "sign-up" &&
                             <>
                                 <label>Username</label>
-                                <InputField type="text" placeholder="Username" maxLength={maxEmailLength} required/><br/>
+                                <InputField  value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Username" maxLength={maxEmailLength} required/><br/>
                                 <label>Email</label>
-                                <InputField type="email" placeholder="Your Email" maxLength={maxEmailLength} required/><br/>
+                                <InputField value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Your Email" maxLength={maxEmailLength} required/><br/>
                             </>
                         }
                         
                         <label>Password</label>
-                        <InputField id="password" type={passwordVisible ? "text" : "password"} placeholder="Password" maxLength={35} required>
+                        <InputField value={password} onChange={(e) => setPassword(e.target.value)} id="password" type={passwordVisible ? "text" : "password"} placeholder="Password" maxLength={35} required>
                             <IconButton icon={passwordVisible ?  invisible : visible} onClick={togglePasswordVisibility} tooltip={passwordVisible ? "Hide password" : "Show password"}/>
                         </InputField>
                         <br/>
                         {props.mode === "sign-up" &&
                             <>
                                 <label>Confirm password</label>
-                                <InputField id="confirm-password" type={passwordVisible ? "text" : "password"} placeholder="Confirm password" maxLength={35} required>
+                                <InputField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} id="confirm-password" type={passwordVisible ? "text" : "password"} placeholder="Confirm password" maxLength={35} required>
                                     <IconButton icon={passwordVisible ?  invisible : visible} onClick={togglePasswordVisibility} tooltip={passwordVisible ? "Hide password" : "Show password"}/>
                                 </InputField>
                                 <br/>

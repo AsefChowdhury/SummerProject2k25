@@ -4,6 +4,7 @@ import settings from '../../assets/settings.svg'
 import light from '../../assets/light.svg'
 import dark from '../../assets/dark.svg'
 import logout from '../../assets/logout.svg'
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function ProfileDropdown() {
     type DropdownItemProps = {
@@ -11,6 +12,14 @@ function ProfileDropdown() {
         text: string;
         onClick?: () => void
     };
+
+    let navigate = useNavigate();
+
+    const logoutUser = () => {
+        localStorage.clear();
+        navigate('/sign-in');
+    }
+
     function DropdownItem(props: DropdownItemProps){
         return(
             <a className='dropdown-item' onClick={props.onClick}>
@@ -24,7 +33,7 @@ function ProfileDropdown() {
         <div className="profile-dropdown">
             <DropdownItem text={'Settings'} icon={settings}/>
             <DropdownItem text={'Light mode'} icon={light}/>
-            <DropdownItem text={'Logout'} icon={logout}/>
+            <DropdownItem text={'Logout'} icon={logout} onClick={logoutUser}/>
         </div>
     )
 }

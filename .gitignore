@@ -25,5 +25,5 @@ lerna-debug.log*
 *.sw?
 
 # === Env / secrets ===
-env/
-*.env
+venv/
+*.venv
