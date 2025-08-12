@@ -4,6 +4,9 @@ frontend/dist/
 frontend/dist-ssr/
 frontend/*.local
 
+# === Django ===
+/__pycache__/*
+
 # === Logs ===
 logs
 *.log
