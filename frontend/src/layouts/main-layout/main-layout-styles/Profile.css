@@ -1,7 +1,7 @@
 .profile-button {
     background-color: white;
     border-radius: 50%;
-    height: var(--button-height);
+    height: 4em;
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;

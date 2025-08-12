@@ -119,14 +119,24 @@ function AuthPage(props: AuthPageProps) {
                         
                         <label>Password</label>
                         <InputField value={password} onChange={(e) => setPassword(e.target.value)} id="password" type={passwordVisible ? "text" : "password"} placeholder="Password" maxLength={35} required>
-                            <IconButton icon={passwordVisible ?  invisible : visible} onClick={togglePasswordVisibility} tooltip={passwordVisible ? "Hide password" : "Show password"}/>
+                            <div className="show-password-container">
+                                <button type="button" className='show-password' onClick={togglePasswordVisibility}>
+                                    <img src={passwordVisible ?  invisible : visible} className='icon-image'/>
+                                </button>
+                                <span className="tooltiptext">{passwordVisible ? "Hide password" : "Show password"}</span>
+                            </div>
                         </InputField>
                         <br/>
                         {props.mode === "sign-up" &&
                             <>
                                 <label>Confirm password</label>
                                 <InputField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} id="confirm-password" type={passwordVisible ? "text" : "password"} placeholder="Confirm password" maxLength={35} required>
-                                    <IconButton icon={passwordVisible ?  invisible : visible} onClick={togglePasswordVisibility} tooltip={passwordVisible ? "Hide password" : "Show password"}/>
+                                    <div className="show-password-container">
+                                        <button type="button" className='show-password' onClick={togglePasswordVisibility}>
+                                            <img src={passwordVisible ?  invisible : visible} className='icon-image'/>
+                                        </button>
+                                        <span className="tooltiptext">{passwordVisible ? "Hide password" : "Show password"}</span>
+                                    </div>
                                 </InputField>
                                 <br/>
                             </>
