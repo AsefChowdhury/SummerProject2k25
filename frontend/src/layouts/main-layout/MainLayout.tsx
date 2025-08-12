@@ -39,13 +39,13 @@ function MainLayout() {
             </NavigationBar>
             <div className="content-container">
                 <SideDrawer type="temporary" open={openDrawer} onClose={() => {setOpenDrawer(false)}}>
-                    <DrawerItem to="/" icon={dashboard} text={'Dashboard'} onClick={() => {setOpenDrawer(false)}}/>
+                    <DrawerItem to="/dashboard" icon={dashboard} text={'Dashboard'} onClick={() => {setOpenDrawer(false)}}/>
                     <DrawerItem to="/flashcards" icon={flashcards} text={'Flashcards'} onClick={() => {setOpenDrawer(false)}}/>
                     <DrawerItem to="/notes" icon={notes} text={'Notes'} onClick={() => {setOpenDrawer(false)}}/>
                     <DrawerItem to="/quizzes" icon={quizzes} text={'Quizzes'} onClick={() => {setOpenDrawer(false)}}/>
                 </SideDrawer>
                 <SideDrawer type="permanent" open={openDrawer}>
-                    <DrawerItem to="/" icon={dashboard} text={'Dashboard'} />
+                    <DrawerItem to="/dashboard" icon={dashboard} text={'Dashboard'} />
                     <DrawerItem to="/flashcards" icon={flashcards} text={'Flashcards'}/>
                     <DrawerItem to="/notes" icon={notes} text={'Notes'}/>
                     <DrawerItem to="/quizzes" icon={quizzes} text={'Quizzes'}/>
