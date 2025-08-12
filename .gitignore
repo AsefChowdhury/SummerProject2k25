@@ -5,7 +5,7 @@ frontend/dist-ssr/
 frontend/*.local
 
 # === Django ===
-/__pycache__/*
+__pycache__/
 
 # === Logs ===
 logs
