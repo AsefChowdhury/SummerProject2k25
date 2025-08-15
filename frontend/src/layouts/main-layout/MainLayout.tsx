@@ -38,6 +38,8 @@ function MainLayout() {
                 </div>
             </NavigationBar>
             <div className="content-container">
+
+                {/* remember to take out brackets after */}
                 <SideDrawer type="temporary" open={openDrawer} onClose={() => {setOpenDrawer(false)}}>
                     <DrawerItem to="/dashboard" icon={dashboard} text={'Dashboard'} onClick={() => {setOpenDrawer(false)}}/>
                     <DrawerItem to="/flashcards" icon={flashcards} text={'Flashcards'} onClick={() => {setOpenDrawer(false)}}/>
@@ -53,6 +55,10 @@ function MainLayout() {
                 <div className="page-content">
                     <Outlet />
                 </div>
+            </div>
+
+            <div style={{ height: "1000px", backgroundColor: "#29282f;", padding: "2em" }}>
+                Scroll down to see the navbar background change!
             </div>
         </div>
     )
