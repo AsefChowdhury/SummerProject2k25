@@ -2,6 +2,7 @@
     position: sticky;
     top: 0;
     height: 100%;
+    --drawer-width: 15em;
     width: var(--drawer-width);
     background-color: transparent;
     display: flex;
@@ -13,6 +14,7 @@
     position: absolute;
     top: 0;
     height: 100%;
+    --drawer-width: 15em;
     width: var(--drawer-width);
     background-color: var(--glass-background);
     backdrop-filter: blur(0.5em);
