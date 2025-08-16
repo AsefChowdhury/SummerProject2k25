@@ -31,12 +31,10 @@ function App() {
           </Route>
           <Route path="/sign-in" element={<PublicRoute><AuthPage mode="sign-in"/></PublicRoute>} />
           <Route path="/sign-up" element={<PublicRoute><AuthPage mode="sign-up"/></PublicRoute>} />
-          <Route path="/signin" element={<AuthPage mode="sign-in"/>} />
-          <Route path="/signup" element={<AuthPage mode="sign-up"/>} />
         </Routes>
       </BrowserRouter>
     </>
-  )
+  ) 
 }
 
 export default App
