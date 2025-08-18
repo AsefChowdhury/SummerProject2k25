@@ -9,6 +9,7 @@
     flex-direction: row;
     margin-top: 0.5em;
     outline: 0.1em solid var(--secondary-hover-border);
+    transition: all 0.2s ease-in-out;
 }
 
 .input-field{
@@ -32,4 +33,5 @@
 
 .input-field-container:focus-within{
     border: 0.2em solid var(--hover-border);
+    background-color: transparent;
 }

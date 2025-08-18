@@ -77,7 +77,7 @@ function AuthPage(props: AuthPageProps) {
         <>
             <NavigationBar>
                 <div className="back-button-container">
-                    <Link to="/"><IconButton icon={arrow_back}/></Link>
+                    <IconButton icon={arrow_back} to="/"/>
                     <p>Back home</p>
                 </div>
                 

@@ -60,7 +60,7 @@ function CorePagesLayout(){
                 </div>
 
                 <div className="auth-link">
-                    <Link className="button" to="/signup">Sign Up</Link>
+                    <Link className="button" to="/sign-up">Sign Up</Link>
                 </div>              
             </NavigationBar>  
             <CorePagesDropDown open={openDrawer} onClose={() => {setOpenDrawer(false)}}>

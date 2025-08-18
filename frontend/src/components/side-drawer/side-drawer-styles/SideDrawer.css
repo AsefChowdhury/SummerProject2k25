@@ -1,9 +1,7 @@
 .side-drawer {
-    position: sticky;
-    top: 0;
+    position: fixed;
     height: 100%;
-    --drawer-width: 15em;
-    width: var(--drawer-width);
+    width: var(--side-drawer-width);
     background-color: transparent;
     display: flex;
     flex-direction: column;
@@ -14,8 +12,7 @@
     position: absolute;
     top: 0;
     height: 100%;
-    --drawer-width: 15em;
-    width: var(--drawer-width);
+    width: var(--side-drawer-width);
     background-color: var(--glass-background);
     backdrop-filter: blur(0.5em);
     box-shadow: 0 0 5em rgba(8,7,16,0.6);

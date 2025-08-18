@@ -5,14 +5,14 @@
     align-items: center;
     background-color: var(--background-color);
     padding: 0.75em;
-    --navbar-height: 4em;
     --button-height: 4em;
-    height: var(--navbar-height);
     position: sticky;
     top: 0;
+    width: 100%;
     z-index: 1000;
     gap: 1em;
     transition: background-color 0.3s ease;
+    box-sizing: border-box;
 }
 
 .navigation-bar.scrolled{
@@ -24,7 +24,6 @@
 
 @media (max-width: 767px) {
     .navigation-bar {
-        --navbar-height: auto;
         flex-wrap: wrap;
     }
 }

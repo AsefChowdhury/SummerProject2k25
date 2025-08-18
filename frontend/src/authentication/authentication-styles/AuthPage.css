@@ -80,15 +80,9 @@
     align-items: center;
     justify-content: center;
     gap: 0.5em;
-
-    .button:hover{
-        background-color: var(--accent-color);
-        
-    }
 }
 
 .auth-page-top-bar{
-    /* outline: 2px solid red; */
     height: 4em;
     width: 100%;
     display: flex;
