@@ -6,6 +6,7 @@ frontend/*.local
 
 # === Django ===
 __pycache__/
+*.pyc
 
 # === Logs ===
 logs
