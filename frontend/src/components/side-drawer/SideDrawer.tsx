@@ -11,9 +11,13 @@ type SideDrawerProps = {
 
 function SideDrawer(props: SideDrawerProps) {
     const drawer = {
-        permanent: <nav className="side-drawer">
-            {props.children}
-        </nav>,
+        permanent: 
+        <>
+            <nav className="side-drawer">
+                {props.children}
+            </nav>
+            <div className='side-drawer-spaceholder'/>
+        </>,
         temporary:
         <>
             <nav className={`temporary-drawer ${props.open ? 'open' : ''}`}>

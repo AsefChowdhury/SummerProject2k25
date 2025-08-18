@@ -15,9 +15,9 @@
 .page-content{
     max-width: 60%;
     width: 100%;
-    padding-left: 3em;
-    padding-right: 3em;
-    margin-left: var(--side-drawer-width);
+    padding-left: 1em;
+    padding-right: 1em;
+    margin: auto;
 }
 
 .navbar-right {
@@ -91,6 +91,10 @@
 
 @media (max-width: 767px) {
     .side-drawer {
+        display: none;
+    }
+
+    .side-drawer-spaceholder {
         display: none;
     }
 
