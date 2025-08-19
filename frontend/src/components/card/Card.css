@@ -1,0 +1,10 @@
+.card-container{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    border-radius: 0.5em;
+    width: 100%;
+    background-color: var(--accent-color);
+    outline: 0.1em solid var(--secondary-hover-border);
+}

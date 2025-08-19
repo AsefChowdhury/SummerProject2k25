@@ -2,10 +2,11 @@
     position: relative;
     display: inline-block;
     border-radius: 50%;
+    height: 3.5em;
 }
 
 .button{
-    height: 4em;
+    height: 100%;
     aspect-ratio: 1 / 1;
     background-color: transparent;
     display: flex;

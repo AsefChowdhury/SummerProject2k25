@@ -4,7 +4,6 @@ import useAuthCheck from "./useAuthCheck";
 
 function ProtectedRoute({ children }: { children: JSX.Element }) {
     const { isAuthorised } = useAuthCheck();
-
     if (isAuthorised === null) {
         return <h1>Loading...</h1>
     }

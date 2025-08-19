@@ -7,7 +7,7 @@ import flashcards from '../../assets/flashcards.svg'
 import quizzes from "../../assets/quizzes.svg"
 import DrawerItem from "../../components/side-drawer/DrawerItem"
 import './main-layout-styles/MainLayout.css'
-import ButtonSearchField from "../../components/ButtonSearchField/ButtonSearchField"
+import ButtonSearchField from "../../components/button-search-field/ButtonSearchField"
 import Notifications from "./Notifications"
 import Profile from "./Profile"
 import NavigationBar from "../../components/navigation-bar/NavigationBar"

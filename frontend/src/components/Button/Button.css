@@ -1,0 +1,34 @@
+.button-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    height: 2em;
+    border-radius: 2em;
+    cursor: pointer;
+    white-space: nowrap;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    border: 3px solid;
+    .button{
+        height: 100%;
+        text-decoration: none;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+}
+
+.button-container.filled{
+    background-color: white;
+    .button{
+        color: var(--background-color);
+    }
+}
+
+.button-container.outlined{
+    border-color: var(--accent-color);
+    .button{
+        color: white;
+    }
+}
+
