@@ -7,14 +7,16 @@
     border-radius: 2em;
     cursor: pointer;
     white-space: nowrap;
-    padding-left: 0.25em;
-    padding-right: 0.25em;
-    border: 3px solid;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     .button{
         height: 100%;
         text-decoration: none;
         font-weight: bold;
         white-space: nowrap;
+        font-size: 0.9em;
     }
 }
 
@@ -26,7 +28,25 @@
 }
 
 .button-container.outlined{
-    border-color: var(--accent-color);
+    outline: 3px solid var(--text-color);;
+    outline-offset: -3px;
+    transition: all 0.2s ease-in-out;
+    .button{
+        color: white;
+    }
+}
+
+.button-container.filled:hover{
+    background: var(--hover-fill);
+    .button{
+        color: white;
+    }
+}
+
+.button-container.outlined:hover{
+    outline: 3px solid var(--hover-border);
+    outline-offset: -3px;
+    background-color: var(--accent-color);
     .button{
         color: white;
     }
