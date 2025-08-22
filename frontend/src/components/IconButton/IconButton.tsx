@@ -10,7 +10,7 @@ type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 function IconButton({icon: Icon, ...props}: IconButtonProps) {
     const content = (
         <div className="icon-button-container">
-            <button {...props} className='button' disabled={props.disabled}>
+            <button {...props} className={`button ${props.className ?? ''}`} disabled={props.disabled}>
                 <Icon className="icon-image" fill='currentColor'/>
                 {props.tooltip && <span className="tooltiptext">{props.tooltip}</span>}
             </button>

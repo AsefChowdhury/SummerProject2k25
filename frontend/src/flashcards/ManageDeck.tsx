@@ -33,6 +33,7 @@ function ManageDeck(props: ManageDeckProps) {
         index: number
         onDelete: (index: number) => void
         onCopy: (index: number) => void
+        disableDelete: boolean
     }
 
     function FlashcardComponent(props: FlashcardComponentProps) {
@@ -42,8 +43,8 @@ function ManageDeck(props: ManageDeckProps) {
                     <InputField placeholder="Term" variant="underlined" defaultValue={props.flashcard.term} onChange={(e) => {props.flashcard.term = e.target.value}}/>
                     <InputField placeholder="Definition" variant="underlined" defaultValue={props.flashcard.definition} onChange={(e) => {props.flashcard.definition = e.target.value}}/>
                     <div className="card-actions">
-                        <IconButton icon={copyIcon} tooltip="Duplicate" onClick={() => {props.onCopy(props.index)}}/>
-                        <IconButton icon={deleteIcon} tooltip="Delete" onClick={() => {props.onDelete(props.index)}}/>
+                        <IconButton className="copy-button" icon={copyIcon} tooltip="Duplicate" onClick={() => {props.onCopy(props.index)}}/>
+                        <IconButton className="delete-button" icon={deleteIcon} disabled={props.disableDelete} tooltip="Delete" onClick={() => {props.onDelete(props.index)}}/>
                     </div>
                 </div>
             </Card> 
@@ -63,6 +64,10 @@ function ManageDeck(props: ManageDeckProps) {
         setFlashcards([...flashcards, newFlashcard]);
     }
 
+    const createDeck = () => {
+        console.log(flashcards);
+    }
+
     return (
         <>
             <div className="page-header">
@@ -78,7 +83,7 @@ function ManageDeck(props: ManageDeckProps) {
             <ol className="flashcard-list">
                 {flashcards.map((flashcard, index) => (
                     <li key={index}>
-                        <FlashcardComponent flashcard={flashcard} index={index} onDelete={deleteFlashcard} onCopy={copyFlashcard}/>
+                        <FlashcardComponent disableDelete={flashcards.length === 1} flashcard={flashcard} index={index} onDelete={deleteFlashcard} onCopy={copyFlashcard}/>
                     </li>
                 ))}
             </ol>

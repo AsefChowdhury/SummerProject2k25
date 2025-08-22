@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function ProfileDropdown() {
     type DropdownItemProps = {
+        className?: string;
         icon?: React.FC<React.SVGProps<SVGSVGElement>>;
         text: string;
         onClick?: () => void
@@ -23,7 +24,7 @@ function ProfileDropdown() {
     function DropdownItem(props: DropdownItemProps){
         return(
             <a className='dropdown-item' onClick={props.onClick}>
-                {props.icon && <props.icon className='dropdown-item-icon' />}
+                {props.icon && <props.icon className={`dropdown-item-icon ${props.className ?? ''}`} />}
                 <span className='dropdown-item-text'>{props.text}</span>
             </a>
         )
@@ -33,7 +34,7 @@ function ProfileDropdown() {
         <div className="profile-dropdown">
             <DropdownItem text={'Settings'} icon={settings}/>
             <DropdownItem text={'Light mode'} icon={light}/>
-            <DropdownItem text={'Logout'} icon={logout} onClick={logoutUser}/>
+            <DropdownItem className='logout' text={'Logout'} icon={logout} onClick={logoutUser}/>
         </div>
     )
 }

@@ -10,13 +10,13 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &{
     onClick?: () => void;
 };
 
-function Button({...props}: ButtonProps) {
+function Button({iconLeft: IconLeft, iconRight: IconRight, ...props}: ButtonProps) {
     const content = (
         <div className="button-container" onClick={props.onClick}>
             <button className={`button ${props.variant ?? 'filled'}`} {...props}>
-                {props.iconLeft && <props.iconLeft className='icon'/>}
+                {IconLeft && <IconLeft className='icon-image'/>}
                 {props.text}
-                {props.iconRight && <props.iconRight className='icon'/>}
+                {IconRight && <IconRight className='icon-image'/>}
             </button>
         </div>
     )
@@ -26,9 +26,9 @@ function Button({...props}: ButtonProps) {
             <div className="button-container" onClick={props.onClick}>
                 <Link to={props.to} >
                     <button className={`button ${props.variant ?? 'filled'}`} {...props}>
-                        {props.iconLeft && <props.iconLeft className='icon'/>}
+                        {IconLeft && <IconLeft className='icon-image'/>}
                         {props.text}
-                        {props.iconRight && <props.iconRight className='icon'/>}
+                        {IconRight && <IconRight className='icon-image'/>}
                     </button>
                 </Link>
             </div>

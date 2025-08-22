@@ -21,7 +21,6 @@
     
     .button:disabled .icon-image {
         color: gray;
-        fill: gray;
     }
     
     
@@ -35,7 +34,7 @@
         width: auto;
         aspect-ratio: 1 / 1;
         border: none;
-        color: var(--icon-color);
+        color: var(--text-color);
     }
     
     .tooltiptext {

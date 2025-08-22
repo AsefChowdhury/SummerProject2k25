@@ -28,7 +28,7 @@
 
     .button.outlined{
         box-sizing: border-box;
-        outline: 3px solid var(--text-color);
+        outline: 3px solid var(--accent-color);
         outline-offset: -3px;
         transition: all 0.2s ease-in-out;
         color: var(--text-color);
@@ -42,7 +42,7 @@
     .button.outlined:hover{
         outline: 3px solid var(--secondary-button-hover-border);
         outline-offset: -3px;
-        background-color: var(--accent-color);
+        background-color: var(--secondary-accent-color);
         color: var(--text-color);
     }
 }

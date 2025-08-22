@@ -36,6 +36,12 @@
     cursor: pointer;
     border-radius: 0.5em;
     background: transparent;
+    .dropdown-item-icon.logout{
+        fill: var(--error-color)
+    }
+    .dropdown-item-icon.logout + span{
+        color: var(--error-color);
+    }
 }
 
 .dropdown-item-icon{ 
@@ -44,4 +50,10 @@
 
 .dropdown-item:hover{
     background: var(--hover-fill);
+    .dropdown-item-icon.logout{
+        fill: var(--text-color)
+    }
+    .dropdown-item-icon + span{
+        color: var(--text-color);
+    }
 }

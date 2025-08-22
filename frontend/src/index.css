@@ -25,6 +25,7 @@ html, body {
     #23a2f6
   );
   --secondary-hover-border: #4d4c55;
+  --error-color: #eb4040;
   --side-drawer-width: 13rem;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
