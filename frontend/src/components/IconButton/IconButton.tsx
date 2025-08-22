@@ -2,18 +2,18 @@ import { Link } from 'react-router-dom';
 import './IconButton.css'
 
 type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    icon: string;
+    icon: React.FC<React.SVGProps<SVGSVGElement>>;
     tooltip?: string;
     to?: string;
 }
 
-function IconButton(props: IconButtonProps) {
+function IconButton({icon: Icon, ...props}: IconButtonProps) {
     const content = (
         <div className="icon-button-container">
-            <button  {...props} className='button'>
-                <img src={props.icon} className='icon-image'/>
+            <button {...props} className='button' disabled={props.disabled}>
+                <Icon className="icon-image" fill='currentColor'/>
+                {props.tooltip && <span className="tooltiptext">{props.tooltip}</span>}
             </button>
-            {props.tooltip && <span className="tooltiptext">{props.tooltip}</span>}
         </div>
     )
 
@@ -22,9 +22,9 @@ function IconButton(props: IconButtonProps) {
             <div className="icon-button-container">
                 <Link to={props.to}>
                     <button {...props} className='button'>
-                        <img src={props.icon} className='icon-image'/>
+                        <Icon className="icon-image" fill='currentColor'/>
+                        {props.tooltip && <span className="tooltiptext">{props.tooltip}</span>}
                     </button>
-                    {props.tooltip && <span className="tooltiptext">{props.tooltip}</span>}
                 </Link>
             </div>
         )

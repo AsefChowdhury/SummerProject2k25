@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom"
 import SideDrawer from "../../components/side-drawer/SideDrawer"
-import dashboard from '../../assets/dashboard.svg'
-import notes from '../../assets/notes.svg'
-import menu from '../../assets/menu.svg'
-import flashcards from '../../assets/flashcards.svg'
-import quizzes from "../../assets/quizzes.svg"
+import dashboard from '../../assets/dashboard.svg?react'
+import notes from '../../assets/notes.svg?react'
+import menu from '../../assets/menu.svg?react'
+import flashcards from '../../assets/flashcards.svg?react'
+import quizzes from "../../assets/quizzes.svg?react"
 import DrawerItem from "../../components/side-drawer/DrawerItem"
 import './main-layout-styles/MainLayout.css'
 import ButtonSearchField from "../../components/button-search-field/ButtonSearchField"

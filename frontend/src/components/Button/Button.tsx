@@ -1,22 +1,40 @@
+import { Link } from 'react-router-dom';
 import './Button.css';
 
-type ButtonProps = {
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &{
     text: string;
-    type?: "button" | "submit" | "reset" | undefined;
     variant?: "outlined" | "filled";
-    iconLeft?: string;
-    iconRight?: string;
+    iconLeft?: React.FC<React.SVGProps<SVGSVGElement>>;
+    iconRight?: React.FC<React.SVGProps<SVGSVGElement>>;
+    to?: string;
     onClick?: () => void;
 };
 
-function Button(props: ButtonProps) {
-    return(
-        <div className={`button-container ${props.variant ?? 'filled'}`} onClick={props.onClick}>
-            {props.iconLeft && <img className='icon' src={props.iconLeft} alt={props.text}/>}
-            <button type={props.type ? props.type : 'button'} className="button">{props.text}</button>
-            {props.iconRight && <img className='icon' src={props.iconRight} alt={props.text}/>}
+function Button({...props}: ButtonProps) {
+    const content = (
+        <div className="button-container" onClick={props.onClick}>
+            <button className={`button ${props.variant ?? 'filled'}`} {...props}>
+                {props.iconLeft && <props.iconLeft className='icon'/>}
+                {props.text}
+                {props.iconRight && <props.iconRight className='icon'/>}
+            </button>
         </div>
     )
+
+    if (props.to) {
+        return(
+            <div className="button-container" onClick={props.onClick}>
+                <Link to={props.to} >
+                    <button className={`button ${props.variant ?? 'filled'}`} {...props}>
+                        {props.iconLeft && <props.iconLeft className='icon'/>}
+                        {props.text}
+                        {props.iconRight && <props.iconRight className='icon'/>}
+                    </button>
+                </Link>
+            </div>
+        )
+    }
+    return content
 }
 
 export default Button;

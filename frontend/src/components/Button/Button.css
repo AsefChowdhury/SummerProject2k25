@@ -1,54 +1,51 @@
 .button-container{
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: auto;
-    height: 2em;
-    border-radius: 2em;
-    cursor: pointer;
-    white-space: nowrap;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    .button{
-        height: 100%;
+    height: 100%;
+    a {
         text-decoration: none;
+    }
+    .button{
+        border-radius: 2em;
+        height: 100%;
         font-weight: bold;
         white-space: nowrap;
         font-size: 0.9em;
+        background: transparent;
+        border: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+        cursor: pointer;
+        padding: 0.5em 1em;
+        height: 100%;
+    }
+
+    .button.filled{
+        background-color: var(--text-color);
+    }
+
+    .button.outlined{
+        box-sizing: border-box;
+        outline: 3px solid var(--text-color);
+        outline-offset: -3px;
+        transition: all 0.2s ease-in-out;
+        color: var(--text-color);
+    }
+    
+    .button.filled:hover{
+        background: var(--secondary-hover-fill);
+        color: var(--text-color);
+    }
+    
+    .button.outlined:hover{
+        outline: 3px solid var(--secondary-button-hover-border);
+        outline-offset: -3px;
+        background-color: var(--accent-color);
+        color: var(--text-color);
     }
 }
 
-.button-container.filled{
-    background-color: white;
-    .button{
-        color: var(--background-color);
-    }
-}
 
-.button-container.outlined{
-    outline: 3px solid var(--text-color);;
-    outline-offset: -3px;
-    transition: all 0.2s ease-in-out;
-    .button{
-        color: white;
-    }
-}
-
-.button-container.filled:hover{
-    background: var(--hover-fill);
-    .button{
-        color: white;
-    }
-}
-
-.button-container.outlined:hover{
-    outline: 3px solid var(--hover-border);
-    outline-offset: -3px;
-    background-color: var(--accent-color);
-    .button{
-        color: white;
-    }
-}
 

@@ -46,13 +46,11 @@
 
 
 .input-field-container.underlined{
-    box-sizing: border-box;
     border-bottom: 0.1em solid var(--secondary-hover-border);
     transition: all 0.1s ease-in-out;
     .input-field{
         padding-left: 0;
-        padding-right: 0;
-        padding-bottom: 0.2em;
+        padding-right: 0.5em;
     }
     
 }

@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import './main-layout-styles/Profile.css'
-import settings from '../../assets/settings.svg'
-import light from '../../assets/light.svg'
-import dark from '../../assets/dark.svg'
-import logout from '../../assets/logout.svg'
-import { Navigate, useNavigate } from 'react-router-dom';
+import settings from '../../assets/settings.svg?react'
+import light from '../../assets/light.svg?react'
+import dark from '../../assets/dark.svg?react'
+import logout from '../../assets/logout.svg?react'
+import { useNavigate } from 'react-router-dom';
 
 function ProfileDropdown() {
     type DropdownItemProps = {
-        icon?: string;
+        icon?: React.FC<React.SVGProps<SVGSVGElement>>;
         text: string;
         onClick?: () => void
     };
@@ -23,7 +23,7 @@ function ProfileDropdown() {
     function DropdownItem(props: DropdownItemProps){
         return(
             <a className='dropdown-item' onClick={props.onClick}>
-                {props.icon && <img className='dropdown-item-icon' src={props.icon} alt={props.text}/>}
+                {props.icon && <props.icon className='dropdown-item-icon' />}
                 <span className='dropdown-item-text'>{props.text}</span>
             </a>
         )

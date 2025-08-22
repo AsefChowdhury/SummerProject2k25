@@ -1,7 +1,8 @@
 import search from '../../assets/search.svg';
-import close from '../../assets/close.svg';
+import close from '../../assets/close.svg?react';
 import './ButtonSearchField.css'
 import { useState } from 'react';
+import IconButton from '../IconButton/IconButton';
 
 function ButtonSearchField () {
     const [searchTerm, setSearchTerm] = useState('');
@@ -16,9 +17,9 @@ function ButtonSearchField () {
         <div className="search-field-container">
             <input type="text" placeholder="Search" className="search-field" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
             {searchTerm.length > 0 &&
-                <button className="delete-button" onClick={() => setSearchTerm('')}>
-                    <img src={close} alt="Close"/>
-                </button>
+                <div className="delete-button">
+                    <IconButton icon={close} onClick={() => {setSearchTerm('')}}/>
+                </div>
             }
             <button className="search-button" onClick={handleSearch}>
                 <img src={search} alt="Search"/>

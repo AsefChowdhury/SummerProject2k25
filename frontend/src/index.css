@@ -13,6 +13,7 @@ html, body {
   --accent-color: #29282f;
   --secondary-accent-color: rgb(31, 30, 34);
   --hover-border: #f09819;
+  --secondary-button-hover-border: #23a2f6;
   --hover-fill: linear-gradient(
     to right,
     #ff512f,
@@ -30,6 +31,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --glass-background: rgba(255,255,255,5%);
+  --icon-color: white;
 }
 
 body {
