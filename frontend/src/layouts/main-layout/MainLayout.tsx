@@ -13,6 +13,7 @@ import Profile from "./Profile"
 import NavigationBar from "../../components/navigation-bar/NavigationBar"
 import IconButton from "../../components/IconButton/IconButton"
 import { useState } from "react"
+import CreationButton from "./CreationButton"
 
 function MainLayout() {
     const [openDrawer, setOpenDrawer] = useState(false);
@@ -30,6 +31,7 @@ function MainLayout() {
                     <ButtonSearchField />
                 </div>
                 <div className="navbar-right">
+                    <CreationButton/>
                     <Notifications />
                     <Profile />
                 </div>

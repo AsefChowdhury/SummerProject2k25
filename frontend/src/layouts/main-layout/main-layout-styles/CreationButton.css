@@ -1,0 +1,19 @@
+.creation-button-container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.button.creation-button{
+    background: var(--accent-color);
+    .icon-image{
+        color: var(--text-color);
+    }
+}
+
+.button.creation-button:hover{
+    background: var(--secondary-hover-fill);
+}

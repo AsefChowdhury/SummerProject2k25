@@ -40,6 +40,7 @@
 }
 
 .input-field-container.outlined:focus-within{
+    outline: 0.1em solid var(--hover-border);
     border: 0.2em solid var(--hover-border);
     background-color: transparent;
 }

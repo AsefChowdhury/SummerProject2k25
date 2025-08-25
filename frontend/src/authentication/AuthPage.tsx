@@ -45,7 +45,6 @@ function AuthPage(props: AuthPageProps) {
                     identifier: username,
                     password: password
                 })
-                console.log(response);
                 localStorage.setItem(ACCESS_TOKEN, response.data.access);
                 localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
                 navigate('/dashboard')
