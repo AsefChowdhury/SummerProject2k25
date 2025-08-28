@@ -7,7 +7,7 @@ type InputFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
 
 function InputField({children, ...props}: InputFieldProps) {
     return(
-        <div className={`input-field-container ${props.variant ?? 'outlined'}`}>
+        <div className={`input-field-container ${props.className ?? ''} ${props.variant ?? 'outlined'}`}>
             <input {...props} className="input-field"/>
             {children}
         </div>

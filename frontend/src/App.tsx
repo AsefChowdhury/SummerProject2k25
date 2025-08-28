@@ -28,6 +28,7 @@ function App() {
             <Route path="/flashcards">
               <Route index element={<MyFlashcards />} />
               <Route path="/flashcards/create" element={<ManageDeck mode="create" />} />
+              <Route path="/flashcards/edit/:deckId" element={<ManageDeck mode="edit" />} />
             </Route>
             <Route path="/quizzes" element={<MyQuizzes />} />
             <Route path="/notes" element={<MyNotes />} />

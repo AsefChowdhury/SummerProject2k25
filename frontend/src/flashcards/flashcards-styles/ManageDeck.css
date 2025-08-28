@@ -40,6 +40,9 @@
             color: var(--error-color);
         }
     }
+    .term{
+        text-wrap: newline;
+    }
 }
 
 .flashcard-list{

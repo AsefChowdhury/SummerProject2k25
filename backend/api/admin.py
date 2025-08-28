@@ -21,6 +21,8 @@ class CustomUserAdmin(UserAdmin):
     ordering = ("email",)
 
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Deck)
+@admin.register(Deck)
+class DeckAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')   # 👈 show ID and title in list view
 admin.site.register(Flashcard)
 

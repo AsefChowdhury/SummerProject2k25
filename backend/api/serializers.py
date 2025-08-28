@@ -6,12 +6,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 
 class FlashcardSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
     class Meta:
         model = Flashcard
         fields = ["id", "term", "definition", "index"]
 
 class DeckSerializer(serializers.ModelSerializer):
-    flashcards = FlashcardSerializer(many=True, write_only=True)
+    flashcards = FlashcardSerializer(many=True, required=True, min_length=1)
     class Meta:
         model = Deck
         fields = ['id', 'title', 'flashcards']
@@ -22,6 +23,29 @@ class DeckSerializer(serializers.ModelSerializer):
         for flashcard in flashcard_data:
             Flashcard.objects.create(deck=deck, **flashcard)
         return deck
+    
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        flashcard_data = validated_data.pop('flashcards')
+
+        sent_ids = [f['id'] for f in flashcard_data if 'id' in f]
+        print(flashcard_data)
+        for flashcard in instance.flashcards.all():
+            if flashcard.id not in sent_ids:
+                flashcard.delete()
+        
+        for flashcard in flashcard_data:
+            if 'id' not in flashcard:
+                Flashcard.objects.create(deck=instance, **flashcard)
+            else:
+                databaseFlashcard = Flashcard.objects.get(id=flashcard['id'], deck=instance)
+                databaseFlashcard.term = flashcard['term']
+                databaseFlashcard.definition = flashcard['definition']
+                databaseFlashcard.index = flashcard['index']
+                databaseFlashcard.save()
+
+        instance.save()
+        return instance
 
 class DeckListSerializer(serializers.ModelSerializer):
     class Meta:

@@ -32,7 +32,7 @@ function Profile() {
     
     return (
         <div className="profile-container">
-            <button className='profile-button' onClick={handleClick}>Profile</button>
+            <button className='profile-button' onClick={handleClick}></button>
             <Dropdown anchor={dropdownAnchor as HTMLElement} open={dropdownAnchor !== null} onClose={handleClose} >
                 <DropdownItem text={'Settings'} icon={settings} onClick={handleClose}/>
                 <DropdownItem text={'Light mode'} icon={light}/>

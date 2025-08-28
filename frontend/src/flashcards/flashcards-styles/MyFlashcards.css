@@ -1,0 +1,25 @@
+.deck-component{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    height: 3em;
+    width: 100%;
+    padding: 1em;
+    .deck-actions{
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+        height: 2.5em;
+    }
+}
+
+.decks-list{
+    list-style-type: none;
+    margin-left: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}

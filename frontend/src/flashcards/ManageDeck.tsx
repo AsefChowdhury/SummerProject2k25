@@ -7,14 +7,17 @@ import editIcon from "../assets/edit.svg?react";
 import InputField from "../components/input-field/InputField";
 import Card from "../components/card/Card";
 import IconButton from "../components/IconButton/IconButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../api";
+import { useNavigate, useParams } from "react-router-dom";
+import Textarea from "../components/textarea/Textarea";
 
 class Flashcard {
     static nextIndex = 0;
     term: string;
     definition: string;
     index?: number;
+    id?: number;
 
     constructor(term?: string, definition?: string) {
         this.term = term ?? "";
@@ -34,17 +37,15 @@ class Deck{
 
 type ManageDeckProps = {
     mode: "edit" | "create";
-    deckId?: number;
-    title?: string;
-    flashcards?: Flashcard[];
 }
 
 function ManageDeck(props: ManageDeckProps) {
     
     
-    
-    const [flashcards, setFlashcards] = useState(props.flashcards ?? [new Flashcard()]);
-    const [title, setTitle] = useState(props.title ?? "");
+    const {deckId} = useParams();
+    const [flashcards, setFlashcards] = useState([new Flashcard()]);
+    const [title, setTitle] = useState("");
+    let navigate = useNavigate();
 
     type FlashcardComponentProps = {
         flashcard: Flashcard
@@ -58,8 +59,8 @@ function ManageDeck(props: ManageDeckProps) {
         return (
             <Card>
                 <div className="card-content">
-                    <InputField placeholder="Term" variant="underlined" defaultValue={props.flashcard.term} onChange={(e) => {props.flashcard.term = e.target.value}}/>
-                    <InputField placeholder="Definition" variant="underlined" defaultValue={props.flashcard.definition} onChange={(e) => {props.flashcard.definition = e.target.value}}/>
+                    <Textarea className="term" placeholder="Term" variant="underlined" defaultValue={props.flashcard.term} onChange={(e) => {props.flashcard.term = e.target.value}}/>
+                    <Textarea className="definition" placeholder="Definition" variant="underlined" defaultValue={props.flashcard.definition} onChange={(e) => {props.flashcard.definition = e.target.value}}/>
                     <div className="card-actions">
                         <IconButton className="copy-button" icon={copyIcon} tooltip="Duplicate" onClick={() => {props.onCopy(props.index)}}/>
                         <IconButton className="delete-button" icon={deleteIcon} disabled={props.disableDelete} tooltip="Delete" onClick={() => {props.onDelete(props.index)}}/>
@@ -68,6 +69,14 @@ function ManageDeck(props: ManageDeckProps) {
             </Card> 
         )
     }
+
+    useEffect(() => {
+        setTitle("");
+        setFlashcards([new Flashcard()]);
+        if(props.mode === "edit"){
+            getDeck();
+        }
+    }, [props.mode]);
 
     const addFlashcard = () => {
         setFlashcards([...flashcards, new Flashcard()]);
@@ -82,14 +91,39 @@ function ManageDeck(props: ManageDeckProps) {
         setFlashcards([...flashcards, newFlashcard]);
     }
 
-    const createDeck = async () => {
+    const submitDeck = async () => {
         for(let i = 0; i < flashcards.length; i++){
             flashcards[i].index = i;
         }
+        console.log("submitting deck...");
+        console.log(flashcards)
+        if(props.mode == "edit"){
+            await api
+            .put(`api/decks/${deckId}/`, {
+                title: title,
+                flashcards: flashcards
+            })
+            .catch(error => console.log(error));
+            return;
+        }
         const deck = new Deck(title, flashcards);
-        console.log(deck);
-        const response = await api.post('api/decks/', deck);
-        console.log(response);
+        await api
+        .post('api/decks/', deck)
+        .then(response => {
+            if(response.status === 201){
+                navigate(`/flashcards/edit/${response.data.id}`);
+            }
+        })
+        .catch(error => console.log(error));
+    }
+
+    const getDeck = async () => {
+        await api.get(`api/decks/${deckId}`).then(response => {
+            setTitle(response.data.title);
+            setFlashcards(response.data.flashcards);
+            console.log("grabbing deck...");
+            console.log(response.data.flashcards);
+        }).catch(error => console.log(error));
     }
 
     return (
@@ -97,7 +131,7 @@ function ManageDeck(props: ManageDeckProps) {
             <div className="page-header">
                 <h1>{props.mode === "edit" ? "Edit deck" : "Create a new deck"}</h1>
                 <div className="save-buttons">
-                    <Button iconLeft={editIcon} text={props.mode === "edit" ? "Save" : "Create"} type="submit" variant="outlined" onClick={createDeck}/>
+                    <Button iconLeft={editIcon} text={props.mode === "edit" ? "Save" : "Create"} type="submit" variant="outlined" onClick={submitDeck}/>
                     <Button text={props.mode === "edit" ? "Save and test" : "Create and test"} type="submit" variant="filled" />
                 </div>
             </div>

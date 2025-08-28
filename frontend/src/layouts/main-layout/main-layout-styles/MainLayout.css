@@ -99,6 +99,11 @@
         .navbar-search {
             display: none;
         }
+
+        .navbar-right, .navbar-left {
+            gap: 0.5em;
+            height: 2.5em;
+        }
     
         .page-content {
             padding-left: 1em;
