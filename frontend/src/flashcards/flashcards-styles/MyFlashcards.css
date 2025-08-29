@@ -23,3 +23,39 @@
     flex-direction: column;
     gap: 1em;
 }
+
+.delete-modal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    padding: 1em;
+    .modal-actions{
+        display: flex;
+        flex-direction: row;
+        gap: 1em;
+        height: 3em;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        .button-container{
+            .button{
+                font-size: 1rem;
+            }
+            .button.filled:hover{
+                background: var(--error-hover-fill);
+                color: var(--text-color);
+            }
+        }
+    }
+}
+
+.delete-modal h1{
+    margin-bottom: 0;
+}
+
+.delete-modal p{
+    margin: 0;
+    text-align: center;
+}

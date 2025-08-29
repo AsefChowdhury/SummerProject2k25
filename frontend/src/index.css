@@ -29,6 +29,11 @@ html, body {
     #1845ad,
     #23a2f6
   );
+  --error-hover-fill: linear-gradient(
+    to right,
+    #ff4545,
+    #b90000
+  );
   --error-color: #eb4040;
   --side-drawer-width: 13rem;
   font-synthesis: none;

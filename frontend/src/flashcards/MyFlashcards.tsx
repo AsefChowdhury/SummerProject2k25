@@ -5,6 +5,8 @@ import deleteIcon from "../assets/delete.svg?react"
 import { useEffect, useState } from "react"
 import api from "../api"
 import "./flashcards-styles/MyFlashcards.css"
+import Modal from "../components/modal/Modal"
+import Button from "../components/button/Button"
 
 type DeckElementProps = {
     title: string
@@ -30,6 +32,8 @@ function DeckElement(props: DeckElementProps) {
 
 function MyFlashcards() {
     const [decks, setDecks] = useState([]);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deckToDelete, setDeckToDelete] = useState({id: 0, title: undefined});
 
     useEffect(() => {
         getDecks();
@@ -57,10 +61,20 @@ function MyFlashcards() {
             <ul className="decks-list">
                 {decks.map((deck: any) => (
                     <li key={deck.id}>
-                        <DeckElement onDelete={handleDelete} key={deck.id} title={deck.title} id={deck.id} />
+                        <DeckElement onDelete={() => {setDeckToDelete({id: deck.id, title: deck.title}); setShowDeleteModal(true)}} key={deck.id} title={deck.title} id={deck.id} />
                     </li>
                 ))}
             </ul>
+            <Modal open={showDeleteModal}>
+                <div className="delete-modal">
+                    <h1>Are you sure?</h1>
+                    <p>Are you sure you want to delete the deck "{deckToDelete.title}"?<br />This action cannot be undone.</p>
+                    <div className="modal-actions">
+                        <Button text="Cancel" variant="outlined" onClick={() => {setShowDeleteModal(false)}}/>
+                        <Button text="Delete" variant="filled" onClick={() => {setShowDeleteModal(false); handleDelete(deckToDelete.id)}}/>
+                    </div>
+                </div>
+            </Modal>
         </>
     )
 }

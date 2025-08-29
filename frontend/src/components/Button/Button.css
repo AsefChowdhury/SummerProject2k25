@@ -1,12 +1,14 @@
 .button-container{
     display: flex;
     height: 100%;
+    width: 100%;
     a {
         text-decoration: none;
     }
     .button{
         border-radius: 2em;
         height: 100%;
+        width: 100%;
         font-weight: bold;
         white-space: nowrap;
         font-size: 0.9em;
