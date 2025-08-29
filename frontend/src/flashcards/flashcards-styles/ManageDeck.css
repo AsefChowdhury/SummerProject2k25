@@ -63,3 +63,23 @@
     margin-top: 2em;
     margin-bottom: 2em;
 }
+
+.finished-modal{
+    padding: 1em;
+    gap: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .modal-actions{
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        align-items: center;
+    }
+}
+
+.finished-modal h2{
+    margin-bottom: 0;
+    text-align: center;
+}

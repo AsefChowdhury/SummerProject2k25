@@ -13,6 +13,8 @@ class FlashcardSerializer(serializers.ModelSerializer):
 
 class DeckSerializer(serializers.ModelSerializer):
     flashcards = FlashcardSerializer(many=True, required=True, min_length=1)
+    id = serializers.IntegerField(required=False)
+    
     class Meta:
         model = Deck
         fields = ['id', 'title', 'flashcards']
@@ -29,7 +31,6 @@ class DeckSerializer(serializers.ModelSerializer):
         flashcard_data = validated_data.pop('flashcards')
 
         sent_ids = [f['id'] for f in flashcard_data if 'id' in f]
-        print(flashcard_data)
         for flashcard in instance.flashcards.all():
             if flashcard.id not in sent_ids:
                 flashcard.delete()
@@ -38,7 +39,7 @@ class DeckSerializer(serializers.ModelSerializer):
             if 'id' not in flashcard:
                 Flashcard.objects.create(deck=instance, **flashcard)
             else:
-                databaseFlashcard = Flashcard.objects.get(id=flashcard['id'], deck=instance)
+                databaseFlashcard = Flashcard.objects.get(id=flashcard['id'], deck=validated_data['id'])
                 databaseFlashcard.term = flashcard['term']
                 databaseFlashcard.definition = flashcard['definition']
                 databaseFlashcard.index = flashcard['index']

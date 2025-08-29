@@ -23,7 +23,7 @@ function SideDrawer(props: SideDrawerProps) {
             <nav className={`temporary-drawer ${props.open ? 'open' : ''}`}>
                 {props.children}
             </nav>
-            <div className={`overlay ${props.open ? 'active' : ''}` } onClick={props.onClose}></div>
+            <div className={`drawer-overlay ${props.open ? 'active' : ''}` } onClick={props.onClose}></div>
         </>
     }
     return (

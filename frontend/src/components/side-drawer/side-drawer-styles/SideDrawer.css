@@ -34,7 +34,7 @@
     transform: translateX(0);
 }
 
-.overlay {
+.drawer-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -47,7 +47,7 @@
     transition: all 0.3s ease-in-out;
 }
 
-.overlay.active {
+.drawer-overlay.active {
     opacity: 1;
     visibility: visible;
 }

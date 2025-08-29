@@ -1,66 +1,52 @@
-.textarea-container{
+.textarea-container {
     width: 100%;
-    align-items: center;
     display: flex;
     flex-direction: row;
-    transition: all 0.2s ease-in-out;
-    .textarea{
-        background-color: transparent;
-        border: none;
-        color: var(--text-color);
-        min-height: 3em;
-        height: 100%;
+    box-sizing: border-box;
+    .textarea {
         width: 100%;
+        min-height: 3em;
+        resize: vertical;
+        border: none;
         outline: none;
-        white-space: pre-wrap;
         font-family: inherit;
         font-size: inherit;
-        resize: vertical;
-        scrollbar-color: auto;
+        color: var(--text-color);
+        background-color: transparent;
+        transition: border-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
+        box-sizing: border-box;
     }
 }
 
 
-.textarea-container.outlined{
+/* outlined variant */
+.textarea-container.outlined .textarea {
     border-radius: 0.5em;
     border: 0.2em solid transparent;
     background-color: var(--accent-color);
     outline: 0.1em solid var(--secondary-hover-border);
-    box-sizing: border-box;
-    .textarea{
-        padding-left: 0.5em;
-        padding-right: 0.5em;
-    }
-    
-    
+    padding: 1em;
 }
 
-.textarea-container.outlined:hover{
-    border: 0.2em solid var(--secondary-hover-border);
+.textarea-container.outlined:hover .textarea {
+    border-color: var(--secondary-hover-border);
 }
 
-.textarea-container.outlined:focus-within{
+.textarea-container.outlined:focus-within .textarea {
     outline: 0.1em solid var(--hover-border);
-    border: 0.2em solid var(--hover-border);
+    border-color: var(--hover-border);
     background-color: transparent;
 }
 
-
-.textarea-container.underlined{
+/* underlined variant */
+.textarea-container.underlined .textarea {
     border-bottom: 0.1em solid var(--secondary-hover-border);
-    transition: all 0.1s ease-in-out;
-    .textarea{
-        padding-left: 0;
-        padding-right: 0.5em;
-    }
-    
 }
 
-.textarea-container.underlined:hover{
+.textarea-container.underlined:hover .textarea {
     border-bottom: 0.15em solid var(--text-color);
 }
 
-.textarea-container.underlined:focus-within{
+.textarea-container.underlined:focus-within .textarea {
     border-bottom: 0.15em solid var(--hover-border);
 }
-
