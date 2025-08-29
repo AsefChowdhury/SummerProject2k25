@@ -12,7 +12,13 @@ html, body {
   --background-color: rgba(7, 5, 15, 255);
   --accent-color: #29282f;
   --secondary-accent-color: rgb(31, 30, 34);
+  
   --hover-border: #f09819;
+  --secondary-hover-border: #4d4c55;
+
+  --button-outline: rgba(114, 113, 113, 0.87);
+  --secondary-button-outline: #23a2f6;
+
   --hover-fill: linear-gradient(
     to right,
     #ff512f,
@@ -23,13 +29,19 @@ html, body {
     #1845ad,
     #23a2f6
   );
-  --secondary-hover-border: #4d4c55;
-
+  --error-hover-fill: linear-gradient(
+    to right,
+    #ff4545,
+    #b90000
+  );
+  --error-color: #eb4040;
+  --side-drawer-width: 13rem;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --glass-background: rgba(255,255,255,5%);
+  --icon-color: white;
 }
 
 body {

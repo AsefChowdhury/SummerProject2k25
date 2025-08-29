@@ -1,21 +1,22 @@
 .side-drawer {
-    position: sticky;
-    top: 0;
+    position: fixed;
     height: 100%;
-    --drawer-width: 15em;
-    width: var(--drawer-width);
+    width: var(--side-drawer-width);
     background-color: transparent;
     display: flex;
     flex-direction: column;
     padding: 1em;
 }
 
+.side-drawer-spaceholder {
+    min-width: var(--side-drawer-width);
+}
+
 .temporary-drawer {
     position: absolute;
     top: 0;
     height: 100%;
-    --drawer-width: 15em;
-    width: var(--drawer-width);
+    width: var(--side-drawer-width);
     background-color: var(--glass-background);
     backdrop-filter: blur(0.5em);
     box-shadow: 0 0 5em rgba(8,7,16,0.6);
@@ -33,7 +34,7 @@
     transform: translateX(0);
 }
 
-.overlay {
+.drawer-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -46,7 +47,7 @@
     transition: all 0.3s ease-in-out;
 }
 
-.overlay.active {
+.drawer-overlay.active {
     opacity: 1;
     visibility: visible;
 }

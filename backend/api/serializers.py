@@ -1,20 +1,68 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
-User = get_user_model()
+from .models import CustomUser, Deck, Flashcard
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 
+class FlashcardSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    class Meta:
+        model = Flashcard
+        fields = ["id", "term", "definition", "index"]
+
+class DeckSerializer(serializers.ModelSerializer):
+    flashcards = FlashcardSerializer(many=True, required=True, min_length=1)
+    id = serializers.IntegerField(required=False)
+    
+    class Meta:
+        model = Deck
+        fields = ['id', 'title', 'flashcards']
+    
+    def create(self, validated_data):
+        flashcard_data = validated_data.pop('flashcards')
+        deck = Deck.objects.create(**validated_data)
+        for flashcard in flashcard_data:
+            Flashcard.objects.create(deck=deck, **flashcard)
+        return deck
+    
+    def update(self, instance, validated_data):
+        instance.title = validated_data.get('title', instance.title)
+        flashcard_data = validated_data.pop('flashcards')
+
+        sent_ids = [f['id'] for f in flashcard_data if 'id' in f]
+        for flashcard in instance.flashcards.all():
+            if flashcard.id not in sent_ids:
+                flashcard.delete()
+        
+        for flashcard in flashcard_data:
+            if 'id' not in flashcard:
+                Flashcard.objects.create(deck=instance, **flashcard)
+            else:
+                databaseFlashcard = Flashcard.objects.get(id=flashcard['id'], deck=validated_data['id'])
+                databaseFlashcard.term = flashcard['term']
+                databaseFlashcard.definition = flashcard['definition']
+                databaseFlashcard.index = flashcard['index']
+                databaseFlashcard.save()
+
+        instance.save()
+        return instance
+
+class DeckListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Deck
+        fields = ['id', 'title']
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['id', 'username', 'email', 'password']
         extra_kwargs = {'password': {'write_only': True}}
     
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
+        user = CustomUser.objects.create_user(**validated_data)
         return user
-    
+
 class CustomTokenObtainPairSerializer(serializers.Serializer):
     identifier = serializers.CharField(max_length=254)
     password = serializers.CharField(write_only=True)
@@ -23,7 +71,7 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
         identifier = data.get('identifier')
         password = data.get('password')
 
-        user = User.objects.filter(email=identifier).first() or User.objects.filter(username=identifier).first()
+        user = CustomUser.objects.filter(email=identifier).first() or CustomUser.objects.filter(username=identifier).first()
 
         if not user or not user.check_password(password):
             raise serializers.ValidationError("Invalid credentials")

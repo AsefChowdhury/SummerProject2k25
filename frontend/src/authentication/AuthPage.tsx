@@ -1,17 +1,18 @@
 import IconButton from "../components/IconButton/IconButton"
 import InputField from "../components/input-field/InputField"
 import "./authentication-styles/AuthPage.css"
-import visible from "../assets/visible.svg"
-import invisible from "../assets/invisible.svg"
+import visible from "../assets/visible.svg?react"
+import invisible from "../assets/invisible.svg?react"
 import { useState } from "react"
 import google from "../assets/google.svg"
 import microsoft from "../assets/microsoft.svg"
-import arrow_back from "../assets/arrow_back.svg"
+import arrow_back from "../assets/arrow_back.svg?react"
 import NavigationBar from "../components/navigation-bar/NavigationBar"
 import { Link, useNavigate } from "react-router-dom"
 import api from "../api"
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"
 import axios from "axios"
+import Button from "../components/button/Button"
 
 type AuthPageProps = {
     mode: "sign-in" | "sign-up"
@@ -44,7 +45,6 @@ function AuthPage(props: AuthPageProps) {
                     identifier: username,
                     password: password
                 })
-                console.log(response);
                 localStorage.setItem(ACCESS_TOKEN, response.data.access);
                 localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
                 navigate('/dashboard')
@@ -77,23 +77,13 @@ function AuthPage(props: AuthPageProps) {
         <>
             <NavigationBar>
                 <div className="back-button-container">
-                    <Link to="/"><IconButton icon={arrow_back}/></Link>
+                    <IconButton icon={arrow_back} to="/"/>
                     <p>Back home</p>
                 </div>
-                
-                {props.mode === "sign-in" &&
-                    <div className="auth-link">
-                        <p>Not a member?</p>
-                        <Link className="button" to="/sign-up">Sign up</Link>
-                    </div>
-                }
-                {props.mode === "sign-up" &&
-                    <div className="auth-link">
-                        <p>Already a member?</p>
-                        <Link className="button" to="/sign-in">Sign in</Link>
-                    </div>
-                }
-
+                <div className="auth-link">
+                    <p>{props.mode === "sign-in" ? "Not a member?" : "Already a member?"}</p>
+                    <Button text={props.mode === "sign-in" ? "Sign up" : "Sign in"} variant="filled" to={props.mode === "sign-in" ? "/sign-up" : "/sign-in"}/>
+                </div>
             </NavigationBar>
             <div className="auth-page-body">
                 <div className="auth-page-wrapper">
@@ -120,10 +110,7 @@ function AuthPage(props: AuthPageProps) {
                         <label>Password</label>
                         <InputField value={password} onChange={(e) => setPassword(e.target.value)} id="password" type={passwordVisible ? "text" : "password"} placeholder="Password" maxLength={35} required>
                             <div className="show-password-container">
-                                <button type="button" className='show-password' onClick={togglePasswordVisibility}>
-                                    <img src={passwordVisible ?  invisible : visible} className='icon-image'/>
-                                </button>
-                                <span className="tooltiptext">{passwordVisible ? "Hide password" : "Show password"}</span>
+                                <IconButton type="button" icon={passwordVisible ?  invisible : visible} tooltip={passwordVisible ? "Hide password" : "Show password"} onClick={togglePasswordVisibility}/>
                             </div>
                         </InputField>
                         <br/>
@@ -132,10 +119,7 @@ function AuthPage(props: AuthPageProps) {
                                 <label>Confirm password</label>
                                 <InputField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} id="confirm-password" type={passwordVisible ? "text" : "password"} placeholder="Confirm password" maxLength={35} required>
                                     <div className="show-password-container">
-                                        <button type="button" className='show-password' onClick={togglePasswordVisibility}>
-                                            <img src={passwordVisible ?  invisible : visible} className='icon-image'/>
-                                        </button>
-                                        <span className="tooltiptext">{passwordVisible ? "Hide password" : "Show password"}</span>
+                                        <IconButton type="button" icon={passwordVisible ?  invisible : visible} tooltip={passwordVisible ? "Hide password" : "Show password"} onClick={togglePasswordVisibility}/>
                                     </div>
                                 </InputField>
                                 <br/>

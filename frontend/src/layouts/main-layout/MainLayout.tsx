@@ -1,18 +1,19 @@
 import { Outlet } from "react-router-dom"
 import SideDrawer from "../../components/side-drawer/SideDrawer"
-import dashboard from '../../assets/dashboard.svg'
-import notes from '../../assets/notes.svg'
-import menu from '../../assets/menu.svg'
-import flashcards from '../../assets/flashcards.svg'
-import quizzes from "../../assets/quizzes.svg"
+import dashboard from '../../assets/dashboard.svg?react'
+import notes from '../../assets/notes.svg?react'
+import menu from '../../assets/menu.svg?react'
+import flashcards from '../../assets/flashcards.svg?react'
+import quizzes from "../../assets/quizzes.svg?react"
 import DrawerItem from "../../components/side-drawer/DrawerItem"
 import './main-layout-styles/MainLayout.css'
-import ButtonSearchField from "../../components/ButtonSearchField/ButtonSearchField"
+import ButtonSearchField from "../../components/button-search-field/ButtonSearchField"
 import Notifications from "./Notifications"
 import Profile from "./Profile"
 import NavigationBar from "../../components/navigation-bar/NavigationBar"
 import IconButton from "../../components/IconButton/IconButton"
 import { useState } from "react"
+import CreationButton from "./CreationButton"
 
 function MainLayout() {
     const [openDrawer, setOpenDrawer] = useState(false);
@@ -30,6 +31,7 @@ function MainLayout() {
                     <ButtonSearchField />
                 </div>
                 <div className="navbar-right">
+                    <CreationButton/>
                     <Notifications />
                     <Profile />
                 </div>
@@ -38,8 +40,6 @@ function MainLayout() {
                 </div>
             </NavigationBar>
             <div className="content-container">
-
-                {/* remember to take out brackets after */}
                 <SideDrawer type="temporary" open={openDrawer} onClose={() => {setOpenDrawer(false)}}>
                     <DrawerItem to="/dashboard" icon={dashboard} text={'Dashboard'} onClick={() => {setOpenDrawer(false)}}/>
                     <DrawerItem to="/flashcards" icon={flashcards} text={'Flashcards'} onClick={() => {setOpenDrawer(false)}}/>
@@ -55,10 +55,6 @@ function MainLayout() {
                 <div className="page-content">
                     <Outlet />
                 </div>
-            </div>
-
-            <div style={{ height: "1000px", backgroundColor: "#29282f;", padding: "2em" }}>
-                Scroll down to see the navbar background change!
             </div>
         </div>
     )

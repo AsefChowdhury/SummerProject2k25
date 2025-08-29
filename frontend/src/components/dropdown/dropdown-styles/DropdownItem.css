@@ -1,0 +1,23 @@
+.dropdown-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 2em;
+    cursor: pointer;
+    border-radius: 0.5em;
+    background: transparent;
+    color: var(--text-color);
+    text-decoration: none;
+    text-wrap: nowrap;
+}
+
+.dropdown-item-icon{ 
+    aspect-ratio: 1 / 1;
+}
+
+.dropdown-item:hover{
+    background: var(--hover-fill);
+}

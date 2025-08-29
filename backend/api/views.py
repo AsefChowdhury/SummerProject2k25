@@ -1,22 +1,42 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import UserSerializer, CustomTokenObtainPairSerializer
+from .serializers import DeckListSerializer, DeckSerializer, UserSerializer, CustomTokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework import viewsets
+from .models import Deck
 User = get_user_model()
 
 
 
 # Create your views here.
 
+class DeckViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Deck.objects.filter(author=user)
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return DeckListSerializer
+        else:
+            return DeckSerializer
+        
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+    authentication_classes = []
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

@@ -8,6 +8,16 @@
     align-items: center;
     display: flex;
     flex-direction: row;
+    transition: all 0.3s ease;
+
+    .delete-button{
+        border-radius: 50%;
+        aspect-ratio: 1 / 1;
+        margin-left: 0.5em;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+    }
 }
 
 .search-button {
@@ -40,34 +50,18 @@
     padding-left: 1em;
 }
 
-.search-field-container:hover {
-    border: 0.2em solid var(--hover-border); /* or any color you like for focus */
-    background-color: transparent;
-    transition: background-color 0.3s ease;
-    transition: border 0.3s ease;
-    
-}
-
 .search-button:hover {
     transform: rotate(20deg) scale(1.15);
     transition: transform 0.2s ease;
 }
 
-.delete-button{
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding-right: 0.5em;
-    border-radius: 50%;
-    aspect-ratio: 1 / 1;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    
-}
+
 
 .delete-button:hover{
     background-color: var(--accent-color);
+}
+
+.search-field-container:focus-within {
+    border: 0.2em solid var(--hover-border);
+    background-color: transparent;
 }

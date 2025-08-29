@@ -11,21 +11,25 @@ import LandingPage from "./core-pages/LandingPage";
 import AboutUs from "./core-pages/AboutUs";
 import ContactUs from "./core-pages/ContactUs";
 import CorePagesLayout from "./layouts/core-pages-layout/CorePagesLayout";
+import ManageDeck from "./flashcards/ManageDeck";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}/>
           <Route element={<CorePagesLayout/>}>
             <Route index element={<LandingPage/>}></Route>
             <Route path="/about-us" element={<AboutUs/>}></Route>
             <Route path="/contact-us" element={<ContactUs/>}></Route>
           </Route>
-          <Route element={<MainLayout />}>
+          <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/flashcards" element={<MyFlashcards />} />
+            <Route path="/flashcards">
+              <Route index element={<MyFlashcards />} />
+              <Route path="/flashcards/create" element={<ManageDeck mode="create" />} />
+              <Route path="/flashcards/edit/:deckId" element={<ManageDeck mode="edit" />} />
+            </Route>
             <Route path="/quizzes" element={<MyQuizzes />} />
             <Route path="/notes" element={<MyNotes />} />
           </Route>

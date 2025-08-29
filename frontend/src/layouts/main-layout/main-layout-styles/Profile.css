@@ -1,7 +1,7 @@
 .profile-button {
     background-color: white;
     border-radius: 50%;
-    height: 4em;
+    height: 100%;
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
@@ -12,36 +12,21 @@
 
 .profile-container{
     position: relative;
-}
-
-.profile-dropdown {
-    position: absolute;
-    right: 0.5em;
-    top: 4em;
-    background-color: var(--glass-background);
-    backdrop-filter: blur(0.5em);
-    box-shadow: 0 0 5em rgba(8,7,16,0.6);
-    outline: 0.1em solid rgba(255,255,255,15%);
-    border-radius: 0.5em;
-    padding: 0.5em;
-    width: 10em;
-}
-
-.dropdown-item{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5em;
-    padding: 0.5em;
-    cursor: pointer;
-    border-radius: 0.5em;
-    background: transparent;
-}
-
-.dropdown-item-icon{ 
-    aspect-ratio: 1 / 1;
-}
-
-.dropdown-item:hover{
-    background: var(--hover-fill);
+    height: 100%;
+    .dropdown-item{
+        .dropdown-item-icon.logout{
+            fill: var(--error-color)
+        }
+        .dropdown-item-icon.logout + span{
+            color: var(--error-color);
+        }
+    }
+    .dropdown-item:hover{
+        .dropdown-item-icon.logout{
+            fill: var(--text-color)
+        }
+        .dropdown-item-icon + span{
+            color: var(--text-color);
+        }
+    }
 }

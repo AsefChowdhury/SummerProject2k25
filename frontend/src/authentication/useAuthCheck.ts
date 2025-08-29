@@ -38,24 +38,43 @@ function useAuthCheck() {
     }
 
     const auth = async () => {
+        
         const token = localStorage.getItem(ACCESS_TOKEN);
+
         if (!token) {
             setIsAuthorised(false);
             return false;
         }
-
+        
         const decodedToken = jwtDecode(token);
         const tokenExp = decodedToken.exp;
         const now = Date.now() / 1000;
-
-        if (tokenExp! < now) {
-            await refreshToken();
-        } else {
-            setIsAuthorised(true);
-            return true;
+        if (!tokenExp) {
+            setIsAuthorised(false);
+            throw new Error('Token expired');
         }
-
-        console.log(isAuthorised);
+        if (tokenExp < now) {
+            await refreshToken();
+            return;
+        } 
+        
+        try {
+            const response = await api.post('/api/token/verify/', { 
+                token: token
+            });
+            
+            if (response.status === 200) {
+                setIsAuthorised(true);
+                return true;
+            } else {
+                setIsAuthorised(false);
+                return false;
+            }
+        } catch (error) {
+            setIsAuthorised(false);
+            console.log(error);
+            return false;
+        }
     }
 
     return {isAuthorised};

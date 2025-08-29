@@ -1,0 +1,89 @@
+.page-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+
+.save-buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    align-items: center;
+    height: 2.7em;
+}
+
+.deck-info{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin-bottom: 2em;
+}
+
+.card-content{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    margin: 2em;
+    margin-right: 1em;
+    .card-actions{
+        display: flex;
+        flex-direction: row;
+        gap: 0.2em;
+        align-items: center;
+        height: 2.7em;
+        .delete-button:hover .icon-image{
+            color: var(--error-color);
+        }
+    }
+    .term{
+        text-wrap: newline;
+    }
+}
+
+.flashcard-list{
+    list-style-type: none;
+    margin-left: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.add-flashcard-button{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 4em;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    .button-container{
+        width: auto;
+    }
+}
+
+.finished-modal{
+    padding: 1em;
+    gap: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .modal-actions{
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        align-items: center;
+    }
+}
+
+.finished-modal h2{
+    margin-bottom: 0;
+    text-align: center;
+}

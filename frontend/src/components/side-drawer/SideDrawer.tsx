@@ -11,15 +11,19 @@ type SideDrawerProps = {
 
 function SideDrawer(props: SideDrawerProps) {
     const drawer = {
-        permanent: <nav className="side-drawer">
-            {props.children}
-        </nav>,
+        permanent: 
+        <>
+            <nav className="side-drawer">
+                {props.children}
+            </nav>
+            <div className='side-drawer-spaceholder'/>
+        </>,
         temporary:
         <>
             <nav className={`temporary-drawer ${props.open ? 'open' : ''}`}>
                 {props.children}
             </nav>
-            <div className={`overlay ${props.open ? 'active' : ''}` } onClick={props.onClose}></div>
+            <div className={`drawer-overlay ${props.open ? 'active' : ''}` } onClick={props.onClose}></div>
         </>
     }
     return (

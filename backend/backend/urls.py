@@ -16,13 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from api.views import CreateUserView, CustomTokenObtainPairView
-from rest_framework_simplejwt.views import  TokenRefreshView
+from api.views import CreateUserView, CustomTokenObtainPairView, DeckViewSet
+from rest_framework_simplejwt.views import  TokenRefreshView, TokenVerifyView
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'decks', DeckViewSet, 'decks')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/user/register/", CreateUserView.as_view(), name="signup"),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='getToken'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='refreshToken'),
-    path('api-auth/', include('rest_framework.urls')),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/', include(router.urls)),
 ]

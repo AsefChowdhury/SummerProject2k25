@@ -1,22 +1,35 @@
+import { Link } from 'react-router-dom';
 import './IconButton.css'
 
-type IconButtonProps = {
-    icon: string;
-    type?: "button" | "submit" | "reset" | undefined;
+type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    icon: React.FC<React.SVGProps<SVGSVGElement>>;
     tooltip?: string;
-    onClick?: () => void;
+    to?: string;
 }
 
-function IconButton(props: IconButtonProps) {
-    return(
+function IconButton({icon: Icon, ...props}: IconButtonProps) {
+    const content = (
         <div className="icon-button-container">
-            <button type={props.type ? props.type : 'button'} className='button' onClick={props.onClick}>
-                <img src={props.icon} className='icon-image'/>
+            <button {...props} className={`button ${props.className ?? ''}`} disabled={props.disabled}>
+                <Icon className="icon-image" fill='currentColor'/>
+                {props.tooltip && <span className="tooltiptext">{props.tooltip}</span>}
             </button>
-            {props.tooltip && <span className="tooltiptext">{props.tooltip}</span>}
         </div>
-        
     )
+
+    if(props.to){
+        return(
+            <div className="icon-button-container">
+                <Link to={props.to}>
+                    <button {...props} className='button'>
+                        <Icon className="icon-image" fill='currentColor'/>
+                        {props.tooltip && <span className="tooltiptext">{props.tooltip}</span>}
+                    </button>
+                </Link>
+            </div>
+        )
+    }
+    return content
 }
 
 export default IconButton

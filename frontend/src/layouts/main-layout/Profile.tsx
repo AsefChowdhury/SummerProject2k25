@@ -1,70 +1,43 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import './main-layout-styles/Profile.css'
-import settings from '../../assets/settings.svg'
-import light from '../../assets/light.svg'
-import dark from '../../assets/dark.svg'
-import logout from '../../assets/logout.svg'
-import { Navigate, useNavigate } from 'react-router-dom';
+import settings from '../../assets/settings.svg?react'
+import light from '../../assets/light.svg?react'
+import dark from '../../assets/dark.svg?react'
+import logout from '../../assets/logout.svg?react'
+import { useNavigate } from 'react-router-dom';
+import Dropdown from '../../components/dropdown/Dropdown';
+import DropdownItem from '../../components/dropdown/DropdownItem';
 
-function ProfileDropdown() {
-    type DropdownItemProps = {
-        icon?: string;
-        text: string;
-        onClick?: () => void
-    };
-
+function Profile() {
+    const [dropdownAnchor, setDropdownAnchor] = useState<null | HTMLElement>(null);
     let navigate = useNavigate();
 
     const logoutUser = () => {
+        handleClose();
         localStorage.clear();
         navigate('/sign-in');
     }
-
-    function DropdownItem(props: DropdownItemProps){
-        return(
-            <a className='dropdown-item' onClick={props.onClick}>
-                {props.icon && <img className='dropdown-item-icon' src={props.icon} alt={props.text}/>}
-                <span className='dropdown-item-text'>{props.text}</span>
-            </a>
-        )
-    }
-
-    return (
-        <div className="profile-dropdown">
-            <DropdownItem text={'Settings'} icon={settings}/>
-            <DropdownItem text={'Light mode'} icon={light}/>
-            <DropdownItem text={'Logout'} icon={logout} onClick={logoutUser}/>
-        </div>
-    )
-}
-
-function Profile() {
-    const [showDropdown, setShowDropdown] = useState(false);
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if(!showDropdown) return;
-        const handleClickOutside = (event: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                setShowDropdown(false);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-        
-    }, [showDropdown]);
     
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (dropdownAnchor !== null) {
+            setDropdownAnchor(null);
+            return;
+        }
+        setDropdownAnchor(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setDropdownAnchor(null);
+    };
     
     return (
-        <div ref={containerRef} className="profile-container">
-            <button className='profile-button' onClick={() => setShowDropdown(!showDropdown)}>Profile</button>
-
-            {showDropdown &&
-                <ProfileDropdown />
-            }
+        <div className="profile-container">
+            <button className='profile-button' onClick={handleClick}></button>
+            <Dropdown anchor={dropdownAnchor as HTMLElement} open={dropdownAnchor !== null} onClose={handleClose} >
+                <DropdownItem text={'Settings'} icon={settings} onClick={handleClose}/>
+                <DropdownItem text={'Light mode'} icon={light}/>
+                <DropdownItem className='logout' text={'Logout'} icon={logout} onClick={logoutUser}/>
+            </Dropdown>
         </div>
     )
 }

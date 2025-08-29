@@ -9,45 +9,10 @@
 .show-password-container{
     position: relative;
     display: inline-block;
-}
-
-.show-password{
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-}
-
-.tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    position: absolute;
-    z-index: 1;
-    top: 100%;
-    left: 50%;
-    margin-left: -60px
-}
-
-.show-password-container:hover .tooltiptext {
-    visibility: visible;
-}
-
-.tooltiptext::after {
-    content: " ";
-    position: absolute;
-    bottom: 100%;  /* At the top of the tooltip */
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent transparent black transparent;
+    
+    .icon-button-container .button:hover{
+        background-color: transparent;
+    }
 }
 
 .auth-link{
@@ -56,22 +21,6 @@
     align-items: center;
     justify-content: center;
     gap: 0.5em;
-    .button {
-        height: 1em;
-        background: var(--text-color);
-        color: var(--background-color);
-        padding: 0.5em 1em;
-        cursor: pointer;
-        border-radius: 1em;
-        text-decoration: none;
-        font-weight: bold;
-        white-space: nowrap;
-    }
-
-    .button:hover {
-        background: var(--secondary-hover-fill); /* or any color */
-        color: white;
-    }
 }
 
 .back-button-container{
@@ -80,15 +29,9 @@
     align-items: center;
     justify-content: center;
     gap: 0.5em;
-
-    .button:hover{
-        background-color: var(--accent-color);
-        
-    }
 }
 
 .auth-page-top-bar{
-    /* outline: 2px solid red; */
     height: 4em;
     width: 100%;
     display: flex;
@@ -168,7 +111,6 @@ h1{
 
 .divider {
     display: flex;
-    /* outline: 2px solid red; */
     text-align: center;
     align-self: center;
     align-items: center;

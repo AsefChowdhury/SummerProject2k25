@@ -3,8 +3,9 @@ import IconButton from "../../components/IconButton/IconButton";
 import NavigationBar from "../../components/navigation-bar/NavigationBar";
 import { Link, Outlet, NavLink } from "react-router-dom";
 import { useState, type ReactElement } from "react";
-import menu from '../../assets/menu.svg';
+import menu from '../../assets/menu.svg?react';
 import "./core-pages-layout-styles/CorePagesStyles.css"
+import Button from "../../components/button/Button";
 
 
 type TopDropDownItemProps = {
@@ -60,7 +61,7 @@ function CorePagesLayout(){
                 </div>
 
                 <div className="auth-link">
-                    <Link className="button" to="/signup">Sign Up</Link>
+                    <Button text="Login" variant="filled" to="/sign-in" />
                 </div>              
             </NavigationBar>  
             <CorePagesDropDown open={openDrawer} onClose={() => {setOpenDrawer(false)}}>
