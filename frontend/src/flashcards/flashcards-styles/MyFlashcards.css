@@ -31,6 +31,7 @@
     justify-content: center;
     gap: 1em;
     padding: 1em;
+    
     .modal-actions{
         display: flex;
         flex-direction: row;
@@ -58,4 +59,5 @@
 .delete-modal p{
     margin: 0;
     text-align: center;
+    font-size: 1.2em;
 }

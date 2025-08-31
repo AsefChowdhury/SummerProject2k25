@@ -1,14 +1,13 @@
-import { Navigate } from "react-router-dom";
-import { type JSX } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 import useAuthCheck from "./useAuthCheck";
 
-function ProtectedRoute({ children }: { children: JSX.Element }) {
+function ProtectedRoute() {
     const { isAuthorised } = useAuthCheck();
     if (isAuthorised === null) {
         return <h1>Loading...</h1>
     }
 
-    return isAuthorised ? children : <Navigate to="/sign-in" />
+    return isAuthorised ? <Outlet /> : <Navigate to="/sign-in" />
 
 }
 

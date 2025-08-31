@@ -35,6 +35,8 @@ html, body {
     #b90000
   );
   --error-color: #eb4040;
+  --warning-color: #fdce4e;
+  --success-color: #5ebd5e;
   --side-drawer-width: 13rem;
   font-synthesis: none;
   text-rendering: optimizeLegibility;

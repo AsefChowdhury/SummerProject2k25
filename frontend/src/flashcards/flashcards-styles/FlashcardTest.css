@@ -1,0 +1,76 @@
+.test-screen{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    .page-header{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        height: 3.5em;
+        margin: 1em;
+    }
+    .page-content{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+    .flashcard{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 60em;
+        width: 100%;
+        height: 100%;
+        max-height: 45em;
+        padding-left: 1em;
+        padding-right: 1em;
+        .test-progress-bar{
+            margin-bottom: 1em;
+        }
+
+    }
+    .page-bottom{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        height: 3.5em;
+        margin: 1em;
+        gap: 1em;
+        .forgot-button:hover{
+            color: var(--error-color);
+            outline: 3px solid var(--error-color);
+        }
+        .forgot-button:hover .icon-image{
+            color: var(--error-color);
+            fill: var(--error-color);
+        }
+        .remember-button:hover{
+            color: var(--success-color);
+            outline: 3px solid var(--success-color);
+        }
+        .remember-button:hover .icon-image{
+            color: var(--success-color);
+            fill: var(--success-color);
+        }
+    }
+    .delete-modal{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1em;
+        .delete-modal-description{
+            text-align: center;
+            font-size: 1.5em;
+        }
+        .modal-actions{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}

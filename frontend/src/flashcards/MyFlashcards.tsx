@@ -22,6 +22,7 @@ function DeckElement(props: DeckElementProps) {
             <div className="deck-component">
                 <h2>{props.title}</h2>
                 <div className="deck-actions">
+                    <Button text="Test" variant="outlined" to={`/flashcards/test/${props.id}`}/>
                     <IconButton icon={editIcon} to={`/flashcards/edit/${props.id}`} tooltip="Edit deck"/>
                     <IconButton icon={deleteIcon} onClick={() => {props.onDelete(props.id)}} tooltip="Delete deck"/>
                 </div>
