@@ -5,12 +5,13 @@ type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
     icon: React.FC<React.SVGProps<SVGSVGElement>>;
     tooltip?: string;
     to?: string;
+    className?: string
 }
 
-function IconButton({icon: Icon, ...props}: IconButtonProps) {
+function IconButton({icon: Icon, className,...props}: IconButtonProps) {
     const content = (
-        <div className="icon-button-container">
-            <button {...props} className={`button ${props.className ?? ''}`} disabled={props.disabled}>
+        <div className={`icon-button-container ${className ?? ''}`}>
+            <button {...props} className="button" disabled={props.disabled}>
                 <Icon className="icon-image" fill='currentColor'/>
                 {props.tooltip && <span className="tooltiptext">{props.tooltip}</span>}
             </button>
