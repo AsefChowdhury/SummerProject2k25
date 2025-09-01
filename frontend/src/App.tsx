@@ -13,6 +13,7 @@ import ContactUs from "./core-pages/ContactUs";
 import CorePagesLayout from "./layouts/core-pages-layout/CorePagesLayout";
 import ManageDeck from "./flashcards/ManageDeck";
 import FlashcardTest from "./flashcards/FlashcardTest";
+import ManageNotes from "./notes/ManageNotes";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           </Route>
           <Route path="/sign-in" element={<PublicRoute><AuthPage mode="sign-in"/></PublicRoute>} />
           <Route path="/sign-up" element={<PublicRoute><AuthPage mode="sign-up"/></PublicRoute>} />
+          <Route path="/manage-notes" element={<ManageNotes/>} />
         </Routes>
       </BrowserRouter>
     </>
