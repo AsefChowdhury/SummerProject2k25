@@ -11,6 +11,7 @@ import LandingPage from "./core-pages/LandingPage";
 import AboutUs from "./core-pages/AboutUs";
 import ContactUs from "./core-pages/ContactUs";
 import CorePagesLayout from "./layouts/core-pages-layout/CorePagesLayout";
+import ManageNotes from "./notes/ManageNotes";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           </Route>
           <Route path="/sign-in" element={<PublicRoute><AuthPage mode="sign-in"/></PublicRoute>} />
           <Route path="/sign-up" element={<PublicRoute><AuthPage mode="sign-up"/></PublicRoute>} />
+          <Route path="/manage-notes" element={<ManageNotes/>} />
         </Routes>
       </BrowserRouter>
     </>
