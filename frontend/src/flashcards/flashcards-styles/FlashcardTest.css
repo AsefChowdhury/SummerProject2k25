@@ -3,6 +3,7 @@
     flex-direction: column;
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
     .page-header{
         display: flex;
         flex-direction: row;
@@ -75,9 +76,9 @@
     }
     .card{
         position: relative;
-        transform: perspective(3000px) rotateY(var(--rotate-y, 0));
+        transform: perspective(3000px) rotateY(var(--rotate-y, 0)) translateX(var(--translate-x, 0));
         transform-style: preserve-3d;
-        transition: 400ms;
+        transition: 0.4s ease;
         .front, .back{
             position: absolute;
             backface-visibility: hidden;
@@ -119,5 +120,19 @@
     .card.flipped{
         --rotate-y: 180deg;
     }
+
+    .card.enter-right.inactive {
+        --translate-x: 150%;
+        transition: none; /* no animation */
+    }
+    .card.enter-right.active {
+        --translate-x: 0;
+        transition: transform 0.4s ease;
+    }
+    .card.exit-left {
+        --translate-x: 150%;
+        transition: transform 0.4s ease;
+    }
+    
     
 }

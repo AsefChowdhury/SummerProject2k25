@@ -3,7 +3,7 @@ import IconButton from "../components/IconButton/IconButton";
 import close from '../assets/close.svg?react'
 import tick from '../assets/tick.svg?react'
 import flip from '../assets/flip.svg?react'
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../api";
 import { useParams } from "react-router-dom";
 import Button from "../components/button/Button";
@@ -26,7 +26,8 @@ function FlashcardTest(){
     const [numOfCards, setNumOfCards] = useState(0);
     const [flipped, setFlipped] = useState(false);
     const [showExitModal, setShowExitModal] = useState(false);
-    
+    const [slideDirection, setSlideDirection] = useState<"exit-left" | "enter-right">("enter-right");
+    const [slideTriggerSlide, setTriggerSlide] = useState<"active" | "inactive">("inactive");
 
     useEffect(() => {
         let isMounted = true;
@@ -41,6 +42,10 @@ function FlashcardTest(){
         fetchDeck();
         return () => {
             isMounted = false;
+            setTimeout(() => {
+                setTriggerSlide("active");
+            }, 100);
+            
         }
     }, []);
 
@@ -48,13 +53,28 @@ function FlashcardTest(){
         if(flashcardQueue === null){
             return;
         }
-        setFlipped(false);
         const [card, ...rest] = flashcardQueue;
+        let newQueue: Flashcard[];
+
         if(state === "forgot"){
-            setFlashcardQueue([...rest, card]);
+            newQueue = [...rest, card];
         } else if(state === "remembered"){
-            setFlashcardQueue(rest);
+            newQueue = rest;
         }
+
+        setSlideDirection("exit-left");
+        setTriggerSlide("inactive");
+        
+        setTimeout(() => {
+            setFlipped(false);
+            setSlideDirection("enter-right");
+            setTriggerSlide("inactive");
+            
+            requestAnimationFrame(() => {
+                setFlashcardQueue(newQueue);
+                setTriggerSlide("active");
+            });
+        }, 400);
         
         return;
     }
@@ -65,11 +85,12 @@ function FlashcardTest(){
                 <h1>Loading...</h1>
             )
         }
+
         const progress = numOfCards > 0 ? (numOfCards - flashcardQueue.length) / numOfCards : 0;
         return(
             <div className="flashcard-container">
                 <Progressbar value={progress} className="test-progress-bar"/>
-                <Card className={`card ${flipped ? 'flipped' : ''}`}>
+                <Card className={`card ${flipped ? 'flipped' : ''} ${slideDirection} ${slideTriggerSlide}`}>
                     {flashcardQueue.length > 0 &&
                         <>
                             <div className="front">
