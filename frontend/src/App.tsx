@@ -12,6 +12,7 @@ import AboutUs from "./core-pages/AboutUs";
 import ContactUs from "./core-pages/ContactUs";
 import CorePagesLayout from "./layouts/core-pages-layout/CorePagesLayout";
 import ManageDeck from "./flashcards/ManageDeck";
+import FlashcardTest from "./flashcards/FlashcardTest";
 
 function App() {
   return (
@@ -20,18 +21,21 @@ function App() {
         <Routes>
           <Route element={<CorePagesLayout/>}>
             <Route index element={<LandingPage/>}></Route>
-            <Route path="/about-us" element={<AboutUs/>}></Route>
-            <Route path="/contact-us" element={<ContactUs/>}></Route>
+            <Route path="about-us" element={<AboutUs/>}></Route>
+            <Route path="contact-us" element={<ContactUs/>}></Route>
           </Route>
-          <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/flashcards">
-              <Route index element={<MyFlashcards />} />
-              <Route path="/flashcards/create" element={<ManageDeck mode="create" />} />
-              <Route path="/flashcards/edit/:deckId" element={<ManageDeck mode="edit" />} />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<MainLayout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="flashcards">
+                <Route index element={<MyFlashcards />} />
+                <Route path="create" element={<ManageDeck mode="create" />} />
+                <Route path="edit/:deckId" element={<ManageDeck mode="edit" />} />
+              </Route>
+              <Route path="quizzes" element={<MyQuizzes />} />
+              <Route path="notes" element={<MyNotes />} />
             </Route>
-            <Route path="/quizzes" element={<MyQuizzes />} />
-            <Route path="/notes" element={<MyNotes />} />
+            <Route path="flashcards/test/:deckId" element={<FlashcardTest />} />
           </Route>
           <Route path="/sign-in" element={<PublicRoute><AuthPage mode="sign-in"/></PublicRoute>} />
           <Route path="/sign-up" element={<PublicRoute><AuthPage mode="sign-up"/></PublicRoute>} />
