@@ -79,6 +79,14 @@
         transform: perspective(3000px) rotateY(var(--rotate-y, 0)) translateX(var(--translate-x, 0));
         transform-style: preserve-3d;
         transition: 0.4s ease;
+        .flashcard-content{
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 3em;
+        }
         .front, .back{
             position: absolute;
             backface-visibility: hidden;
@@ -89,14 +97,7 @@
             gap: 1em;
             width: 100%;
             height: 100%;
-            .flashcard-content{
-                width: 100%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                margin: 3em;
+            
                 .flashcard-term, .flashcard-definition{
                     width: 100%;
                     height: 100%;
@@ -106,11 +107,14 @@
                     flex-grow: 1;
                     text-align: center;
                     font-size: 1.2em;
+                    word-wrap: break-word;
+                    word-break: break-word;
+                    overflow-x: auto;
                 }
                 .flip-button{
                     height: 20%;
                 }
-            }
+            
         }
         
         .back{
@@ -123,7 +127,7 @@
 
     .card.enter-right.inactive {
         --translate-x: 150%;
-        transition: none; /* no animation */
+        transition: none;
     }
     .card.enter-right.active {
         --translate-x: 0;
@@ -134,5 +138,20 @@
         transition: transform 0.4s ease;
     }
     
+    .success-modal{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1em;
+        padding: 1em;
+        .modal-actions{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1em;
+        }
+    }
     
 }

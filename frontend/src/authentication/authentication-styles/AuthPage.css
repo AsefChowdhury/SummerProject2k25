@@ -21,6 +21,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5em;
+    text-wrap: nowrap;
 }
 
 .back-button-container{
@@ -65,6 +66,10 @@
     outline: 0.1em solid rgba(255,255,255,15%);
     padding: 2em;
     backdrop-filter: blur(0.5em);
+}
+
+.auth-page-form label{
+    margin-bottom: 0.5em;
 }
 
 h1{

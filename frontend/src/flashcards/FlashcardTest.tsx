@@ -3,13 +3,14 @@ import IconButton from "../components/IconButton/IconButton";
 import close from '../assets/close.svg?react'
 import tick from '../assets/tick.svg?react'
 import flip from '../assets/flip.svg?react'
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../api";
 import { useParams } from "react-router-dom";
 import Button from "../components/button/Button";
 import "./flashcards-styles/FlashcardTest.css"
 import Progressbar from "../components/progress-bar/ProgressBar";
 import Modal from "../components/modal/Modal";
+import ModalSuccess from "../assets/modal-success.svg?react";
 
 class Flashcard{
     term: string;
@@ -26,8 +27,10 @@ function FlashcardTest(){
     const [numOfCards, setNumOfCards] = useState(0);
     const [flipped, setFlipped] = useState(false);
     const [showExitModal, setShowExitModal] = useState(false);
+    const [showEndTestModal, setShowEndTestModal] = useState(false);
     const [slideDirection, setSlideDirection] = useState<"exit-left" | "enter-right">("enter-right");
     const [slideTriggerSlide, setTriggerSlide] = useState<"active" | "inactive">("inactive");
+    const progress = (numOfCards > 0 && flashcardQueue !== null) ? (numOfCards - flashcardQueue.length) / numOfCards : 0;
 
     useEffect(() => {
         let isMounted = true;
@@ -76,6 +79,8 @@ function FlashcardTest(){
             });
         }, 400);
         
+
+
         return;
     }
 
@@ -86,45 +91,41 @@ function FlashcardTest(){
             )
         }
 
-        const progress = numOfCards > 0 ? (numOfCards - flashcardQueue.length) / numOfCards : 0;
+        if(progress === 1 && showEndTestModal === false){
+            setShowEndTestModal(true);
+        }
+
         return(
             <div className="flashcard-container">
                 <Progressbar value={progress} className="test-progress-bar"/>
-                <Card className={`card ${flipped ? 'flipped' : ''} ${slideDirection} ${slideTriggerSlide}`}>
-                    {flashcardQueue.length > 0 &&
-                        <>
-                            <div className="front">
-                                <div className="flashcard-content">
-                                    <h1>Term</h1>
-                                    <p className="flashcard-term">{flashcardQueue[0].term}</p>
-                                    <IconButton className="flip-button" icon={flip} tooltip="Flip card" onClick={() => {setFlipped(!flipped)}}/>
+                {flashcardQueue.length > 0 && <>
+                    <Card className={`card ${flipped ? 'flipped' : ''} ${slideDirection} ${slideTriggerSlide}`}>                     
+                            <>
+                                <div className="front">
+                                    <div className="flashcard-content">
+                                        <h1>Term</h1>
+                                        <p className="flashcard-term">{flashcardQueue[0].term}</p>
+                                        <IconButton className="flip-button" icon={flip} tooltip="Flip card" onClick={() => {setFlipped(!flipped)}}/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="back">
-                                <div className="flashcard-content">
-                                    <h1>Definition</h1>
-                                    <p className="flashcard-definition">{flashcardQueue[0].definition}</p>
-                                    <IconButton className="flip-button" icon={flip} tooltip="Flip card" onClick={() => {setFlipped(!flipped)}}/>
+                                <div className="back">
+                                    <div className="flashcard-content">
+                                        <h1>Definition</h1>
+                                        <p className="flashcard-definition">{flashcardQueue[0].definition}</p>
+                                        <IconButton className="flip-button" icon={flip} tooltip="Flip card" onClick={() => {setFlipped(!flipped)}}/>
+                                    </div>
                                 </div>
-                            </div>
-                        </>
-                    }
-                    {flashcardQueue.length === 0 &&
-                        <div className="flashcard-content">
-                            <h1>Test complete!</h1>
-                            <Button text="Edit deck" variant="outlined" to={`/flashcards/edit/${deckId}`}/>
-                            <Button text="View all decks" variant="outlined" to={`/flashcards/`}/>
-                        </div>
-                    }
-                </Card>
-                <div className="page-bottom">
-                {flashcardQueue.length > 0 && flipped &&
-                    <>
-                        <Button text="Forgot" className="forgot-button" iconLeft={close} variant="outlined" onClick={() => {handleNextCard("forgot")}}/>
-                        <Button text="Remembered" className="remember-button" iconLeft={tick} variant="outlined" onClick={() => {handleNextCard("remembered")}}/>  
-                    </>
-                }
-                </div>
+                            </>
+                    </Card> 
+                    <div className="page-bottom">
+                        {flipped &&
+                            <>
+                                <Button text="Forgot" className="forgot-button" iconLeft={close} variant="outlined" onClick={() => {handleNextCard("forgot")}}/>
+                                <Button text="Remembered" className="remember-button" iconLeft={tick} variant="outlined" onClick={() => {handleNextCard("remembered")}}/>  
+                            </>
+                        }
+                    </div>
+                </>}
             </div>
         )
     }
@@ -132,7 +133,7 @@ function FlashcardTest(){
     return(
         <div className="test-screen">
             <div className="page-header">
-                {flashcardQueue && <IconButton icon={close} tooltip="Exit test" onClick={() => {setShowExitModal(true)}}/>}
+                {flashcardQueue && flashcardQueue.length > 0 && <IconButton icon={close} tooltip="Exit test" onClick={() => {setShowExitModal(true)}}/>}
             </div>
             <div className="page-content">
                 {showCard()}
@@ -146,6 +147,14 @@ function FlashcardTest(){
                         <Button text="End test" variant="filled" to={`/flashcards/`} onClick={() => {setShowExitModal(false)}}/>
                     </div>
                 </div>}
+            </Modal>
+            <Modal className="success-modal" open={showEndTestModal}>
+                <h1>Test completed!</h1>
+                <ModalSuccess/>
+                <div className="modal-actions">
+                    <Button text="View all decks" variant="filled" to={`/flashcards/`} onClick={() => {setShowEndTestModal(false)}}/>
+                    <Button text="Edit deck" variant="outlined" to={`/flashcards/edit/${deckId}`} onClick={() => {setShowEndTestModal(false)}}/>
+                </div>
             </Modal>
         </div>
         
