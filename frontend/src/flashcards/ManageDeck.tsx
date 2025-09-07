@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Textarea from "../components/textarea/Textarea";
 import Modal from "../components/modal/Modal";
 import ModalSuccess from "../assets/modal-success.svg?react";
+import { useToast } from "../components/toast/toast";
 
 class Flashcard {
     static nextIndex = 0;
@@ -71,6 +72,7 @@ function ManageDeck(props: ManageDeckProps) {
     const [title, setTitle] = useState("");
     const [showFinishedModal, setShowFinishedModal] = useState(false);
     const [submittingDeck, setSubmittingDeck] = useState(false);
+    const toast = useToast();
     let navigate = useNavigate();
     
     useEffect(() => {
@@ -113,7 +115,6 @@ function ManageDeck(props: ManageDeckProps) {
         if(submittingDeck){
             return;
         }
-
         for(let i = 0; i < flashcards.length; i++){
             flashcards[i].index = i;
         }
@@ -146,7 +147,9 @@ function ManageDeck(props: ManageDeckProps) {
                 setShowFinishedModal(true);
             }
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+            console.log(error);
+        })
         .finally(() => {
             
             setSubmittingDeck(false);
