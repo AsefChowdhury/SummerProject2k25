@@ -28,7 +28,7 @@ function Toast(props: ToastProps) {
         <div className={`toast ${props.type}`}>
             <div className="toast-content">
                 {props.type === "success" ? <Success className="toast-icon success"/> : props.type === "error" ? <Error className="toast-icon error"/> : <Warning className="toast-icon warning"/>}
-                <p>{props.message}</p>
+                <p className="toast-message">{props.message}</p>
             </div>
             <IconButton icon={close} className="close-button" onClick={props.onClose}/>
         </div>

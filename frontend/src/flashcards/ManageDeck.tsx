@@ -131,7 +131,10 @@ function ManageDeck(props: ManageDeckProps) {
                     setShowFinishedModal(true);
                 }
             })
-            .catch(error => console.log(error))
+            .catch(error => 
+                {
+                    toast?.addToast({message: "Something went wrong, please try again", type: "error"});
+                })
             .finally(() => {
                 setSubmittingDeck(false);
             })
@@ -148,7 +151,7 @@ function ManageDeck(props: ManageDeckProps) {
             }
         })
         .catch(error => {
-            console.log(error);
+            toast?.addToast({message: "Something went wrong, please try again", type: "error"});
         })
         .finally(() => {
             
