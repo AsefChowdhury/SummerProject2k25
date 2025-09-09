@@ -8,6 +8,9 @@
     gap: 0.8em;
     max-width: 18em;
     height: auto;
+    .close-button .button:hover{
+        background-color: var(--accent-color);
+    }
     .toast{
         border-radius: 0.5em;
         padding-left: 0.5em;

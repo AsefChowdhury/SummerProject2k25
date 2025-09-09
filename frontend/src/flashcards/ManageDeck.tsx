@@ -19,6 +19,8 @@ class Flashcard {
     static nextIndex = 0;
     term: string;
     definition: string;
+    termError?: string;
+    definitionError?: string;
     index?: number;
     id?: number;
     clientId: string;
@@ -41,8 +43,8 @@ function FlashcardComponent(props: FlashcardComponentProps) {
     return (
         <Card>
             <div className="card-content">
-                <Textarea placeholder="Term" variant="underlined" defaultValue={props.flashcard.term} onChange={(e) => {props.flashcard.term = e.target.value}}/>
-                <Textarea placeholder="Definition" variant="underlined" defaultValue={props.flashcard.definition} onChange={(e) => {props.flashcard.definition = e.target.value}}/>
+                <Textarea placeholder="Term" error={props.flashcard.termError} variant="underlined" defaultValue={props.flashcard.term} onChange={(e) => {props.flashcard.term = e.target.value}}/>
+                <Textarea placeholder="Definition" error={props.flashcard.definitionError} variant="underlined" defaultValue={props.flashcard.definition} onChange={(e) => {props.flashcard.definition = e.target.value}}/>
                 <div className="card-actions">
                     <IconButton className="copy-button" icon={copyIcon} tooltip="Duplicate" onClick={() => {props.onCopy(props.index)}}/>
                     <IconButton className="delete-button" icon={deleteIcon} disabled={props.disableDelete} tooltip="Delete" onClick={() => {props.onDelete(props.index)}}/>
@@ -70,6 +72,7 @@ function ManageDeck(props: ManageDeckProps) {
     const {deckId} = useParams();
     const [flashcards, setFlashcards] = useState([new Flashcard()]);
     const [title, setTitle] = useState("");
+    const [titleError, setTitleError] = useState<string | undefined>(undefined);
     const [showFinishedModal, setShowFinishedModal] = useState(false);
     const [submittingDeck, setSubmittingDeck] = useState(false);
     const toast = useToast();
@@ -133,7 +136,7 @@ function ManageDeck(props: ManageDeckProps) {
             })
             .catch(error => 
                 {
-                    toast?.addToast({message: "Something went wrong, please try again", type: "error"});
+                    toast?.addToast({message: "Something went wrong whilst saving your deck, please try again", type: "error"});
                 })
             .finally(() => {
                 setSubmittingDeck(false);
@@ -151,7 +154,7 @@ function ManageDeck(props: ManageDeckProps) {
             }
         })
         .catch(error => {
-            toast?.addToast({message: "Something went wrong, please try again", type: "error"});
+            toast?.addToast({message: "Something went wrong whilst creating your deck, please try again", type: "error"});
         })
         .finally(() => {
             
@@ -169,7 +172,7 @@ function ManageDeck(props: ManageDeckProps) {
                 </div>
             </div>
             <div className="deck-info">
-                <InputField placeholder="Title" value={title} onChange={(e) => {setTitle(e.target.value)}}/>
+                <InputField error={titleError} placeholder="Title" value={title} onChange={(e) => {setTitle(e.target.value)}}/>
             </div>
             <ol className="flashcard-list">
                 {flashcards.map((flashcard, index) => (

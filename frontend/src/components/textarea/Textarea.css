@@ -1,8 +1,15 @@
 .textarea-container {
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     box-sizing: border-box;
+    .error-message {
+        color: var(--error-color);
+        font-size: 0.8em;
+        margin: 0;
+        margin-top: 0.2em;
+        padding: 0;
+    }
     .textarea {
         width: 100%;
         min-height: 3em;
@@ -16,37 +23,56 @@
         transition: border-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
         box-sizing: border-box;
     }
+    .textarea.outlined{
+        border-radius: 0.5em;
+        border: 0.1em solid transparent;
+        background-color: var(--accent-color);
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+
+    .textarea.outlined.regular{
+        outline: 0.1em solid var(--secondary-hover-border);
+    }
+    
+    .textarea.outlined.regular:hover{
+        outline: 0.15em solid var(--text-color);
+    }
+    
+    .textarea.outlined.regular:focus-within{
+        outline: 0.15em solid var(--hover-border);
+        background-color: transparent;
+    }
+
+    .textarea.outlined.error{
+        outline: 0.1em solid var(--error-color);
+    }
+    
+    .textarea.outlined.error:focus-within{
+        outline: 0.15em solid var(--error-color);
+    }
+    
+    .textarea.underlined{
+        border-bottom: 0.1em solid var(--secondary-hover-border);
+    }
+    
+    .textarea.underlined.regular:hover{
+        border-bottom: 0.15em solid var(--text-color);
+    }
+    
+    .textarea.underlined.error{
+        border-color: var(--error-color);
+    }
+
+    .textarea.underlined.error:focus-within{
+        border-bottom: 0.15em solid var(--error-color);
+    }
+    
+    .textarea.underlined.regular:focus-within{
+        border-bottom: 0.15em solid var(--hover-border);
+    }
 }
 
 
 /* outlined variant */
-.textarea-container.outlined .textarea {
-    border-radius: 0.5em;
-    border: 0.2em solid transparent;
-    background-color: var(--accent-color);
-    outline: 0.1em solid var(--secondary-hover-border);
-    padding: 1em;
-}
 
-.textarea-container.outlined:hover .textarea {
-    border-color: var(--secondary-hover-border);
-}
-
-.textarea-container.outlined:focus-within .textarea {
-    outline: 0.1em solid var(--hover-border);
-    border-color: var(--hover-border);
-    background-color: transparent;
-}
-
-/* underlined variant */
-.textarea-container.underlined .textarea {
-    border-bottom: 0.1em solid var(--secondary-hover-border);
-}
-
-.textarea-container.underlined:hover .textarea {
-    border-bottom: 0.15em solid var(--text-color);
-}
-
-.textarea-container.underlined:focus-within .textarea {
-    border-bottom: 0.15em solid var(--hover-border);
-}
