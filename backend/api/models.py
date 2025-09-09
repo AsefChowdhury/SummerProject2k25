@@ -19,7 +19,7 @@ class Deck(models.Model):
     
 class Flashcard(models.Model):
     term = models.CharField(max_length=100)
-    definition = models.TextField()
+    definition = models.TextField(max_length=1000)
     deck = models.ForeignKey(Deck, on_delete=models.CASCADE, related_name='flashcards')
     index = models.IntegerField()
 

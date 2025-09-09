@@ -7,6 +7,7 @@ import api from "../api"
 import "./flashcards-styles/MyFlashcards.css"
 import Modal from "../components/modal/Modal"
 import Button from "../components/button/Button"
+import { useToast } from "../components/toast/toast"
 
 type DeckElementProps = {
     title: string
@@ -32,9 +33,11 @@ function DeckElement(props: DeckElementProps) {
 }
 
 function MyFlashcards() {
+    const toast = useToast();
     const [decks, setDecks] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deckToDelete, setDeckToDelete] = useState({id: 0, title: undefined});
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         getDecks();
@@ -46,12 +49,30 @@ function MyFlashcards() {
         .then(response => {
             setDecks(response.data);
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+            toast?.addToast({message: "Something went wrong whilst fetching your decks, please try again", type: "error"});
+        });
     }
 
     const handleDelete = async (id: number) => {
-        await api.delete(`api/decks/${id}/`).catch(error => console.log(error));
-        getDecks();
+        if(isDeleting) {
+            return;
+        }
+        setIsDeleting(true);
+        await api.delete(`api/decks/${id}/`)
+        .then(response => {
+            if(response.status === 204) {
+                setShowDeleteModal(false);
+                toast?.addToast({message: `Deck "${deckToDelete.title}" has been deleted`, type: "success"});
+            }
+        })
+        .catch(error => {
+            toast?.addToast({message: "Something went wrong whilst deleting your deck, please try again", type: "error"});
+        })
+        .finally(() => {
+            getDecks();
+            setIsDeleting(false);
+        });  
     }
 
     return (

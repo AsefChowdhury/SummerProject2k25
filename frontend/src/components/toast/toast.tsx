@@ -47,7 +47,6 @@ export function ToastProvider(props: ToastProviderProps) {
 
     const removeToast = (id: number) => {
         setToasts((toasts) => toasts.filter(toast => toast.id !== id));
-        console.log(toasts);
     }
 
     return (

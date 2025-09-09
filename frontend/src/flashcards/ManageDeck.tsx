@@ -114,52 +114,78 @@ function ManageDeck(props: ManageDeckProps) {
         setFlashcards([...flashcards, newFlashcard]);
     }
 
+    const validateDeck = () => {
+        let isValid = true;
+        if(title === ""){
+            setTitleError("Title cannot be empty");
+            isValid = false;
+        } else if(title.length > 100){
+            setTitleError("Title must be less than or equal to 100 characters");
+            isValid = false;
+        } else {
+            setTitleError(undefined);
+        }
+        const validateFlashcards = flashcards.map(flashcard => {
+            if(flashcard.term === ""){
+                flashcard.termError = "Term cannot be empty";
+                isValid = false;
+            }
+            else if(flashcard.term.length > 100){
+                flashcard.termError = "Term must be less than or equal to 100 characters";
+                isValid = false;
+            } else {
+                flashcard.termError = undefined;
+            }
+            if(flashcard.definition === ""){
+                flashcard.definitionError = "Definition cannot be empty";
+                isValid = false;
+            }
+            else if(flashcard.definition.length > 1000){
+                flashcard.definitionError = "Definition must be less than or equal to 1000 characters";
+                isValid = false;
+            } else {
+                flashcard.definitionError = undefined;
+            }
+            return flashcard;
+        });
+        setFlashcards(validateFlashcards)
+        return isValid;
+    }
+
     const submitDeck = async () => {
         if(submittingDeck){
+            return;
+        }
+        if(!validateDeck()){
             return;
         }
         for(let i = 0; i < flashcards.length; i++){
             flashcards[i].index = i;
         }
-
-        if(props.mode == "edit"){
+        try{
             setSubmittingDeck(true);
-            await api
-            .put(`api/decks/${deckId}/`, {
-                id: deckId,
-                title: title,
-                flashcards: flashcards
-            }).then(response => {
-                if(response.status === 200){
-                    setShowFinishedModal(true);
-                }
-            })
-            .catch(error => 
-                {
-                    toast?.addToast({message: "Something went wrong whilst saving your deck, please try again", type: "error"});
+            let response;
+            if (props.mode == "edit"){
+                response = await api.put(`api/decks/${deckId}/`, {
+                    id: deckId,
+                    title: title,
+                    flashcards: flashcards
                 })
-            .finally(() => {
-                setSubmittingDeck(false);
-            })
-            return;
-        }
-        const deck = new Deck(title, flashcards);
-        setSubmittingDeck(true);
-        await api
-        .post('api/decks/', deck)
-        .then(response => {
-            if(response.status === 201){
-                navigate(`/flashcards/edit/${response.data.id}`);
+            } else if (props.mode == "create"){
+                const deck = new Deck(title, flashcards);
+                response = await api.post('api/decks/', deck)
+            }
+            if(response?.status === 200 || response?.status === 201){
+                if(props.mode === "create"){
+                    navigate(`/flashcards/edit/${response.data.id}`);
+                }
                 setShowFinishedModal(true);
             }
-        })
-        .catch(error => {
-            toast?.addToast({message: "Something went wrong whilst creating your deck, please try again", type: "error"});
-        })
-        .finally(() => {
-            
+        } catch (error) {
+            toast?.addToast({message: `Something went wrong whilst ${props.mode === "edit" ? "saving" : "creating"} your deck, please try again`, type: "error"});
+        } finally {
             setSubmittingDeck(false);
-        })
+        }
     }
 
     return (
