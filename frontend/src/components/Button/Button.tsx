@@ -12,16 +12,16 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &{
     onClick?: () => void;
 };
 
-function Button({iconLeft: IconLeft, iconRight: IconRight, ...props}: ButtonProps) {
+function Button({iconLeft: IconLeft, iconRight: IconRight, loading, ...props}: ButtonProps) {
     const content = (
         <div className="button-container" onClick={props.onClick}>
-            <button {...props} disabled={props.loading || props.disabled} className={`button ${props.variant ?? 'filled'}`} >
+            <button {...props} disabled={loading || props.disabled} className={`button ${props.variant ?? 'filled'}`} >
                 {IconLeft && <IconLeft className='icon-image'/>}
                 <div className="button-content">
-                    {props.loading &&
+                    {loading &&
                             <Spinner /> 
                     }
-                    <span className={`button-text ${props.loading ? 'loading' : ''}`}>{props.text}</span>
+                    <span className={`button-text ${loading ? 'loading' : ''}`}>{props.text}</span>
                 </div>
                 {IconRight && <IconRight className='icon-image'/>}
             </button>
@@ -32,13 +32,13 @@ function Button({iconLeft: IconLeft, iconRight: IconRight, ...props}: ButtonProp
         return(
             <div className="button-container" onClick={props.onClick}>
                 <Link to={props.to} >
-                    <button {...props} disabled={props.loading || props.disabled} className={`button ${props.variant ?? 'filled'}`} >
+                    <button {...props} disabled={loading || props.disabled} className={`button ${props.variant ?? 'filled'}`} >
                         {IconLeft && <IconLeft className='icon-image'/>}
                         <div className="button-content">
-                            {props.loading &&
+                            {loading &&
                                     <Spinner /> 
                             }
-                            <span className={`button-text ${props.loading ? 'loading' : ''}`}>{props.text}</span>
+                            <span className={`button-text ${loading ? 'loading' : ''}`}>{props.text}</span>
                         </div>
                         {IconRight && <IconRight className='icon-image'/>}
                     </button>
