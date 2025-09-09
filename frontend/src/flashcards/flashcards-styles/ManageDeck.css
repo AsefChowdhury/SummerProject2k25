@@ -54,18 +54,21 @@
     gap: 1em;
 }
 
-.add-flashcard-button{
-    width: 100%;
+#add-flashcard-button{
+    width: auto;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     height: 4em;
+}
+
+.flashcards-bottom{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 2em;
     margin-bottom: 2em;
-    .button-container{
-        width: auto;
-    }
 }
 
 .finished-modal{

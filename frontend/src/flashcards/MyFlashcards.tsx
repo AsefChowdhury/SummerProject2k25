@@ -92,8 +92,8 @@ function MyFlashcards() {
                     <h1>Are you sure?</h1>
                     <p>Are you sure you want to delete the deck "{deckToDelete.title}"?<br />This action cannot be undone.</p>
                     <div className="modal-actions">
-                        <Button text="Cancel" variant="outlined" onClick={() => {setShowDeleteModal(false)}}/>
-                        <Button text="Delete" variant="filled" onClick={() => {setShowDeleteModal(false); handleDelete(deckToDelete.id)}}/>
+                        <Button id="cancel-delete" text="Cancel" variant="outlined" onClick={() => {setShowDeleteModal(false)}}/>
+                        <Button id="confirm-delete" text="Delete" variant="filled" onClick={() => {setShowDeleteModal(false); handleDelete(deckToDelete.id)}}/>
                     </div>
                 </div>
             </Modal>

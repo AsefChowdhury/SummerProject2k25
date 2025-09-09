@@ -176,7 +176,7 @@ function AuthPage(props: AuthPageProps) {
                                 <a className="forgot-password">Forgot Password?</a>
                             </div>
                         }
-                        <button type="submit" className="auth-page-submit-button">{props.mode === "sign-in" ? "Sign in" : "Sign up"}</button>
+                        <Button loading={loading} type="submit" id="auth-page-submit-button" text={props.mode === "sign-in" ? "Sign in" : "Sign up"} variant="filled"/>
                         
                         <div className="divider">
                             <span>or</span>

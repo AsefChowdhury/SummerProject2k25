@@ -1,0 +1,10 @@
+.spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    aspect-ratio: 1/1;
+    .spinner-icon{
+        fill: currentColor;
+    }
+}

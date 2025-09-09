@@ -75,6 +75,7 @@ function ManageDeck(props: ManageDeckProps) {
     const [titleError, setTitleError] = useState<string | undefined>(undefined);
     const [showFinishedModal, setShowFinishedModal] = useState(false);
     const [submittingDeck, setSubmittingDeck] = useState(false);
+    const [loading, setLoading] = useState(false);
     const toast = useToast();
     let navigate = useNavigate();
     
@@ -85,6 +86,8 @@ function ManageDeck(props: ManageDeckProps) {
         }
 
         if(props.mode === "edit"){
+            setTitleError(undefined);
+            setLoading(true);
             let isMounted = true;
             const fetchDeck = async () => {
                 await api.get(`api/decks/${deckId}`).then(response => {
@@ -92,7 +95,11 @@ function ManageDeck(props: ManageDeckProps) {
                         setTitle(response.data.title);
                         setFlashcards(response.data.flashcards);
                     }
-                }).catch(error => console.log(error));
+                }).catch(error => {
+                    toast?.addToast({message: "Something went wrong whilst fetching your deck, please try again", type: "error"});
+                }).finally(() => {
+                    setLoading(false);
+                });
             }
             fetchDeck();
             return () => {
@@ -164,6 +171,7 @@ function ManageDeck(props: ManageDeckProps) {
         }
         try{
             setSubmittingDeck(true);
+            setLoading(true);
             let response;
             if (props.mode == "edit"){
                 response = await api.put(`api/decks/${deckId}/`, {
@@ -185,6 +193,7 @@ function ManageDeck(props: ManageDeckProps) {
             toast?.addToast({message: `Something went wrong whilst ${props.mode === "edit" ? "saving" : "creating"} your deck, please try again`, type: "error"});
         } finally {
             setSubmittingDeck(false);
+            setLoading(false);
         }
     }
 
@@ -193,8 +202,8 @@ function ManageDeck(props: ManageDeckProps) {
             <div className="page-header">
                 <h1>{props.mode === "edit" ? "Edit deck" : "Create a new deck"}</h1>
                 <div className="save-buttons">
-                    <Button iconLeft={editIcon} text={props.mode === "edit" ? "Save" : "Create"} type="button" variant="outlined" onClick={() => {submitDeck()}}/>
-                    <Button text={props.mode === "edit" ? "Save and test" : "Create and test"} type="button" variant="filled" />
+                    <Button loading={loading} iconLeft={editIcon} text={props.mode === "edit" ? "Save" : "Create"} type="button" variant="outlined" onClick={() => {submitDeck()}}/>
+                    <Button loading={loading} text={props.mode === "edit" ? "Save and test" : "Create and test"} type="button" variant="filled" />
                 </div>
             </div>
             <div className="deck-info">
@@ -207,8 +216,8 @@ function ManageDeck(props: ManageDeckProps) {
                     </li>
                 ))}
             </ol>
-            <div className="add-flashcard-button">
-                <Button iconLeft={addIcon} variant="outlined" text="Add flashcard" onClick={addFlashcard}/>
+            <div className="flashcards-bottom">
+                <Button disabled={loading} id="add-flashcard-button" iconLeft={addIcon} variant="outlined" text="Add flashcard" onClick={addFlashcard}/>
             </div>
             <Modal open={showFinishedModal}>
                 <div className="finished-modal">
