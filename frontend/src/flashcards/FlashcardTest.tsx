@@ -11,6 +11,7 @@ import "./flashcards-styles/FlashcardTest.css"
 import Progressbar from "../components/progress-bar/ProgressBar";
 import Modal from "../components/modal/Modal";
 import ModalSuccess from "../assets/modal-success.svg?react";
+import Spinner from "../components/spinner/Spinner";
 
 class Flashcard{
     term: string;
@@ -87,7 +88,10 @@ function FlashcardTest(){
     const showCard = () => {
         if(flashcardQueue === null){
             return(
-                <h1>Loading...</h1>
+                <div className="fetch-deck-loading">
+                    <h1>Fetching cards...</h1>
+                    <Spinner />
+                </div>
             )
         }
 
@@ -139,12 +143,12 @@ function FlashcardTest(){
                 {showCard()}
             </div>
             <Modal open={showExitModal}>
-                {flashcardQueue && <div className="delete-modal">
+                {flashcardQueue && <div className="end-modal">
                     <h1>End this test?</h1>
-                    <p className="delete-modal-description">Only {flashcardQueue.length} cards left. You can do it!</p>
+                    <p className="end-modal-description">Only {flashcardQueue.length} card{flashcardQueue.length === 1 ? "" : "s"} left. You can do it!</p>
                     <div className="modal-actions">
-                        <Button text="Keep going" variant="outlined" onClick={() => {setShowExitModal(false)}}/>
-                        <Button text="End test" variant="filled" to={`/flashcards/`} onClick={() => {setShowExitModal(false)}}/>
+                        <Button id="continue-button" text="Keep going" variant="outlined" onClick={() => {setShowExitModal(false)}}/>
+                        <Button id="end-test-button" text="End test" variant="filled" onClick={() => {setShowExitModal(false); setShowEndTestModal(true)}}/>
                     </div>
                 </div>}
             </Modal>

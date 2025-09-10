@@ -8,6 +8,7 @@ import "./flashcards-styles/MyFlashcards.css"
 import Modal from "../components/modal/Modal"
 import Button from "../components/button/Button"
 import { useToast } from "../components/toast/toast"
+import Spinner from "../components/spinner/Spinner"
 
 type DeckElementProps = {
     title: string
@@ -38,12 +39,14 @@ function MyFlashcards() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deckToDelete, setDeckToDelete] = useState({id: 0, title: undefined});
     const [isDeleting, setIsDeleting] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getDecks();
     }, []);
 
     const getDecks = async () => {
+        setLoading(true);
         await api
         .get('api/decks/')
         .then(response => {
@@ -51,6 +54,9 @@ function MyFlashcards() {
         })
         .catch(error => {
             toast?.addToast({message: "Something went wrong whilst fetching your decks, please try again", type: "error"});
+        })
+        .finally(() => {
+            setLoading(false);
         });
     }
 
@@ -76,17 +82,21 @@ function MyFlashcards() {
     }
 
     return (
-        <>
+        <div className="my-flashcards-page">
             <div className="page-header">
                 <h1>My Flashcards</h1>
             </div>
-            <ul className="decks-list">
+            {!loading && <ul className="decks-list">
                 {decks.map((deck: any) => (
                     <li key={deck.id}>
                         <DeckElement onDelete={() => {setDeckToDelete({id: deck.id, title: deck.title}); setShowDeleteModal(true)}} key={deck.id} title={deck.title} id={deck.id} />
                     </li>
                 ))}
-            </ul>
+            </ul>}
+            {loading && <div className="fetch-deck-loading">
+                <h2>Fetching your decks...</h2>
+                <Spinner />
+            </div>}
             <Modal open={showDeleteModal}>
                 <div className="delete-modal">
                     <h1>Are you sure?</h1>
@@ -97,7 +107,7 @@ function MyFlashcards() {
                     </div>
                 </div>
             </Modal>
-        </>
+        </div>
     )
 }
 
