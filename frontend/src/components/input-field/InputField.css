@@ -1,66 +1,85 @@
 .input-field-container{
     width: 100%;
-    height: 2em;
-    align-items: center;
     display: flex;
-    flex-direction: row;
-    transition: all 0.2s ease-in-out;
-}
-
-.input-field{
-    background-color: transparent;
-    border: none;
-    color: var(--text-color);
-    height: 100%;
-    width: 100%;
-    font-size: 1em;
-    outline: none;
-}
-
-.input-field-container.outlined{
-    border-radius: 0.5em;
-    border: 0.2em solid transparent;
-    background-color: var(--accent-color);
-    outline: 0.1em solid var(--secondary-hover-border);
+    flex-direction: column;
     box-sizing: border-box;
-    padding-top: 1em;
-    padding-bottom: 1em;
-    .input-field{
-        padding-top: 1em;
-        padding-bottom: 1em;
-        padding-left: 1em;
-        padding-right: 1em;
+    border-radius: 0.5em;
+    .input-contents{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        transition: border-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
+        .input-field{
+            min-height: 2.5em;
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            width: 100%;
+            font-size: inherit;
+            font-family: inherit;
+            outline: none;
+            padding: 0;
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+        }
+    }
+
+    .error-message {
+        color: var(--error-color);
+        font-size: 0.8em;
+        margin: 0;
+        margin-top: 0.2em;
+        padding: 0;
+    }
+
+    .input-contents.outlined{
+        border-radius: 0.5em;
+        background-color: var(--accent-color);
+        box-sizing: border-box;
+        .input-field{
+            border-radius: 0.5em;
+        }
+    }
+
+    .input-contents.outlined.regular{
+        outline: 0.1em solid var(--secondary-hover-border);
     }
     
-    
-}
-
-.input-field-container.outlined:hover{
-    border: 0.2em solid var(--secondary-hover-border);
-}
-
-.input-field-container.outlined:focus-within{
-    outline: 0.1em solid var(--hover-border);
-    border: 0.2em solid var(--hover-border);
-    background-color: transparent;
-}
-
-
-.input-field-container.underlined{
-    border-bottom: 0.1em solid var(--secondary-hover-border);
-    transition: all 0.1s ease-in-out;
-    .input-field{
-        padding-left: 0;
-        padding-right: 0.5em;
+    .input-contents.outlined.regular:hover{
+        outline: 0.15em solid var(--text-color);
     }
     
+    .input-contents.outlined.regular:focus-within{
+        outline: 0.15em solid var(--hover-border);
+        background-color: transparent;
+    }
+    
+    .input-contents.outlined.error{
+        outline: 0.1em solid var(--error-color);
+    }
+    
+    .input-contents.outlined.error:focus-within{
+        outline: 0.15em solid var(--error-color);
+    }
+    
+    .input-contents.underlined{
+        border-bottom: 0.1em solid var(--secondary-hover-border);
+        transition: all 0.1s ease-in-out;
+        .input-field{
+            padding-left: 0;
+            padding-right: 0.5em;
+        }
+        
+    }
+    
+    .input-contents.underlined:hover{
+        border-bottom: 0.15em solid var(--text-color);
+    }
+    
+    .input-contents.underlined:focus-within{
+        border-bottom: 0.15em solid var(--hover-border);
+    }
 }
 
-.input-field-container.underlined:hover{
-    border-bottom: 0.15em solid var(--text-color);
-}
-
-.input-field-container.underlined:focus-within{
-    border-bottom: 0.15em solid var(--hover-border);
-}
 

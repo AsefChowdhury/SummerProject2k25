@@ -1,7 +1,7 @@
 .button-container{
     display: flex;
     height: 100%;
-    width: 100%;
+    width: auto;
     a {
         text-decoration: none;
         width: 100%;
@@ -23,10 +23,40 @@
         gap: 0.5em;
         cursor: pointer;
         padding: 0.5em 1em;
+        .button-content{
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        .spinner{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .button-text.loading{
+            visibility: hidden;
+        }
+        
+    }
+
+    .button:disabled{
+        cursor: not-allowed;
+        pointer-events: none;
+        .icon-image{
+            fill: gray;
+        }
     }
 
     .button.filled{
         background-color: var(--text-color);
+    }
+
+    .button.filled:disabled{
+        background-color: gray;
     }
 
     .button.outlined{

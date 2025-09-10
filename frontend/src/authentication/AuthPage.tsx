@@ -13,16 +13,22 @@ import api from "../api"
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"
 import axios from "axios"
 import Button from "../components/button/Button"
+import { useToast } from "../components/toast/toast"
 
 type AuthPageProps = {
     mode: "sign-in" | "sign-up"
 }
 
 function AuthPage(props: AuthPageProps) {
+    const toast = useToast();
     const [username, setUsername] = useState('')
+    const [usernameError, setUsernameError] = useState('')
     const [email, setEmail] = useState('')
+    const [emailError, setEmailError] = useState('')
     const [password, setPassword] = useState('')
+    const [passwordError, setPasswordError] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [confirmPasswordError, setConfirmPasswordError] = useState('')
     const [passwordVisible, setPasswordVisible] = useState(false)
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
@@ -36,37 +42,73 @@ function AuthPage(props: AuthPageProps) {
         }
     }
 
+    const validateDetails = () => {
+        let valid = true;
+        if(username === '') {
+            setUsernameError(props.mode === "sign-in" ? "Username/email cannot be empty" : "Username cannot be empty");
+            valid = false;
+        } else {
+            setUsernameError('');
+        }
+
+        if(password === '') {
+            setPasswordError("Password cannot be empty");
+            valid = false;
+        } else if ((password.length < 8) && (props.mode === "sign-up")) {
+            setPasswordError("Password must be at least 8 characters long");
+            valid = false;
+        } else {
+            setPasswordError('');
+        }
+
+        if(props.mode === "sign-up") {
+            if(confirmPassword === '') {
+                setConfirmPasswordError("Confirm password cannot be empty");
+                valid = false;
+            } else if (password !== confirmPassword) {
+                setPasswordError("Confirm password must match password");
+                setConfirmPasswordError("Confirm password must match password");
+                valid = false;
+            } else {
+                setConfirmPasswordError('');
+            }
+        }
+        return valid;
+    }
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        if(!validateDetails()) {
+            return;
+        }
         setLoading(true);
         try{
+            let response;
             if(props.mode === "sign-in") {
-                const response = await api.post('api/token/', {
+                response = await api.post('api/token/', {
                     identifier: username,
                     password: password
                 })
-                localStorage.setItem(ACCESS_TOKEN, response.data.access);
-                localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
-                navigate('/dashboard')
             } else if(props.mode === "sign-up") {
-                if (password !== confirmPassword) {
-                    throw new Error("Confirm password must match password");
-                }
-                
-                const response = await api.post('api/user/register/', {
+                response = await api.post('api/user/register/', {
                     username: username,
                     email: email,
                     password: password,
                     confirm_password: confirmPassword
                 });
                 
+            }
+            if(response?.status === 200) {
                 localStorage.setItem(ACCESS_TOKEN, response.data.access);
                 localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
                 navigate('/dashboard');
             }
         } catch (error) {
-            if(axios.isAxiosError(error) && error.response){
-                console.log(error.response.data);
+            if(axios.isAxiosError(error) && error.response && error.response.data.email && error.response.data.email[0] === "Enter a valid email address.") {
+                setEmailError("Enter a valid email address.");
+            } else {
+                setEmailError('');
+                toast?.addToast({message: `Something went wrong whilst signing you ${props.mode === "sign-in" ? "in" : "up"}, please try again`, type: "error"});
             }
         } finally {
             setLoading(false);
@@ -95,20 +137,20 @@ function AuthPage(props: AuthPageProps) {
                         {props.mode === "sign-in" &&
                             <>
                                 <label>Username or email</label>
-                                <InputField value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Username or email" maxLength={maxEmailLength} required/><br/>
+                                <InputField value={username} error={usernameError} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Username or email" maxLength={maxEmailLength} required/><br/>
                             </>
                         }
                         {props.mode === "sign-up" &&
                             <>
                                 <label>Username</label>
-                                <InputField  value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Username" maxLength={maxEmailLength} required/><br/>
+                                <InputField  value={username} error={usernameError} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Username" maxLength={maxEmailLength} required/><br/>
                                 <label>Email</label>
-                                <InputField value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Your Email" maxLength={maxEmailLength} required/><br/>
+                                <InputField value={email} error={emailError} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Your Email" maxLength={maxEmailLength} required/><br/>
                             </>
                         }
                         
                         <label>Password</label>
-                        <InputField value={password} onChange={(e) => setPassword(e.target.value)} id="password" type={passwordVisible ? "text" : "password"} placeholder="Password" maxLength={35} required>
+                        <InputField value={password} error={passwordError} onChange={(e) => setPassword(e.target.value)} id="password" type={passwordVisible ? "text" : "password"} placeholder="Password" maxLength={35} required>
                             <div className="show-password-container">
                                 <IconButton type="button" icon={passwordVisible ?  invisible : visible} tooltip={passwordVisible ? "Hide password" : "Show password"} onClick={togglePasswordVisibility}/>
                             </div>
@@ -117,7 +159,7 @@ function AuthPage(props: AuthPageProps) {
                         {props.mode === "sign-up" &&
                             <>
                                 <label>Confirm password</label>
-                                <InputField value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} id="confirm-password" type={passwordVisible ? "text" : "password"} placeholder="Confirm password" maxLength={35} required>
+                                <InputField value={confirmPassword} error={confirmPasswordError} onChange={(e) => setConfirmPassword(e.target.value)} id="confirm-password" type={passwordVisible ? "text" : "password"} placeholder="Confirm password" maxLength={35} required>
                                     <div className="show-password-container">
                                         <IconButton type="button" icon={passwordVisible ?  invisible : visible} tooltip={passwordVisible ? "Hide password" : "Show password"} onClick={togglePasswordVisibility}/>
                                     </div>
@@ -134,7 +176,7 @@ function AuthPage(props: AuthPageProps) {
                                 <a className="forgot-password">Forgot Password?</a>
                             </div>
                         }
-                        <button type="submit" className="auth-page-submit-button">{props.mode === "sign-in" ? "Sign in" : "Sign up"}</button>
+                        <Button loading={loading} type="submit" id="auth-page-submit-button" text={props.mode === "sign-in" ? "Sign in" : "Sign up"} variant="filled"/>
                         
                         <div className="divider">
                             <span>or</span>

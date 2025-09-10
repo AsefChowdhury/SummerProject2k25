@@ -5,15 +5,14 @@
     align-items: center;
     justify-content: center;
     position: relative;
-}
-
-.button.creation-button{
-    background: var(--accent-color);
-    .icon-image{
-        color: var(--text-color);
+    .creation-button .button{
+        background: var(--accent-color);
+        .icon-image{
+            color: var(--text-color);
+        }
     }
-}
-
-.button.creation-button:hover{
-    background: var(--secondary-hover-fill);
+    
+    .creation-button .button:hover{
+        background: var(--secondary-hover-fill);
+    }
 }
