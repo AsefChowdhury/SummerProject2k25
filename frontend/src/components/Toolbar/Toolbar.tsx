@@ -94,8 +94,13 @@ function toggleListFormat(editor: LexicalEditor, formatChoice: ListType){
         const findNodes = findAnchorAndFocusNodes();
         if (findNodes == false) return false;
         
+        // Declare target nodes
         let anchorTargetNode = null;
+        let focusTargetNode = null;
+
+        // Get anchor node
         const anchorNode = findNodes.anchorNode;
+        const focusNode = findNodes.focusNode;
 
         // Get parent nodes
         const anchorNodeParent = findNodes.anchorParentNode;
@@ -104,24 +109,30 @@ function toggleListFormat(editor: LexicalEditor, formatChoice: ListType){
         // Check if nodes are null
         if (anchorNodeParent === null || focusNodeParent === null) return false;
 
-        if ($isListItemNode(anchorNode)) {
+        // Get correct target node based on condition
+        if ($isListItemNode(anchorNode) && $isListItemNode(focusNode)) {
             anchorTargetNode = anchorNode;
+            focusTargetNode = focusNode;
         }
         else{
             anchorTargetNode = anchorNodeParent;
+            focusTargetNode = focusNodeParent;
         }
 
-        const anchorNodeTag = getListFormat(anchorTargetNode);        
+        const anchorNodeTag = getListFormat(anchorTargetNode);
+        const focusNodeTag = getListFormat(focusTargetNode);        
 
-        if((isListType(anchorNodeParent) && isListType(focusNodeParent)) && (anchorNodeTag == listTagMap[formatChoice])){
+        if((isListType(anchorNodeParent) && isListType(focusNodeParent)) && (anchorNodeTag == listTagMap[formatChoice] && focusNodeTag == listTagMap[formatChoice])){
             removeList(editor);
+            console.log("Remove list")
         }
         else if((isListType(anchorNodeParent) && isListType(focusNodeParent)) && (anchorNodeTag != listTagMap[formatChoice])){
-            removeList(editor);
             insertList(editor, formatChoice);
+            console.log("conversion")
         }
         else{
             insertList(editor, formatChoice);
+            console.log("insertion")
         }
     })
 }
