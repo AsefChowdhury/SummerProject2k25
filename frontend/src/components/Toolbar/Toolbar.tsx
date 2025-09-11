@@ -67,7 +67,6 @@ function getListFormat(node: LexicalNode){
     return (parentNode as ListNode).getTag();
 }
 
-
 function insertList(editor: LexicalEditor, formatChoice: ListType){
     // Switch-Case used to apply specific list formartting based on formatChoice given
     switch (formatChoice) {
