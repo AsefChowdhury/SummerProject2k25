@@ -4,7 +4,7 @@ import { $getNodeByKey, $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND, t
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isListItemNode, $isListNode, INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, ListNode, REMOVE_LIST_COMMAND} from "@lexical/list";
 
-type Styles = "Bold" | "Italic"| "Underline";
+type TextStyles = "Bold" | "Italic"| "Underline";
 type ListFormats = "Bulleted List" | "Numbered List";
 type ListType = "bullet" | "number";
 
@@ -84,7 +84,7 @@ function insertList(editor: LexicalEditor, formatChoice: ListType){
 }
 
 function removeList(editior: LexicalEditor) {
-    // Removes List
+    // Removes List with Lexical command
     editior.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
 }
 
@@ -124,15 +124,12 @@ function toggleListFormat(editor: LexicalEditor, formatChoice: ListType){
 
         if((isListType(anchorNodeParent) && isListType(focusNodeParent)) && (anchorNodeTag == listTagMap[formatChoice] && focusNodeTag == listTagMap[formatChoice])){
             removeList(editor);
-            console.log("Remove list")
         }
         else if((isListType(anchorNodeParent) && isListType(focusNodeParent)) && (anchorNodeTag != listTagMap[formatChoice])){
             insertList(editor, formatChoice);
-            console.log("conversion")
         }
         else{
             insertList(editor, formatChoice);
-            console.log("insertion")
         }
     })
 }
@@ -148,13 +145,14 @@ function toggleStyle(editor: LexicalEditor, styleChoice: TextFormatType) {
     })
 }
 
+
 function Toolbar() {
     const [editor] = useLexicalComposerContext(); // Allows us to reference the editor
 
-    const styles: Styles[] = ["Bold", "Italic", "Underline"];
+    const textStyles: TextStyles[] = ["Bold", "Italic", "Underline"];
     const listFormats: ListFormats[] = ["Bulleted List", "Numbered List"];
 
-    const [activeStyles, setActiveStyles] = useState<Styles[]>([]);
+    const [activeStyles, setActiveStyles] = useState<TextStyles[]>([]);
     const [activeFormat, setActiveFormat] = useState<ListFormats[]>([]);
 
     return(
@@ -167,14 +165,14 @@ function Toolbar() {
 
             {/*Styling */}
             <div className="styling-options">
-                {styles.map(style => (
+                {textStyles.map(textStyle => (
                     <button 
-                    key={style}
-                    className={`style-button ${activeStyles.includes(style) ? "active" : ""}`}
+                    key={textStyle}
+                    className={`style-button ${activeStyles.includes(textStyle) ? "active" : ""}`}
                     onClick={() => {
-                        toggleStyle(editor, styleMap[style] as TextFormatType)
+                        toggleStyle(editor, styleMap[textStyle] as TextFormatType)
                     }}
-                    >{style}</button>
+                    >{textStyle}</button>
                 ))}
                 {/* Fontsize tsx */}
             </div>
