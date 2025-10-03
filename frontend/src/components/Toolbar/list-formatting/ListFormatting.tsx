@@ -1,0 +1,33 @@
+import { useState } from "react";
+import type { ListType } from "./ListFormattingHelpers";
+import { toggleListFormat } from "./ListFormattingHelpers";
+import type { LexicalEditor } from "lexical";
+
+type ListFormats = "Bulleted List" | "Numbered List";
+
+const listTypeMap = {
+    "Bulleted List" : "bullet",
+    "Numbered List" : "number"
+}
+
+function ListFormatting({ editor }: {editor : LexicalEditor}) {
+    const [activeFormat, setActiveFormat] = useState<ListFormats[]>([]);
+    
+    const listFormats: ListFormats[] = ["Bulleted List", "Numbered List"];
+
+    return(
+        <div className="list-formatting-options">
+            {listFormats.map(listFormat => (
+                <button
+                key={listFormat}
+                className={`format-button ${activeFormat.includes(listFormat) ? "active" : ""}`}
+                onClick={() => {
+                    toggleListFormat(editor, listTypeMap[listFormat] as ListType)
+                }}
+                >{listFormat}</button>
+            ))}
+        </div>
+    )
+}
+
+export default ListFormatting;
