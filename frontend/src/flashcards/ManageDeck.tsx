@@ -117,7 +117,6 @@ function ManageDeck(props: ManageDeckProps) {
     const reorderedList = useRef<Flashcard[]>([]);
     const toast = useToast();
     const prevDragPosition = useRef<number>(0);
-    const prevFlashcardPositions = useRef<number[]>([]);
     let navigate = useNavigate();
     
     useEffect(() => {
@@ -276,18 +275,17 @@ function ManageDeck(props: ManageDeckProps) {
         draggingCard.ref.style.transform = `translateY(${dy}px)`;
         if(velocity > 0){
             if (nextCardRect === undefined) return;
-            if (mouseY >= nextCardRect.rect.top) {
+            if (mouseY >= nextCardRect.rect.top - (draggingCard.rect.height / 2)) {
                 nextCardRect.ref.style.transition = 'transform 0.2s ease';
                 const newPosition = nextCardRect.offsetPosition + (draggingCard.rect.height * -1 - 20)
                 nextCardRect.ref.style.transform = `translateY(${newPosition}px)`;
-                prevFlashcardPositions.current[cardIndex + 1] = newPosition;
                 const newFlashcards = [...reorderedList.current];
                 const nextFlashcard = newFlashcards[cardIndex + 1];
                 newFlashcards[cardIndex] = nextFlashcard;
                 newFlashcards[cardIndex + 1] = draggingCard.flashcard;
                 
                 const newRects = [...flashcardRects.current];
-                newRects[cardIndex] = {ref: nextCardRect.ref, rect: nextCardRect.ref.getBoundingClientRect(), offsetPosition: newPosition};
+                newRects[cardIndex] = {ref: nextCardRect.ref, rect: {...nextCardRect.rect, top: nextCardRect.rect.top - (draggingCard.rect.height + 20)}, offsetPosition: newPosition};
                 newRects[cardIndex + 1] = {ref: draggingCard.ref, rect: draggingCard.ref.getBoundingClientRect(), offsetPosition: 0};
                 flashcardRects.current = newRects;
                 
@@ -297,7 +295,7 @@ function ManageDeck(props: ManageDeckProps) {
             
         } else if (velocity <= 0) {
             if (prevCardRect === undefined) return;
-            if(mouseY <= prevCardRect.rect.top){
+            if(mouseY <= prevCardRect.rect.top + (draggingCard.rect.height / 2)){
                 prevCardRect.ref.style.transition = 'transform 0.2s ease';
                 const newPosition = prevCardRect.offsetPosition + (draggingCard.rect.height + 20)
                 prevCardRect.ref.style.transform = `translateY(${newPosition}px)`;
@@ -307,7 +305,7 @@ function ManageDeck(props: ManageDeckProps) {
                 newFlashcards[cardIndex - 1] = draggingCard.flashcard;
     
                 const newRects = [...flashcardRects.current];
-                newRects[cardIndex] = {ref: prevCardRect.ref, rect: prevCardRect.ref.getBoundingClientRect(), offsetPosition: newPosition};
+                newRects[cardIndex] = {ref: prevCardRect.ref, rect: {...prevCardRect.rect, top: prevCardRect.rect.top + (draggingCard.rect.height + 20)}, offsetPosition: newPosition};
                 newRects[cardIndex - 1] = {ref: draggingCard.ref, rect: draggingCard.ref.getBoundingClientRect(), offsetPosition: 0};
                 flashcardRects.current = newRects;
                 reorderedList.current = newFlashcards;

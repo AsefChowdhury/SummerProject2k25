@@ -29,8 +29,6 @@
     &.dragging{
         position: relative;
         z-index: 1000;
-        /* pointer-events: none; */
-        /* cursor: grabbing; */
     }
     .card-top{
         width: 100%;
