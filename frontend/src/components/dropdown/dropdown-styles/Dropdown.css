@@ -3,8 +3,7 @@
     top: 100%;
     right: 0;
     display: inline-block;
-    background-color: var(--glass-background);
-    backdrop-filter: blur(0.5em);
+    background-color: var(--accent-color);
     box-shadow: 0 0 5em rgba(8,7,16,0.6);
     outline: 0.1em solid rgba(255,255,255,15%);
     border-radius: 0.5em;

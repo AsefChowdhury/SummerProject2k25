@@ -43,6 +43,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --glass-background: rgba(255,255,255,5%);
+  --glass-background-solid: rgb(54, 54, 54);
   --toast-background: rgba(255, 255, 255, 0.103);
   --icon-color: white;
 }
