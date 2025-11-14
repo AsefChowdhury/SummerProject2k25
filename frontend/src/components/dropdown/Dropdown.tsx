@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 import './dropdown-styles/Dropdown.css'
 
 type DropdownProps = {
-    anchor: HTMLElement
+    anchor: HTMLElement;
     children: React.ReactNode;
-    open: boolean
+    open: boolean;
     onClose: () => void
 };
 

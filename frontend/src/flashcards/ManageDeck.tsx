@@ -22,15 +22,15 @@ class Flashcard {
     definition: string;
     termError?: string;
     definitionError?: string;
-    index?: number;
-    id?: number;
+    index: number;
+    id?: string;
     clientId: string;
 
-    constructor(term?: string, definition?: string, index?: number) {
+    constructor(term?: string, definition?: string) {
         this.term = term ?? "";
         this.definition = definition ?? "";
-        this.clientId = crypto.randomUUID()
-        this.index = index;
+        this.clientId = crypto.randomUUID();
+        this.index = 0;
     }
 }
 
@@ -69,11 +69,11 @@ function FlashcardComponent(props: FlashcardComponentProps) {
 
     const handleDragStart = (e: React.MouseEvent) => {
         setDragging(true);
-        props.onDragStart(props.flashcard.id ? props.flashcard.id.toString() : props.flashcard.clientId, props.flashcard, e.clientY);
+        props.onDragStart(props.flashcard.id ?? props.flashcard.clientId, props.flashcard, e.clientY);
     }
 
     return (
-        <Card id={props.flashcard.id ? props.flashcard.id.toString() : props.flashcard.clientId} className={`flashcard${dragging ? ' dragging' : ''}`}>
+        <Card id={props.flashcard.id ?? props.flashcard.clientId} className={`flashcard${dragging ? ' dragging' : ''}`}>
             <div className="card-top">
                 <div className="index">{props.flashcard.index !== undefined ? props.flashcard.index + 1 : ""}</div>
                 <div className="card-actions">
@@ -106,7 +106,7 @@ type ManageDeckProps = {
 
 function ManageDeck(props: ManageDeckProps) {
     const {deckId} = useParams();
-    const [flashcards, setFlashcards] = useState([new Flashcard(undefined, undefined, 0)]);
+    const [flashcards, setFlashcards] = useState([new Flashcard()]);
     const [title, setTitle] = useState("");
     const [titleError, setTitleError] = useState<string | undefined>(undefined);
     const [showFinishedModal, setShowFinishedModal] = useState(false);
@@ -122,7 +122,7 @@ function ManageDeck(props: ManageDeckProps) {
     useEffect(() => {
         if(props.mode === "create"){
             setTitle("");
-            setFlashcards([new Flashcard(undefined, undefined, 0)]);
+            setFlashcards([new Flashcard()]);
         }
 
         if(props.mode === "edit"){
@@ -133,7 +133,8 @@ function ManageDeck(props: ManageDeckProps) {
                 await api.get(`api/decks/${deckId}`).then(response => {
                     if(isMounted){
                         setTitle(response.data.title);
-                        const flashcards = response.data.flashcards.map((flashcard: Flashcard, index: number) => ({...flashcard, index: index + 1}));
+                        const flashcards = response.data.flashcards.map((flashcard: Flashcard, index: number) => ({...flashcard, index: index}));
+                        console.log(flashcards);
                         setFlashcards(flashcards);
                     }
                 }).catch(error => {
@@ -268,14 +269,14 @@ function ManageDeck(props: ManageDeckProps) {
         if(!draggingCard) return;
         let dy = mouseY - draggingCard.startY;
         let velocity = mouseY - prevDragPosition.current;
-        const cardIndex = reorderedList.current.findIndex(flashcard => flashcard.clientId === draggingCard.flashcard.clientId);
-
+        const cardIndex = reorderedList.current.findIndex(flashcard => (flashcard.id ?? flashcard.clientId) === (draggingCard.flashcard.id ?? draggingCard.flashcard.clientId));
+        console.log(cardIndex);
         const nextCardRect = flashcardRects.current[cardIndex + 1];
         const prevCardRect = flashcardRects.current[cardIndex - 1];
         draggingCard.ref.style.transform = `translateY(${dy}px)`;
         if(velocity > 0){
             if (nextCardRect === undefined) return;
-            if (mouseY >= nextCardRect.rect.top - (draggingCard.rect.height / 2)) {
+            if (mouseY >= nextCardRect.rect.bottom - (draggingCard.rect.height)) {
                 nextCardRect.ref.style.transition = 'transform 0.2s ease';
                 const newPosition = nextCardRect.offsetPosition + (draggingCard.rect.height * -1 - 20)
                 nextCardRect.ref.style.transform = `translateY(${newPosition}px)`;
@@ -285,7 +286,7 @@ function ManageDeck(props: ManageDeckProps) {
                 newFlashcards[cardIndex + 1] = draggingCard.flashcard;
                 
                 const newRects = [...flashcardRects.current];
-                newRects[cardIndex] = {ref: nextCardRect.ref, rect: {...nextCardRect.rect, top: nextCardRect.rect.top - (draggingCard.rect.height + 20)}, offsetPosition: newPosition};
+                newRects[cardIndex] = {ref: nextCardRect.ref, rect: {...nextCardRect.rect, bottom: nextCardRect.rect.bottom - (draggingCard.rect.height + 20), top: nextCardRect.rect.top - (draggingCard.rect.height + 20)}, offsetPosition: newPosition};
                 newRects[cardIndex + 1] = {ref: draggingCard.ref, rect: draggingCard.ref.getBoundingClientRect(), offsetPosition: 0};
                 flashcardRects.current = newRects;
                 
@@ -295,7 +296,7 @@ function ManageDeck(props: ManageDeckProps) {
             
         } else if (velocity <= 0) {
             if (prevCardRect === undefined) return;
-            if(mouseY <= prevCardRect.rect.top + (draggingCard.rect.height / 2)){
+            if(mouseY <= prevCardRect.rect.top){
                 prevCardRect.ref.style.transition = 'transform 0.2s ease';
                 const newPosition = prevCardRect.offsetPosition + (draggingCard.rect.height + 20)
                 prevCardRect.ref.style.transform = `translateY(${newPosition}px)`;
@@ -305,7 +306,7 @@ function ManageDeck(props: ManageDeckProps) {
                 newFlashcards[cardIndex - 1] = draggingCard.flashcard;
     
                 const newRects = [...flashcardRects.current];
-                newRects[cardIndex] = {ref: prevCardRect.ref, rect: {...prevCardRect.rect, top: prevCardRect.rect.top + (draggingCard.rect.height + 20)}, offsetPosition: newPosition};
+                newRects[cardIndex] = {ref: prevCardRect.ref, rect: {...prevCardRect.rect, bottom: prevCardRect.rect.bottom + (draggingCard.rect.height + 20), top: prevCardRect.rect.top + (draggingCard.rect.height + 20)}, offsetPosition: newPosition};
                 newRects[cardIndex - 1] = {ref: draggingCard.ref, rect: draggingCard.ref.getBoundingClientRect(), offsetPosition: 0};
                 flashcardRects.current = newRects;
                 reorderedList.current = newFlashcards;

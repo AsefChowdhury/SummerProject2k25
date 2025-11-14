@@ -4,12 +4,11 @@ import "./Card.css"
 type CardProps = React.HTMLAttributes<HTMLDivElement> & {
     children: React.ReactNode
     className?: string
-    ref?: React.Ref<HTMLDivElement>
 }
 
-function Card({children, className, ref, ...props}: CardProps) {
+function Card({children, className, ...props}: CardProps) {
     return(
-        <div className={`card-container ${className ?? ''}`} ref={ref} {...props}>
+        <div className={`card-container ${className ?? ''}`} {...props}>
             {children}
         </div>
     )
