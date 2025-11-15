@@ -7,7 +7,7 @@ import editIcon from "../assets/edit.svg?react";
 import InputField from "../components/input-field/InputField";
 import Card from "../components/card/Card";
 import IconButton from "../components/IconButton/IconButton";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import api from "../api";
 import { useNavigate, useParams } from "react-router-dom";
 import Textarea from "../components/textarea/Textarea";
@@ -15,9 +15,9 @@ import Modal from "../components/modal/Modal";
 import ModalSuccess from "../assets/modal-success.svg?react";
 import dragIcon from "../assets/drag.svg?react";
 import { useToast } from "../components/toast/toast";
+import Reorderlist from "../components/reorder-list/ReorderList";
 
 class Flashcard {
-    static nextIndex = 0;
     term: string;
     definition: string;
     termError?: string;
@@ -36,13 +36,12 @@ class Flashcard {
 
 type FlashcardComponentProps = {
     flashcard: Flashcard
-    index: number
     onDelete: (index: number) => void
     onCopy: (index: number) => void
     disableDelete: boolean
-    onDragStart: (cardId: string, flashcard: Flashcard, mouseY: number) => void
+    onDragStart: (cardId: string, e: React.MouseEvent) => void
     onDragEnd: () => void
-    onDragging: (mouseY: number) => void
+    onDragging: (e: MouseEvent) => void
 }
 function FlashcardComponent(props: FlashcardComponentProps) {
     const [dragging, setDragging] = useState(false);
@@ -59,7 +58,7 @@ function FlashcardComponent(props: FlashcardComponentProps) {
     }, [dragging]);
 
     const handleDragging = (e: MouseEvent) => {
-        props.onDragging(e.clientY);
+        props.onDragging(e);
     }
 
     const handleDragEnd = () => {
@@ -69,16 +68,16 @@ function FlashcardComponent(props: FlashcardComponentProps) {
 
     const handleDragStart = (e: React.MouseEvent) => {
         setDragging(true);
-        props.onDragStart(props.flashcard.id ?? props.flashcard.clientId, props.flashcard, e.clientY);
+        props.onDragStart(props.flashcard.clientId, e);
     }
 
     return (
-        <Card id={props.flashcard.id ?? props.flashcard.clientId} className={`flashcard${dragging ? ' dragging' : ''}`}>
+        <Card id={props.flashcard.clientId} className={`flashcard${dragging ? ' dragging' : ''}`}>
             <div className="card-top">
                 <div className="index">{props.flashcard.index !== undefined ? props.flashcard.index + 1 : ""}</div>
                 <div className="card-actions">
-                    <IconButton className="copy-button" icon={copyIcon} tooltip="Duplicate" onClick={() => {props.onCopy(props.index)}}/>
-                    <IconButton className="delete-button" icon={deleteIcon} disabled={props.disableDelete} tooltip="Delete" onClick={() => {props.onDelete(props.index)}}/>
+                    <IconButton className="copy-button" icon={copyIcon} tooltip="Duplicate" onClick={() => {props.onCopy(props.flashcard.index)}}/>
+                    <IconButton className="delete-button" icon={deleteIcon} disabled={props.disableDelete} tooltip="Delete" onClick={() => {props.onDelete(props.flashcard.index)}}/>
                     <IconButton className="drag-button" icon={dragIcon} tooltip="Drag to reorder" onMouseDown={(e) => {handleDragStart(e)}}/>
                 </div>
             </div>
@@ -133,8 +132,7 @@ function ManageDeck(props: ManageDeckProps) {
                 await api.get(`api/decks/${deckId}`).then(response => {
                     if(isMounted){
                         setTitle(response.data.title);
-                        const flashcards = response.data.flashcards.map((flashcard: Flashcard, index: number) => ({...flashcard, index: index}));
-                        console.log(flashcards);
+                        const flashcards = response.data.flashcards.map((flashcard: Flashcard, index: number) => ({...flashcard, clientId: flashcard.id?.toString(), index: index}));
                         setFlashcards(flashcards);
                     }
                 }).catch(error => {
@@ -242,77 +240,9 @@ function ManageDeck(props: ManageDeckProps) {
         }
     }
 
-    const handleDragStart = (cardId: string, flashcard: Flashcard,  mouseY: number) => {
-        prevDragPosition.current = mouseY;
-        const cards = [...document.getElementsByClassName("flashcard")];
-        const cardRects = cards.map(card => ({ref: card as HTMLElement, rect: card.getBoundingClientRect(), offsetPosition: 0}));
-        flashcardRects.current = cardRects;
-        reorderedList.current = flashcards;
-        const card = document.getElementById(cardId);
-        if(!card) return;
-        setDraggingCard({ref: card, rect: card.getBoundingClientRect(), flashcard: flashcard, startY: mouseY});
-    }
-
-    const handleDragEnd = () => {
-        if(!draggingCard) return;
-        const newList = reorderedList.current.map((flashcard, index) => ({...flashcard, index: index}));
-        setFlashcards(newList);
-        document.querySelectorAll('.flashcard:not(.dragging)').forEach(el => {
-            (el as HTMLElement).style.transition = 'none';
-            (el as HTMLElement).style.transform = 'translateY(0px)';
-        });
-        draggingCard.ref.style.transform = `translateY(0px)`;
-        setDraggingCard(null);
-    }
-
-    const handleDragging = (mouseY: number) => {
-        if(!draggingCard) return;
-        let dy = mouseY - draggingCard.startY;
-        let velocity = mouseY - prevDragPosition.current;
-        const cardIndex = reorderedList.current.findIndex(flashcard => (flashcard.id ?? flashcard.clientId) === (draggingCard.flashcard.id ?? draggingCard.flashcard.clientId));
-        console.log(cardIndex);
-        const nextCardRect = flashcardRects.current[cardIndex + 1];
-        const prevCardRect = flashcardRects.current[cardIndex - 1];
-        draggingCard.ref.style.transform = `translateY(${dy}px)`;
-        if(velocity > 0){
-            if (nextCardRect === undefined) return;
-            if (mouseY >= nextCardRect.rect.bottom - (draggingCard.rect.height)) {
-                nextCardRect.ref.style.transition = 'transform 0.2s ease';
-                const newPosition = nextCardRect.offsetPosition + (draggingCard.rect.height * -1 - 20)
-                nextCardRect.ref.style.transform = `translateY(${newPosition}px)`;
-                const newFlashcards = [...reorderedList.current];
-                const nextFlashcard = newFlashcards[cardIndex + 1];
-                newFlashcards[cardIndex] = nextFlashcard;
-                newFlashcards[cardIndex + 1] = draggingCard.flashcard;
-                
-                const newRects = [...flashcardRects.current];
-                newRects[cardIndex] = {ref: nextCardRect.ref, rect: {...nextCardRect.rect, bottom: nextCardRect.rect.bottom - (draggingCard.rect.height + 20), top: nextCardRect.rect.top - (draggingCard.rect.height + 20)}, offsetPosition: newPosition};
-                newRects[cardIndex + 1] = {ref: draggingCard.ref, rect: draggingCard.ref.getBoundingClientRect(), offsetPosition: 0};
-                flashcardRects.current = newRects;
-                
-                reorderedList.current = newFlashcards;
-                prevDragPosition.current = mouseY;
-            }
-            
-        } else if (velocity <= 0) {
-            if (prevCardRect === undefined) return;
-            if(mouseY <= prevCardRect.rect.top){
-                prevCardRect.ref.style.transition = 'transform 0.2s ease';
-                const newPosition = prevCardRect.offsetPosition + (draggingCard.rect.height + 20)
-                prevCardRect.ref.style.transform = `translateY(${newPosition}px)`;
-                const newFlashcards = [...reorderedList.current];
-                const prevFlashcard = newFlashcards[cardIndex - 1];
-                newFlashcards[cardIndex] = prevFlashcard;
-                newFlashcards[cardIndex - 1] = draggingCard.flashcard;
-    
-                const newRects = [...flashcardRects.current];
-                newRects[cardIndex] = {ref: prevCardRect.ref, rect: {...prevCardRect.rect, bottom: prevCardRect.rect.bottom + (draggingCard.rect.height + 20), top: prevCardRect.rect.top + (draggingCard.rect.height + 20)}, offsetPosition: newPosition};
-                newRects[cardIndex - 1] = {ref: draggingCard.ref, rect: draggingCard.ref.getBoundingClientRect(), offsetPosition: 0};
-                flashcardRects.current = newRects;
-                reorderedList.current = newFlashcards;
-                prevDragPosition.current = mouseY;
-            }
-        }  
+    const handleReorder = (newOrder: Flashcard[]) => {
+        console.log(newOrder);
+        setFlashcards(newOrder);
     }
 
     return (
@@ -327,21 +257,24 @@ function ManageDeck(props: ManageDeckProps) {
             <div className="deck-info">
                 <InputField error={titleError} placeholder="Title" value={title} onChange={(e) => {setTitle(e.target.value)}}/>
             </div>
-            <ol className="flashcard-list">
-                {flashcards.map((flashcard, index) => (
-                    <li key={flashcard.id ?? flashcard.clientId}>
-                        <FlashcardComponent 
+
+            <Reorderlist className="flashcard-list" items={flashcards} onReorder={handleReorder}>
+                {(item, helpers) => (
+                    <li key={item.clientId}>
+                        <FlashcardComponent
+                            flashcard={item}
                             disableDelete={flashcards.length === 1}
-                            flashcard={flashcard} index={index}
                             onDelete={deleteFlashcard}
                             onCopy={copyFlashcard}
-                            onDragStart={handleDragStart}
-                            onDragEnd={handleDragEnd}
-                            onDragging={handleDragging}
+    
+                            // drag events forwarded into ReorderList
+                            onDragStart={helpers.onDragStart}
+                            onDragging={helpers.onDragging}
+                            onDragEnd={helpers.onDragEnd}
                         />
                     </li>
-                ))}
-            </ol>
+                )}
+            </Reorderlist>
             <div className="flashcards-bottom">
                 <Button disabled={loading} id="add-flashcard-button" iconLeft={addIcon} variant="outlined" text="Add flashcard" onClick={addFlashcard}/>
             </div>
