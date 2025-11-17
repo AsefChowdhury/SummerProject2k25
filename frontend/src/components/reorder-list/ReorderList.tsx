@@ -39,7 +39,6 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
                 const rect = listElement.getBoundingClientRect();
                 rectMap.set(listElement.id, {ref: listElement as HTMLElement, top: rect.top, bottom: rect.bottom, offsetPosition: 0});
             }
-            console.log(rectMap);
         });
         reorderedList.current = props.items;
         itemRects.current = rectMap;
@@ -48,7 +47,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
     const handleDragEnd = () => {
         if(!draggingItem) return;
         const newList = reorderedList.current.map((item, index) => ({...item, index: index}));
-        document.querySelectorAll('.flashcard:not(.dragging)').forEach(el => {
+        document.querySelectorAll('.reorder-list :not(.dragging)').forEach(el => {
             (el as HTMLElement).style.transition = 'none';
             (el as HTMLElement).style.transform = 'translateY(0px)';
         });
@@ -81,7 +80,6 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
                 setDraggingItem({...draggingItem});
                 
                 const newRects = itemRects.current;
-                console.log(newRects);
                 newRects.set(nextItem.clientId, {...nextItemRect, bottom: nextItemRect.bottom - (draggingItem.rect.height + listGap), top: nextItemRect.top - (draggingItem.rect.height + listGap), offsetPosition: newPosition});
                 itemRects.current = newRects;
                 

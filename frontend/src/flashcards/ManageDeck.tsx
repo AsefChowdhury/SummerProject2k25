@@ -7,7 +7,7 @@ import editIcon from "../assets/edit.svg?react";
 import InputField from "../components/input-field/InputField";
 import Card from "../components/card/Card";
 import IconButton from "../components/IconButton/IconButton";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../api";
 import { useNavigate, useParams } from "react-router-dom";
 import Textarea from "../components/textarea/Textarea";
@@ -111,11 +111,7 @@ function ManageDeck(props: ManageDeckProps) {
     const [showFinishedModal, setShowFinishedModal] = useState(false);
     const [submittingDeck, setSubmittingDeck] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [draggingCard, setDraggingCard] = useState<{ref: HTMLElement, rect: DOMRect, flashcard: Flashcard, startY: number} | null>(null);
-    const flashcardRects = useRef<{ref: HTMLElement, rect: DOMRect, offsetPosition: number}[]>([]);
-    const reorderedList = useRef<Flashcard[]>([]);
     const toast = useToast();
-    const prevDragPosition = useRef<number>(0);
     let navigate = useNavigate();
     
     useEffect(() => {
@@ -132,8 +128,8 @@ function ManageDeck(props: ManageDeckProps) {
                 await api.get(`api/decks/${deckId}`).then(response => {
                     if(isMounted){
                         setTitle(response.data.title);
-                        const flashcards = response.data.flashcards.map((flashcard: Flashcard, index: number) => ({...flashcard, clientId: flashcard.id?.toString(), index: index}));
-                        setFlashcards(flashcards);
+                        const flashcards: Flashcard[] = response.data.flashcards.map((flashcard: Flashcard) => ({...flashcard, clientId: flashcard.id?.toString(), index: flashcard.index}));
+                        setFlashcards(flashcards.sort((a, b) => a.index - b.index));
                     }
                 }).catch(error => {
                     toast?.addToast({message: "Something went wrong whilst fetching your deck, please try again", type: "error"});
@@ -241,7 +237,6 @@ function ManageDeck(props: ManageDeckProps) {
     }
 
     const handleReorder = (newOrder: Flashcard[]) => {
-        console.log(newOrder);
         setFlashcards(newOrder);
     }
 
