@@ -7,48 +7,59 @@ import editIcon from "../assets/edit.svg?react";
 import InputField from "../components/input-field/InputField";
 import Card from "../components/card/Card";
 import IconButton from "../components/IconButton/IconButton";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../api";
 import { useNavigate, useParams } from "react-router-dom";
 import Textarea from "../components/textarea/Textarea";
 import Modal from "../components/modal/Modal";
 import ModalSuccess from "../assets/modal-success.svg?react";
+import dragIcon from "../assets/drag.svg?react";
 import { useToast } from "../components/toast/toast";
+import Reorderlist from "../components/reorder-list/ReorderList";
 
 class Flashcard {
-    static nextIndex = 0;
     term: string;
     definition: string;
     termError?: string;
     definitionError?: string;
-    index?: number;
-    id?: number;
+    index: number;
+    id?: string;
     clientId: string;
 
     constructor(term?: string, definition?: string) {
         this.term = term ?? "";
         this.definition = definition ?? "";
-        this.clientId = crypto.randomUUID()
+        this.clientId = crypto.randomUUID();
+        this.index = 0;
     }
 }
 
 type FlashcardComponentProps = {
     flashcard: Flashcard
-    index: number
     onDelete: (index: number) => void
     onCopy: (index: number) => void
     disableDelete: boolean
+    onDragStart: (cardId: string, e: React.MouseEvent) => void
 }
 function FlashcardComponent(props: FlashcardComponentProps) {
+
+    const handleDragStart = (e: React.MouseEvent) => {
+        props.onDragStart(props.flashcard.clientId, e);
+    }
+
     return (
-        <Card>
-            <div className="card-content">
+        <Card className={`flashcard`}>
+            <div className="card-top">
+                <div className="index">{props.flashcard.index !== undefined ? props.flashcard.index + 1 : ""}</div>
+                <div className="card-actions">
+                    <IconButton className="copy-button" icon={copyIcon} tooltip="Duplicate" onClick={() => {props.onCopy(props.flashcard.index)}}/>
+                    <IconButton className="delete-button" icon={deleteIcon} disabled={props.disableDelete} tooltip="Delete" onClick={() => {props.onDelete(props.flashcard.index)}}/>
+                    <IconButton className="drag-button" icon={dragIcon} tooltip="Drag to reorder" onMouseDown={(e) => {handleDragStart(e)}}/>
+                </div>
+            </div>
+            <div className="card-bottom">
                 <Textarea placeholder="Term" error={props.flashcard.termError} variant="underlined" defaultValue={props.flashcard.term} onChange={(e) => {props.flashcard.term = e.target.value}}/>
                 <Textarea placeholder="Definition" error={props.flashcard.definitionError} variant="underlined" defaultValue={props.flashcard.definition} onChange={(e) => {props.flashcard.definition = e.target.value}}/>
-                <div className="card-actions">
-                    <IconButton className="copy-button" icon={copyIcon} tooltip="Duplicate" onClick={() => {props.onCopy(props.index)}}/>
-                    <IconButton className="delete-button" icon={deleteIcon} disabled={props.disableDelete} tooltip="Delete" onClick={() => {props.onDelete(props.index)}}/>
-                </div>
             </div>
         </Card> 
     )
@@ -93,7 +104,8 @@ function ManageDeck(props: ManageDeckProps) {
                 await api.get(`api/decks/${deckId}`).then(response => {
                     if(isMounted){
                         setTitle(response.data.title);
-                        setFlashcards(response.data.flashcards);
+                        const flashcards: Flashcard[] = response.data.flashcards.map((flashcard: Flashcard) => ({...flashcard, clientId: flashcard.id?.toString(), index: flashcard.index}));
+                        setFlashcards(flashcards.sort((a, b) => a.index - b.index));
                     }
                 }).catch(error => {
                     toast?.addToast({message: "Something went wrong whilst fetching your deck, please try again", type: "error"});
@@ -109,16 +121,19 @@ function ManageDeck(props: ManageDeckProps) {
     }, [props.mode, deckId]);
 
     const addFlashcard = () => {
-        setFlashcards([...flashcards, new Flashcard()]);
+        const newList = [...flashcards, new Flashcard()].map((flashcard, index) => ({...flashcard, index: index}));
+        setFlashcards(newList);
     }
 
     const deleteFlashcard = (index: number) => {
-        setFlashcards(flashcards.filter((_, i) => i !== index));
+        const newList = flashcards.filter((_, i) => i !== index).map((flashcard, index) => ({...flashcard, index: index}));
+        setFlashcards(newList);
     }
 
     const copyFlashcard = (index: number) => {
         const newFlashcard = new Flashcard(flashcards[index].term, flashcards[index].definition);
-        setFlashcards([...flashcards, newFlashcard]);
+        const newList = [...flashcards, newFlashcard].map((flashcard, index) => ({...flashcard, index: index}));
+        setFlashcards(newList);
     }
 
     const validateDeck = () => {
@@ -197,6 +212,10 @@ function ManageDeck(props: ManageDeckProps) {
         }
     }
 
+    const handleReorder = (newOrder: Flashcard[]) => {
+        setFlashcards(newOrder);
+    }
+
     return (
         <>
             <div className="page-header">
@@ -209,13 +228,20 @@ function ManageDeck(props: ManageDeckProps) {
             <div className="deck-info">
                 <InputField error={titleError} placeholder="Title" value={title} onChange={(e) => {setTitle(e.target.value)}}/>
             </div>
-            <ol className="flashcard-list">
-                {flashcards.map((flashcard, index) => (
-                    <li key={flashcard.id ?? flashcard.clientId}>
-                        <FlashcardComponent disableDelete={flashcards.length === 1} flashcard={flashcard} index={index} onDelete={deleteFlashcard} onCopy={copyFlashcard}/>
+
+            <Reorderlist className="flashcard-list" items={flashcards} onReorder={handleReorder}>
+                {(item, helpers) => (
+                    <li key={item.clientId}>
+                        <FlashcardComponent
+                            flashcard={item}
+                            disableDelete={flashcards.length === 1}
+                            onDelete={deleteFlashcard}
+                            onCopy={copyFlashcard}
+                            onDragStart={helpers.onDragStart}
+                        />
                     </li>
-                ))}
-            </ol>
+                )}
+            </Reorderlist>
             <div className="flashcards-bottom">
                 <Button disabled={loading} id="add-flashcard-button" iconLeft={addIcon} variant="outlined" text="Add flashcard" onClick={addFlashcard}/>
             </div>

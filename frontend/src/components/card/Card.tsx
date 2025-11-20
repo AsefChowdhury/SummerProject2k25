@@ -1,15 +1,15 @@
+import type React from "react"
 import "./Card.css"
 
-type CardProps = {
+type CardProps = React.HTMLAttributes<HTMLDivElement> & {
     children: React.ReactNode
     className?: string
-    style?: React.CSSProperties
 }
 
-function Card(props: CardProps) {
+function Card({children, className, ...props}: CardProps) {
     return(
-        <div className={`card-container ${props.className ?? ''}`}>
-            {props.children}
+        <div className={`card-container ${className ?? ''}`} {...props}>
+            {children}
         </div>
     )
 }
