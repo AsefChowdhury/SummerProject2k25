@@ -50,6 +50,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
                 listElement.classList.add('dragging');
                 (listElement as HTMLElement).style.zIndex = '100';
                 (listElement as HTMLElement).style.position = 'relative';
+                (listElement as HTMLElement).style.boxShadow = '0px 0px 20px 1px rgba(0, 0, 0, 0.7)';
                 const rect = listElement.getBoundingClientRect();
                 mouseOffsets.current = {left: e.clientX - rect.left, right: rect.right - e.clientX, top: e.clientY - rect.top, bottom: rect.bottom - e.clientY};
                 setDraggingItem({ref: listElement as HTMLElement, item: item, index: item.index, rect: rect, startPos: {y: e.clientY, x: e.clientX}});
