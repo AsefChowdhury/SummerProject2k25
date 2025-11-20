@@ -26,10 +26,7 @@
 .flashcard{
     display: flex;
     flex-direction: column;
-    &.dragging{
-        position: relative;
-        z-index: 1000;
-    }
+    z-index: 0;
     .card-top{
         width: 100%;
         display: flex;

@@ -40,39 +40,15 @@ type FlashcardComponentProps = {
     onCopy: (index: number) => void
     disableDelete: boolean
     onDragStart: (cardId: string, e: React.MouseEvent) => void
-    onDragEnd: () => void
-    onDragging: (e: MouseEvent) => void
 }
 function FlashcardComponent(props: FlashcardComponentProps) {
-    const [dragging, setDragging] = useState(false);
-
-    useEffect(() => {
-        if (dragging) {
-            window.addEventListener("mousemove", handleDragging);
-            window.addEventListener("mouseup", handleDragEnd);
-            return () => {
-                window.removeEventListener("mousemove", handleDragging);
-                window.removeEventListener("mouseup", handleDragEnd);
-            };
-        }
-    }, [dragging]);
-
-    const handleDragging = (e: MouseEvent) => {
-        props.onDragging(e);
-    }
-
-    const handleDragEnd = () => {
-        setDragging(false);
-        props.onDragEnd();
-    }
 
     const handleDragStart = (e: React.MouseEvent) => {
-        setDragging(true);
         props.onDragStart(props.flashcard.clientId, e);
     }
 
     return (
-        <Card id={props.flashcard.clientId} className={`flashcard${dragging ? ' dragging' : ''}`}>
+        <Card className={`flashcard`}>
             <div className="card-top">
                 <div className="index">{props.flashcard.index !== undefined ? props.flashcard.index + 1 : ""}</div>
                 <div className="card-actions">
@@ -261,11 +237,7 @@ function ManageDeck(props: ManageDeckProps) {
                             disableDelete={flashcards.length === 1}
                             onDelete={deleteFlashcard}
                             onCopy={copyFlashcard}
-    
-                            // drag events forwarded into ReorderList
                             onDragStart={helpers.onDragStart}
-                            onDragging={helpers.onDragging}
-                            onDragEnd={helpers.onDragEnd}
                         />
                     </li>
                 )}
