@@ -14,8 +14,8 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &{
 
 function Button({iconLeft: IconLeft, iconRight: IconRight, loading, ...props}: ButtonProps) {
     const content = (
-        <div className="button-container" onClick={props.onClick}>
-            <button {...props} disabled={loading || props.disabled} className={`button ${props.variant ?? 'filled'}`} >
+        <div className="button-container">
+            <button {...props} onClick={props.onClick} disabled={loading || props.disabled} className={`button ${props.variant ?? 'filled'}`} >
                 {IconLeft && <IconLeft className='icon-image'/>}
                 <div className="button-content">
                     {loading &&
@@ -30,9 +30,9 @@ function Button({iconLeft: IconLeft, iconRight: IconRight, loading, ...props}: B
 
     if (props.to) {
         return(
-            <div className="button-container" onClick={props.onClick}>
+            <div className="button-container">
                 <Link to={props.to} >
-                    <button {...props} disabled={loading || props.disabled} className={`button ${props.variant ?? 'filled'}`} >
+                    <button {...props} onClick={props.onClick} disabled={loading || props.disabled} className={`button ${props.variant ?? 'filled'}`} >
                         {IconLeft && <IconLeft className='icon-image'/>}
                         <div className="button-content">
                             {loading &&

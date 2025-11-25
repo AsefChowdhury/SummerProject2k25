@@ -46,9 +46,6 @@
     .button:disabled{
         cursor: not-allowed;
         pointer-events: none;
-        .icon-image{
-            fill: gray;
-        }
     }
 
     .button.filled{
@@ -57,6 +54,12 @@
 
     .button.filled:disabled{
         background-color: gray;
+        .icon-image{
+            fill: black;
+        }
+        .button-text{
+            color: black;
+        }
     }
 
     .button.outlined{
@@ -65,6 +68,15 @@
         outline-offset: -3px;
         transition: all 0.2s ease-in-out;
         color: var(--text-color);
+    }
+
+    .button.outlined:disabled{
+        .icon-image{
+            fill: gray;
+        }
+        .button-text{
+            color: gray;
+        }
     }
     
     .button.filled:hover{
