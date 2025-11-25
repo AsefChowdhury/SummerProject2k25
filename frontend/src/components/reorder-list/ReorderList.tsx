@@ -24,6 +24,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
     const prevDragPosition = useRef<{x: number, y: number}>({x: 0, y: 0});
     const container = useRef<{ref: HTMLOListElement, top: number, bottom: number} | null>(null);
     const mouseOffsets = useRef<{left: number, right: number, top: number, bottom: number}>({left: 0, right: 0, top: 0, bottom: 0});
+    const scroll = useRef(0);
     const animations = useRef<Map<string, Animation>>(new Map())
 
     useEffect(() => {
@@ -43,6 +44,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
         container.current = {ref: listElement, top: listElement.getBoundingClientRect().top, bottom: listElement.getBoundingClientRect().bottom};
         const listElements = document.querySelector(`.${props.className ?? 'reorder-list'}`)?.children;
         if(!listElements) return;
+        scroll.current = window.scrollY;
         const item = props.items.find(item => item.clientId === id)!;
         const itemEl = (e.target as HTMLElement).closest('li');
         prevDragPosition.current = {y: e.clientY, x: e.clientX};
@@ -76,13 +78,14 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
         draggingItem.ref.classList.remove('dragging');
         setDraggingItem(null);
         props.onReorder(newList);
+        scroll.current = 0;
     }
 
     const handleDragging = (e: MouseEvent) => {
         const mouseY = e.clientY;
         if(!draggingItem) return;
         if (!container.current) return;
-        let dy = mouseY - draggingItem.startPos.y;
+        let dy = mouseY - draggingItem.startPos.y + (window.scrollY - scroll.current);
         let velocity = mouseY - prevDragPosition.current.y;
         const itemIndex = draggingItem.index;
         const listGap = 20;
@@ -101,20 +104,20 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
             translate = maxTranslate;
         }
 
-        // if (mouseY < 10) {
-        //     window.scrollBy(0, -12);
-        // }
+        if (mouseY < 20) {
+            window.scrollBy(0, -12);
+        }
     
-        // if (window.innerHeight - (mouseY + mouseOffsets.current.bottom) < 10) {
-        //     window.scrollBy(0, 12);
-        // }
+        if (window.innerHeight - (mouseY + mouseOffsets.current.bottom) < 20) {
+            window.scrollBy(0, 12);
+        }
         draggingItem.ref.style.transform = `translateY(${translate}px)`;
         if(velocity > 0){
             const nextItem = reorderedList.current[itemIndex + 1];
             if(nextItem === undefined) return;
             const nextItemRect = itemRects.current.get(nextItem.clientId);
             if (nextItemRect === undefined) return;
-            if (mouseY + mouseOffsets.current.bottom >= nextItemRect.center) {
+            if (mouseY + mouseOffsets.current.bottom + (window.scrollY - scroll.current) >= nextItemRect.center) {
                 const newPosition = nextItemRect.offsetPosition + (draggingItem.rect.height * -1 - listGap)
                 const anim = nextItemRect.ref.animate(
                     [{ transform: `translateY(${newPosition}px)` }],
@@ -137,7 +140,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
             if(prevItem === undefined) return;
             const prevItemRect = itemRects.current.get(prevItem.clientId);
             if (prevItemRect === undefined) return;
-            if(mouseY - mouseOffsets.current.top <= prevItemRect.center){
+            if(mouseY - mouseOffsets.current.top + (window.scrollY - scroll.current) <= prevItemRect.center){
                 const newPosition = prevItemRect.offsetPosition + (draggingItem.rect.height + listGap);
                 const anim = prevItemRect.ref.animate(
                     [{ transform: `translateY(${newPosition}px)` }],
