@@ -106,7 +106,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
             window.scrollBy(0, scrollDelta);
             const newDy = mousePos.current.y - draggingItem.startPos.y + (window.scrollY - scroll.current);
             applyDragTranslation(newDy);
-            checkReordering(newDy);
+            checkReordering(mousePos.current.y);
 
         } else if (autoScrollInterval.current !== null) {
             clearInterval(autoScrollInterval.current);
@@ -138,10 +138,9 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
         const nextItem = reorderedList.current[itemIndex + 1];
         const prevItem = reorderedList.current[itemIndex - 1];
         const listGap = 20;
-        console.log(mouseY)
         if (nextItem) {
             const nextItemRect = itemRects.current.get(nextItem.clientId);
-            if (nextItemRect && mouseY + mouseOffsets.current.bottom + (window.scrollY - scroll.current) >= nextItemRect.center) {
+            if (nextItemRect && mouseY + mouseOffsets.current.bottom + (window.scrollY - scroll.current)>= nextItemRect.center) {
                 const newPosition = nextItemRect.offsetPosition + (draggingItem.rect.height * -1 - listGap)
                 const anim = nextItemRect.ref.animate(
                     [{ transform: `translateY(${newPosition}px)` }],
@@ -156,11 +155,13 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
                 
                 itemRects.current.set(nextItem.clientId, {...nextItemRect, center: nextItemRect.center - (draggingItem.rect.height + listGap), offsetPosition: newPosition});
                 reorderedList.current = newList;
+                return;
             }
         }
         if(prevItem){
             const prevItemRect = itemRects.current.get(prevItem.clientId);
-            if(prevItemRect && mouseY - mouseOffsets.current.top + (window.scrollY - scroll.current) <= prevItemRect.center){
+            if(prevItemRect && mouseY - mouseOffsets.current.top + (window.scrollY - scroll.current)<= prevItemRect.center){
+                console.log(mouseY, prevItemRect.center);
                 const newPosition = prevItemRect.offsetPosition + (draggingItem.rect.height + listGap);
                 const anim = prevItemRect.ref.animate(
                     [{ transform: `translateY(${newPosition}px)` }],
@@ -186,7 +187,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
         let dy = mouseY - draggingItem.startPos.y + (window.scrollY - scroll.current);
         mousePos.current.y = mouseY;
         applyDragTranslation(dy);
-        checkReordering(dy);
+        checkReordering(mouseY);
         
         const scrollDelta = checkAutoScroll(mouseY);
         if (scrollDelta !== 0) {
