@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState} from "react"
+import { useEffect, useRef } from "react"
 
 type ReorderableItem = {
     clientId: string;
@@ -18,7 +18,7 @@ type ReorderListProps<T extends ReorderableItem> = {
 };
 
 function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
-    const [draggingItem, setDraggingItem] = useState<{ref: HTMLElement, item: T, index: number, rect: DOMRect, startPos: {x: number, y: number}} | null>(null);
+    const draggingItem = useRef<{ref: HTMLElement, item: T, index: number, rect: DOMRect, startPos: {x: number, y: number}} | null>(null);
     const itemRects = useRef<Map<string, {ref: HTMLElement, center: number, offsetPosition: number}>>(new Map());
     const reorderedList = useRef<T[]>([]);
     const prevDragPosition = useRef<{x: number, y: number}>({x: 0, y: 0});
@@ -58,7 +58,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
                 (listElement as HTMLElement).style.boxShadow = '0px 0px 20px 1px rgba(0, 0, 0, 0.7)';
                 const rect = listElement.getBoundingClientRect();
                 mouseOffsets.current = {left: e.clientX - rect.left, right: rect.right - e.clientX, top: e.clientY - rect.top, bottom: rect.bottom - e.clientY};
-                setDraggingItem({ref: listElement as HTMLElement, item: item, index: item.index, rect: rect, startPos: {y: e.clientY, x: e.clientX}});
+                draggingItem.current = ({ref: listElement as HTMLElement, item: item, index: item.index, rect: rect, startPos: {y: e.clientY, x: e.clientX}});
             } else {
                 const rect = listElement.getBoundingClientRect();
                 itemRects.current.set(props.items[index].clientId, {ref: listElement as HTMLElement, center: rect.top + (rect.height / 2), offsetPosition: 0});
@@ -68,18 +68,19 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
     }
 
     const handleDragEnd = () => {
-        if(!draggingItem) return;
+        if(!draggingItem.current) return;
         const newList = reorderedList.current.map((item, index) => ({...item, index: index}));
+        itemRects.current.forEach((itemRect) => itemRect.ref.style.transform = `translateY(0px)`);
+        props.onReorder(newList);
         animations.current.forEach((a) => a.cancel())
         animations.current.clear()
         itemRects.current.clear();
-        draggingItem.ref.style.transform = `translateY(0px)`;
-        draggingItem.ref.style.zIndex = '';
-        draggingItem.ref.style.position = '';
-        draggingItem.ref.style.boxShadow = '';
-        draggingItem.ref.classList.remove('dragging');
-        setDraggingItem(null);
-        props.onReorder(newList);
+        draggingItem.current.ref.style.transform = `translateY(0px)`;
+        draggingItem.current.ref.style.zIndex = '';
+        draggingItem.current.ref.style.position = '';
+        draggingItem.current.ref.style.boxShadow = '';
+        draggingItem.current.ref.classList.remove('dragging');
+        draggingItem.current = null;
         scroll.current = 0;
         if(autoScrollInterval.current !== null){
             clearInterval(autoScrollInterval.current);
@@ -100,11 +101,11 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
     };
 
     const runAutoScroll = () => {
-        if (!draggingItem || !container.current) return;
+        if (!draggingItem.current || !container.current) return;
         const scrollDelta = checkAutoScroll(mousePos.current.y);
         if (scrollDelta !== 0) {
             window.scrollBy(0, scrollDelta);
-            const newDy = mousePos.current.y - draggingItem.startPos.y + (window.scrollY - scroll.current);
+            const newDy = mousePos.current.y - draggingItem.current.startPos.y + (window.scrollY - scroll.current);
             applyDragTranslation(newDy);
             checkReordering(mousePos.current.y);
 
@@ -114,79 +115,74 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
         }
     };
 
-    const applyDragTranslation = (dy: number) => {
-        if(!draggingItem || !container.current) return;
-        const origTop = draggingItem.rect.top;
-        const height = draggingItem.rect.height;
+    const applyDragTranslation = (mouseY: number) => {
+        if(!draggingItem.current || !container.current) return;
+        const origTop = draggingItem.current.rect.top;
+        const height = draggingItem.current.rect.height;
 
         const minTranslate = container.current.top - origTop; 
         const maxTranslate = container.current.bottom - (origTop + height);
 
-        let translate = dy;
+        let translate = mouseY - draggingItem.current.startPos.y + (window.scrollY - scroll.current);
 
         if (translate < minTranslate) {
             translate = minTranslate;
         } else if (translate > maxTranslate) {
             translate = maxTranslate;
         }
-        draggingItem.ref.style.transform = `translateY(${translate}px)`;
+        draggingItem.current.ref.style.transform = `translateY(${translate}px)`;
     }
 
     const checkReordering = (mouseY: number) => {
-        if(!draggingItem) return;
-        const itemIndex = draggingItem.index;
+        if(!draggingItem.current) return;
+        const itemIndex = draggingItem.current.index;
         const nextItem = reorderedList.current[itemIndex + 1];
         const prevItem = reorderedList.current[itemIndex - 1];
         const listGap = 20;
         if (nextItem) {
             const nextItemRect = itemRects.current.get(nextItem.clientId);
             if (nextItemRect && mouseY + mouseOffsets.current.bottom + (window.scrollY - scroll.current)>= nextItemRect.center) {
-                const newPosition = nextItemRect.offsetPosition + (draggingItem.rect.height * -1 - listGap)
+                console.log(nextItem.index, itemIndex);
+                const newPosition = nextItemRect.offsetPosition + (draggingItem.current.rect.height * -1 - listGap)
+                reorderedList.current[itemIndex] = nextItem;
+                reorderedList.current[itemIndex + 1] = draggingItem.current.item;
+                draggingItem.current.index = itemIndex + 1;
+                
+                itemRects.current.set(nextItem.clientId, {...nextItemRect, center: nextItemRect.center - (draggingItem.current.rect.height + listGap), offsetPosition: newPosition});
+                nextItemRect.ref.style.transform = `translateY(${newPosition}px)`;
                 const anim = nextItemRect.ref.animate(
-                    [{ transform: `translateY(${newPosition}px)` }],
-                    { duration: 200, easing: "ease", fill: "forwards" }
+                    [{transform: `translateY(${nextItemRect.offsetPosition}px)`}, { transform: `translateY(${newPosition}px)` }],
+                    { duration: 200, easing: "ease"}
                 );
                 animations.current.set(nextItem.clientId, anim)
-                const newList = [...reorderedList.current];
-                newList[itemIndex] = newList[itemIndex + 1];
-                newList[itemIndex + 1] = draggingItem.item;
-                draggingItem.index = itemIndex + 1;
-                setDraggingItem({...draggingItem});
-                
-                itemRects.current.set(nextItem.clientId, {...nextItemRect, center: nextItemRect.center - (draggingItem.rect.height + listGap), offsetPosition: newPosition});
-                reorderedList.current = newList;
                 return;
             }
         }
         if(prevItem){
             const prevItemRect = itemRects.current.get(prevItem.clientId);
-            if(prevItemRect && mouseY - mouseOffsets.current.top + (window.scrollY - scroll.current)<= prevItemRect.center){
-                console.log(mouseY, prevItemRect.center);
-                const newPosition = prevItemRect.offsetPosition + (draggingItem.rect.height + listGap);
+            if(prevItemRect && mouseY - mouseOffsets.current.top + (window.scrollY - scroll.current) <= prevItemRect.center){
+                console.log(prevItem.index, itemIndex);
+                const newPosition = prevItemRect.offsetPosition + (draggingItem.current.rect.height + listGap);
+                reorderedList.current[itemIndex] = prevItem;
+                reorderedList.current[itemIndex - 1] = draggingItem.current.item;
+                draggingItem.current.index = itemIndex - 1;
+                
+                itemRects.current.set(prevItem.clientId, {...prevItemRect, center: prevItemRect.center + (draggingItem.current.rect.height + listGap), offsetPosition: newPosition});
+                prevItemRect.ref.style.transform = `translateY(${newPosition}px)`;
                 const anim = prevItemRect.ref.animate(
-                    [{ transform: `translateY(${newPosition}px)` }],
-                    { duration: 200, easing: "ease", fill: "forwards" }
+                    [ {transform: `translateY(${prevItemRect.offsetPosition}px)`}, { transform: `translateY(${newPosition}px)` }],
+                    { duration: 200, easing: "ease"}
                 );
                 animations.current.set(prevItem.clientId, anim)
-                const newList = [...reorderedList.current];
-                newList[itemIndex] = newList[itemIndex - 1];
-                newList[itemIndex - 1] = draggingItem.item;
-                draggingItem.index = itemIndex - 1;
-                setDraggingItem({...draggingItem});
-    
-                itemRects.current.set(prevItem.clientId, {...prevItemRect, center: prevItemRect.center + (draggingItem.rect.height + listGap), offsetPosition: newPosition});
-                reorderedList.current = newList;
             }
         }
     }
 
     const handleDragging = (e: MouseEvent) => {
         const mouseY = e.clientY;
-        if(!draggingItem) return;
-        if (!container.current) return;
-        let dy = mouseY - draggingItem.startPos.y + (window.scrollY - scroll.current);
+        if(!draggingItem.current || !container.current) return;
         mousePos.current.y = mouseY;
-        applyDragTranslation(dy);
+        applyDragTranslation(mouseY);
         checkReordering(mouseY);
         
         const scrollDelta = checkAutoScroll(mouseY);
