@@ -22,7 +22,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
     const itemRects = useRef<Map<string, {ref: HTMLElement, center: number, offsetPosition: number}>>(new Map());
     const reorderedList = useRef<T[]>([]);
     const prevDragPosition = useRef<{x: number, y: number}>({x: 0, y: 0});
-    const container = useRef<{ref: HTMLOListElement, top: number, bottom: number} | null>(null);
+    const container = useRef<{ref: HTMLOListElement, top: number, bottom: number, gap: number} | null>(null);
     const mouseOffsets = useRef<{left: number, right: number, top: number, bottom: number}>({left: 0, right: 0, top: 0, bottom: 0});
     const scroll = useRef(0);
     const mousePos = useRef<{x: number, y: number}>({x: 0, y: 0});
@@ -43,7 +43,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
     const handleDragStart = (id: string, e: React.MouseEvent) => {
         const listElement = (e.target as HTMLElement).closest('ol');
         if(!listElement) return;
-        container.current = {ref: listElement, top: listElement.getBoundingClientRect().top, bottom: listElement.getBoundingClientRect().bottom};
+        container.current = {ref: listElement, top: listElement.getBoundingClientRect().top, bottom: listElement.getBoundingClientRect().bottom, gap: Number.isNaN(parseInt(getComputedStyle(listElement).gap)) ? 0 : parseInt(getComputedStyle(listElement).gap)};
         const listElements = document.querySelector(`.${props.className ?? 'reorder-list'}`)?.children;
         if(!listElements) return;
         scroll.current = window.scrollY;
@@ -134,21 +134,19 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
     }
 
     const checkReordering = (mouseY: number) => {
-        if(!draggingItem.current) return;
+        if(!draggingItem.current || !container.current) return;
         const itemIndex = draggingItem.current.index;
         const nextItem = reorderedList.current[itemIndex + 1];
         const prevItem = reorderedList.current[itemIndex - 1];
-        const listGap = 20;
         if (nextItem) {
             const nextItemRect = itemRects.current.get(nextItem.clientId);
             if (nextItemRect && mouseY + mouseOffsets.current.bottom + (window.scrollY - scroll.current)>= nextItemRect.center) {
-                console.log(nextItem.index, itemIndex);
-                const newPosition = nextItemRect.offsetPosition + (draggingItem.current.rect.height * -1 - listGap)
+                const newPosition = nextItemRect.offsetPosition + (draggingItem.current.rect.height * -1 - container.current.gap)
                 reorderedList.current[itemIndex] = nextItem;
                 reorderedList.current[itemIndex + 1] = draggingItem.current.item;
                 draggingItem.current.index = itemIndex + 1;
                 
-                itemRects.current.set(nextItem.clientId, {...nextItemRect, center: nextItemRect.center - (draggingItem.current.rect.height + listGap), offsetPosition: newPosition});
+                itemRects.current.set(nextItem.clientId, {...nextItemRect, center: nextItemRect.center - (draggingItem.current.rect.height + container.current.gap), offsetPosition: newPosition});
                 nextItemRect.ref.style.transform = `translateY(${newPosition}px)`;
                 const anim = nextItemRect.ref.animate(
                     [{transform: `translateY(${nextItemRect.offsetPosition}px)`}, { transform: `translateY(${newPosition}px)` }],
@@ -161,13 +159,12 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
         if(prevItem){
             const prevItemRect = itemRects.current.get(prevItem.clientId);
             if(prevItemRect && mouseY - mouseOffsets.current.top + (window.scrollY - scroll.current) <= prevItemRect.center){
-                console.log(prevItem.index, itemIndex);
-                const newPosition = prevItemRect.offsetPosition + (draggingItem.current.rect.height + listGap);
+                const newPosition = prevItemRect.offsetPosition + (draggingItem.current.rect.height + container.current.gap);
                 reorderedList.current[itemIndex] = prevItem;
                 reorderedList.current[itemIndex - 1] = draggingItem.current.item;
                 draggingItem.current.index = itemIndex - 1;
                 
-                itemRects.current.set(prevItem.clientId, {...prevItemRect, center: prevItemRect.center + (draggingItem.current.rect.height + listGap), offsetPosition: newPosition});
+                itemRects.current.set(prevItem.clientId, {...prevItemRect, center: prevItemRect.center + (draggingItem.current.rect.height + container.current.gap), offsetPosition: newPosition});
                 prevItemRect.ref.style.transform = `translateY(${newPosition}px)`;
                 const anim = prevItemRect.ref.animate(
                     [ {transform: `translateY(${prevItemRect.offsetPosition}px)`}, { transform: `translateY(${newPosition}px)` }],
