@@ -3,12 +3,12 @@ import IconButton from "../components/IconButton/IconButton"
 import editIcon from "../assets/edit.svg?react"
 import deleteIcon from "../assets/delete.svg?react"
 import { useEffect, useState } from "react"
-import api from "../api"
 import "./flashcards-styles/MyFlashcards.css"
 import Modal from "../components/modal/Modal"
 import Button from "../components/button/Button"
 import { useToast } from "../components/toast/toast"
 import Spinner from "../components/spinner/Spinner"
+import useApi from "../authentication/useApi"
 
 type DeckElementProps = {
     title: string
@@ -40,6 +40,7 @@ function MyFlashcards() {
     const [deckToDelete, setDeckToDelete] = useState({id: 0, title: undefined});
     const [isDeleting, setIsDeleting] = useState(false);
     const [loading, setLoading] = useState(true);
+    const api = useApi();
 
     useEffect(() => {
         getDecks();

@@ -8,7 +8,6 @@ import InputField from "../components/input-field/InputField";
 import Card from "../components/card/Card";
 import IconButton from "../components/IconButton/IconButton";
 import React, { useEffect, useState } from "react";
-import api from "../api";
 import { useNavigate, useParams } from "react-router-dom";
 import Textarea from "../components/textarea/Textarea";
 import Modal from "../components/modal/Modal";
@@ -16,6 +15,7 @@ import ModalSuccess from "../assets/modal-success.svg?react";
 import dragIcon from "../assets/drag.svg?react";
 import { useToast } from "../components/toast/toast";
 import Reorderlist from "../components/reorder-list/ReorderList";
+import useApi from "../authentication/useApi";
 
 class Flashcard {
     term: string;
@@ -89,6 +89,7 @@ function ManageDeck(props: ManageDeckProps) {
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     let navigate = useNavigate();
+    const api = useApi();
     
     useEffect(() => {
         if(props.mode === "create"){

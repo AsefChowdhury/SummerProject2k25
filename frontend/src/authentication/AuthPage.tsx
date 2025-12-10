@@ -8,12 +8,12 @@ import google from "../assets/google.svg"
 import microsoft from "../assets/microsoft.svg"
 import arrow_back from "../assets/arrow_back.svg?react"
 import NavigationBar from "../components/navigation-bar/NavigationBar"
-import { useNavigate } from "react-router-dom"
-import api from "../api"
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants"
 import axios from "axios"
 import Button from "../components/button/Button"
 import { useToast } from "../components/toast/toast"
+import { useAuth } from "./AuthContext"
+import useApi from "./useApi"
 
 type AuthPageProps = {
     mode: "sign-in" | "sign-up"
@@ -31,7 +31,8 @@ function AuthPage(props: AuthPageProps) {
     const [confirmPasswordError, setConfirmPasswordError] = useState('')
     const [passwordVisible, setPasswordVisible] = useState(false)
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate();
+    const {setIsAuthorised} = useAuth();
+    const api = useApi();
     const maxEmailLength = 254
 
     const togglePasswordVisibility = () => {
@@ -101,7 +102,7 @@ function AuthPage(props: AuthPageProps) {
             if(response?.status === 200) {
                 localStorage.setItem(ACCESS_TOKEN, response.data.access);
                 localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
-                navigate('/dashboard');
+                setIsAuthorised(true);
             }
         } catch (error) {
             if(axios.isAxiosError(error) && error.response && error.response.data.email && error.response.data.email[0] === "Enter a valid email address.") {
@@ -110,6 +111,7 @@ function AuthPage(props: AuthPageProps) {
                 setEmailError('');
                 toast?.addToast({message: `Something went wrong whilst signing you ${props.mode === "sign-in" ? "in" : "up"}, please try again`, type: "error"});
             }
+            setIsAuthorised(false);
         } finally {
             setLoading(false);
         }

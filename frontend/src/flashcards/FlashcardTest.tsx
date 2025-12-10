@@ -4,7 +4,6 @@ import close from '../assets/close.svg?react'
 import tick from '../assets/tick.svg?react'
 import flip from '../assets/flip.svg?react'
 import { useEffect, useState } from "react";
-import api from "../api";
 import { useParams } from "react-router-dom";
 import Button from "../components/button/Button";
 import "./flashcards-styles/FlashcardTest.css"
@@ -12,6 +11,7 @@ import Progressbar from "../components/progress-bar/ProgressBar";
 import Modal from "../components/modal/Modal";
 import ModalSuccess from "../assets/modal-success.svg?react";
 import Spinner from "../components/spinner/Spinner";
+import useApi from "../authentication/useApi";
 
 class Flashcard{
     term: string;
@@ -32,6 +32,7 @@ function FlashcardTest(){
     const [slideDirection, setSlideDirection] = useState<"exit-left" | "enter-right">("enter-right");
     const [slideTriggerSlide, setTriggerSlide] = useState<"active" | "inactive">("inactive");
     const progress = (numOfCards > 0 && flashcardQueue !== null) ? (numOfCards - flashcardQueue.length) / numOfCards : 0;
+    const api = useApi();
 
     useEffect(() => {
         let isMounted = true;

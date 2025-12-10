@@ -4,18 +4,18 @@ import settings from '../../assets/settings.svg?react'
 import light from '../../assets/light.svg?react'
 import dark from '../../assets/dark.svg?react'
 import logout from '../../assets/logout.svg?react'
-import { useNavigate } from 'react-router-dom';
 import Dropdown from '../../components/dropdown/Dropdown';
 import DropdownItem from '../../components/dropdown/DropdownItem';
+import { useAuth } from '../../authentication/AuthContext';
 
 function Profile() {
+    const {setIsAuthorised} = useAuth();
     const [dropdownAnchor, setDropdownAnchor] = useState<null | HTMLElement>(null);
-    let navigate = useNavigate();
 
     const logoutUser = () => {
         handleClose();
         localStorage.clear();
-        navigate('/sign-in');
+        setIsAuthorised(false);
     }
     
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
