@@ -67,9 +67,8 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request, *args, **kwargs):
         response = Response()
         response.delete_cookie('refresh')
-        print(response.cookies)
         return response

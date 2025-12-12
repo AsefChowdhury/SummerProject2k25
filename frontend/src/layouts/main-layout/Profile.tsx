@@ -19,7 +19,7 @@ function Profile() {
     const logoutUser = async () => {
         handleClose();
         try{
-            const response = await api.post('/api/user/logout/');
+            const response = await api.post('/api/user/logout/', {}, {withCredentials: true});
     
             if (response.status === 200) {
                 setAuth(null);
