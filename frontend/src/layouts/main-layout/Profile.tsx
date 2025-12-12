@@ -8,19 +8,25 @@ import Dropdown from '../../components/dropdown/Dropdown';
 import DropdownItem from '../../components/dropdown/DropdownItem';
 import { useAuth } from '../../authentication/AuthContext';
 import useApi from '../../authentication/useApi';
+import { useToast } from '../../components/toast/toast';
 
 function Profile() {
     const { setAuth } = useAuth();
+    const toast = useToast();
     const api = useApi();
     const [dropdownAnchor, setDropdownAnchor] = useState<null | HTMLElement>(null);
 
     const logoutUser = async () => {
         handleClose();
-        const response = await api.post('/api/user/logout/');
-
-        if (response.status === 200) {
-            setAuth(null);
-        } 
+        try{
+            const response = await api.post('/api/user/logout/');
+    
+            if (response.status === 200) {
+                setAuth(null);
+            } 
+        } catch (error) {
+            toast?.addToast({message: "Something went wrong whilst logging out, please try again", type: "error"});
+        }
     }
     
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
