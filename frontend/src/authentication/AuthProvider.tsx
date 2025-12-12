@@ -9,8 +9,13 @@ type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [auth, setAuth] = useState<{accessToken: string} | null | undefined>(undefined);
+    const [persist, setPersist] = useState<boolean>(localStorage.getItem('persist') === 'true');
 
     const refresh = async () => {
+        if (!persist) {
+            setAuth(null);
+            return;
+        }
         try {
             const response = await privateApi.post('/api/token/refresh/');
             
@@ -75,7 +80,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }, []);
 
     return (
-        <AuthContext value={{auth: auth, setAuth: setAuth}}>
+        <AuthContext value={{auth: auth, persist: persist, setPersist: setPersist, setAuth: setAuth}}>
             {children}
         </AuthContext>
     );

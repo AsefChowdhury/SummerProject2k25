@@ -3,10 +3,14 @@ import { useToast } from "../components/toast/toast";
 import { useAuth } from "./AuthContext";
 
 export default function useRefreshToken() {
-    const { setAuth } = useAuth();
+    const { persist, setAuth } = useAuth();
     const toast = useToast();
 
     const refresh = async () => {
+        if (!persist) {
+            setAuth(null);
+            return;
+        }
         try {
 
             const response = await privateApi.post('/api/token/refresh/');

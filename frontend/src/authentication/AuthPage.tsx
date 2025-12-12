@@ -12,7 +12,7 @@ import axios from "axios"
 import Button from "../components/button/Button"
 import { useToast } from "../components/toast/toast"
 import { useAuth } from "./AuthContext"
-import useApi from "./useApi"
+import { privateApi } from "../api"
 
 type AuthPageProps = {
     mode: "sign-in" | "sign-up"
@@ -30,8 +30,7 @@ function AuthPage(props: AuthPageProps) {
     const [confirmPasswordError, setConfirmPasswordError] = useState('')
     const [passwordVisible, setPasswordVisible] = useState(false)
     const [loading, setLoading] = useState(false)
-    const { setAuth } = useAuth();
-    const api = useApi();
+    const { setPersist, setAuth } = useAuth();
     const maxEmailLength = 254
 
     const togglePasswordVisibility = () => {
@@ -82,20 +81,17 @@ function AuthPage(props: AuthPageProps) {
             return;
         }
         setLoading(true);
+        
         try{
             let response;
             if(props.mode === "sign-in") {
-                response = await api.post('api/token/', {
+                response = await privateApi.post('api/token/', {
                         identifier: username,
                         password: password,
                     },
-                    {
-                        headers: {'Content-Type': 'application/json'},
-                        withCredentials: true
-                    }
                 );
             } else if(props.mode === "sign-up") {
-                response = await api.post('api/user/register/', {
+                response = await privateApi.post('api/user/register/', {
                     username: username,
                     email: email,
                     password: password,
@@ -104,7 +100,10 @@ function AuthPage(props: AuthPageProps) {
                 
             }
             if(response?.status === 200) {
-                setAuth(response.data);
+                const check = (document.getElementById("remember-checkbox") as HTMLInputElement)?.checked
+                localStorage.setItem('persist', check ? "true" : "false");
+                setAuth({accessToken: response.data.access});
+                setPersist(check);
             } else {
                 setAuth(null);
             }
@@ -176,7 +175,7 @@ function AuthPage(props: AuthPageProps) {
                         {props.mode === "sign-in" &&
                             <div className="auth-page-remember-password">
                                 <div>
-                                    <input type="checkbox" className="remember-checkbox"/>
+                                    <input type="checkbox" id="remember-checkbox" className="remember-checkbox"/>
                                     <label>Remember me</label>
                                 </div>
                                 <a className="forgot-password">Forgot Password?</a>
