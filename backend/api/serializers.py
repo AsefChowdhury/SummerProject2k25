@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from django.contrib.auth import get_user_model
 from .models import CustomUser, Deck, Flashcard
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -72,7 +72,6 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
         password = data.get('password')
 
         user = CustomUser.objects.filter(email=identifier).first() or CustomUser.objects.filter(username=identifier).first()
-
         if not user or not user.check_password(password):
             raise serializers.ValidationError("Invalid credentials")
         
@@ -81,8 +80,22 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
         
         refresh = RefreshToken.for_user(user)
 
-
         return {
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }
+
+class CustomTokenRefreshSerializer(TokenRefreshSerializer):
+    refresh = serializers.CharField(required=False)
+
+    def validate(self, attrs):
+        request = self.context['request']
+
+        refresh_token = request.COOKIES.get("refresh")
+
+        if not refresh_token:
+            raise serializers.ValidationError("Refresh token cookie missing.")
+
+        attrs['refresh'] = refresh_token
+
+        return super().validate(attrs)

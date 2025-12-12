@@ -50,7 +50,7 @@ export function ToastProvider(props: ToastProviderProps) {
     }
 
     return (
-        <ToastContext.Provider value={{addToast}}>
+        <ToastContext value={{addToast}}>
             {props.children}
             <div className="toasts">
                 {toasts.map((toast, index) => {
@@ -58,7 +58,7 @@ export function ToastProvider(props: ToastProviderProps) {
                     return (<Toast key={index} id={index} message={toast.message} type={toast.type} onClose={() => removeToast(index)}/>)
                 })}
             </div>
-        </ToastContext.Provider>
+        </ToastContext>
     )
 }
 

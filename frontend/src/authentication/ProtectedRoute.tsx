@@ -1,13 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom";
-import useAuthCheck from "./useAuthCheck";
+import { useAuth } from "./AuthContext";
 
 function ProtectedRoute() {
-    const { isAuthorised } = useAuthCheck();
-    if (isAuthorised === null) {
+    const { auth } = useAuth();
+
+    if (auth === undefined) {
         return <h1>Loading...</h1>
     }
 
-    return isAuthorised ? <Outlet /> : <Navigate to="/sign-in" />
+    return auth !== null ? <Outlet /> : <Navigate to="/sign-in" />
 
 }
 

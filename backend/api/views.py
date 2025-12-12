@@ -1,18 +1,16 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import DeckListSerializer, DeckSerializer, UserSerializer, CustomTokenObtainPairSerializer
+from .serializers import CustomTokenRefreshSerializer, DeckListSerializer, DeckSerializer, UserSerializer, CustomTokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework import viewsets
+from rest_framework.views import APIView
 from .models import Deck
 User = get_user_model()
-
-
 
 # Create your views here.
 
@@ -54,3 +52,25 @@ class CreateUserView(generics.CreateAPIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = Response({
+            "access": serializer.validated_data['access'],
+        }, status=status.HTTP_200_OK)
+        response.set_cookie(key='refresh', value=serializer.validated_data['refresh'], httponly=True)
+        return response
+    
+class CustomTokenRefreshView(TokenRefreshView):
+    serializer_class = CustomTokenRefreshSerializer
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        token = RefreshToken(request.COOKIES.get("refresh"))
+        token.blacklist()
+        response = Response()
+        response.delete_cookie('refresh')
+        return response

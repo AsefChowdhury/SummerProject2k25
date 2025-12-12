@@ -1,15 +1,15 @@
 import { Navigate } from "react-router-dom";
 import { type JSX } from "react";
-import useAuthCheck from "./useAuthCheck";
+import { useAuth } from "./AuthContext";
 
 function PublicRoute({ children }: { children: JSX.Element }) {
-    const { isAuthorised } = useAuthCheck();
+    const { auth } = useAuth();
 
-    if (isAuthorised === null) {
+    if (auth === undefined) {
         return <h1>Loading...</h1>
     }
 
-    return isAuthorised ? <Navigate to="/dashboard" /> : children
+    return auth !== null ? <Navigate to="/dashboard" /> : children
 
 }
 

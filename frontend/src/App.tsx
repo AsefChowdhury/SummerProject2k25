@@ -13,10 +13,12 @@ import ContactUs from "./core-pages/ContactUs";
 import CorePagesLayout from "./layouts/core-pages-layout/CorePagesLayout";
 import ManageDeck from "./flashcards/ManageDeck";
 import FlashcardTest from "./flashcards/FlashcardTest";
+import { AuthProvider } from "./authentication/AuthProvider";
 
 function App() {
   return (
     <>
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route element={<CorePagesLayout/>}>
@@ -41,6 +43,7 @@ function App() {
           <Route path="/sign-up" element={<PublicRoute><AuthPage mode="sign-up"/></PublicRoute>} />
         </Routes>
       </BrowserRouter>
+    </AuthProvider>
     </>
   ) 
 }

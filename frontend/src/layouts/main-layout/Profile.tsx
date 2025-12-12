@@ -3,19 +3,30 @@ import './main-layout-styles/Profile.css'
 import settings from '../../assets/settings.svg?react'
 import light from '../../assets/light.svg?react'
 import dark from '../../assets/dark.svg?react'
-import logout from '../../assets/logout.svg?react'
-import { useNavigate } from 'react-router-dom';
+import logoutIcon from '../../assets/logout.svg?react'
 import Dropdown from '../../components/dropdown/Dropdown';
 import DropdownItem from '../../components/dropdown/DropdownItem';
+import { useAuth } from '../../authentication/AuthContext';
+import useApi from '../../authentication/useApi';
+import { useToast } from '../../components/toast/toast';
 
 function Profile() {
+    const { setAuth } = useAuth();
+    const toast = useToast();
+    const api = useApi();
     const [dropdownAnchor, setDropdownAnchor] = useState<null | HTMLElement>(null);
-    let navigate = useNavigate();
 
-    const logoutUser = () => {
+    const logoutUser = async () => {
         handleClose();
-        localStorage.clear();
-        navigate('/sign-in');
+        try{
+            const response = await api.post('/api/user/logout/', {}, {withCredentials: true});
+    
+            if (response.status === 200) {
+                setAuth(null);
+            } 
+        } catch (error) {
+            toast?.addToast({message: "Something went wrong whilst logging out, please try again", type: "error"});
+        }
     }
     
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,7 +47,7 @@ function Profile() {
             <Dropdown anchor={dropdownAnchor as HTMLElement} open={dropdownAnchor !== null} onClose={handleClose} >
                 <DropdownItem text={'Settings'} icon={settings} onClick={handleClose}/>
                 <DropdownItem text={'Light mode'} icon={light}/>
-                <DropdownItem className='logout' text={'Logout'} icon={logout} onClick={logoutUser}/>
+                <DropdownItem className='logout' text={'Logout'} icon={logoutIcon} onClick={logoutUser}/>
             </Dropdown>
         </div>
     )
