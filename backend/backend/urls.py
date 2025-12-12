@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from api.views import CreateUserView, CustomTokenObtainPairView, DeckViewSet
+from api.views import CreateUserView, CustomTokenObtainPairView, CustomTokenRefreshView, DeckViewSet, LogoutView
 from rest_framework_simplejwt.views import  TokenRefreshView, TokenVerifyView
 from rest_framework.routers import DefaultRouter
 
@@ -26,8 +26,9 @@ router.register(r'decks', DeckViewSet, 'decks')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/user/register/", CreateUserView.as_view(), name="signup"),
+    path("api/user/logout/", LogoutView.as_view(), name="logout"),
     path('api/token/', CustomTokenObtainPairView.as_view(), name='getToken'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='refreshToken'),
+    path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='refreshToken'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/', include(router.urls)),
 ]

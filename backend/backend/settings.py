@@ -32,8 +32,11 @@ DEBUG = os.getenv("DJANGO_DEBUG", "True")
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWS_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # React development server
+    "http://127.0.0.1:5173",  # Alternative localhost format
+]
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 

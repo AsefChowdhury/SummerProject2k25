@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 import api from "../api";
-import { ACCESS_TOKEN } from '../constants';
 import useRefreshToken from "./useRefreshToken";
+import { useAuth } from "./AuthContext";
 
 export default function useApi() {
     const refresh = useRefreshToken();
+    const { auth } = useAuth();
     
     useEffect(() => {
         const requestInterceptor = api.interceptors.request.use((config) => {
-                const token = localStorage.getItem(ACCESS_TOKEN);
-                if (token) {
+                const token = auth?.accessToken;
+                if (token && !config.headers.Authorization) {
                     config.headers.Authorization = `Bearer ${token}`;
                 }
                 return config;

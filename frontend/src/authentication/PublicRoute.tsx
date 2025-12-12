@@ -3,13 +3,13 @@ import { type JSX } from "react";
 import { useAuth } from "./AuthContext";
 
 function PublicRoute({ children }: { children: JSX.Element }) {
-    const { isAuthorised } = useAuth();
+    const { auth } = useAuth();
 
-    if (isAuthorised === null) {
+    if (auth === undefined) {
         return <h1>Loading...</h1>
     }
 
-    return isAuthorised ? <Navigate to="/dashboard" /> : children
+    return auth !== null ? <Navigate to="/dashboard" /> : children
 
 }
 

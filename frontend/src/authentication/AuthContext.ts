@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 
-export const AuthContext = createContext<{ isAuthorised: boolean | null; setIsAuthorised: React.Dispatch<React.SetStateAction<boolean | null>>}>({ isAuthorised: null, setIsAuthorised: () => {} });
+export const AuthContext = createContext<{ auth: {accessToken: string} | null | undefined; setAuth: React.Dispatch<React.SetStateAction<{accessToken: string} | null | undefined>>}>({ auth: null, setAuth: () => {} });
 
 export const useAuth = () => {
     return useContext(AuthContext);

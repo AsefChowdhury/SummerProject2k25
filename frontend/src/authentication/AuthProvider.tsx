@@ -1,6 +1,5 @@
 import { jwtDecode, type JwtPayload } from "jwt-decode";
-import api from "../api";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { privateApi } from "../api";
 import { useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 
@@ -9,39 +8,30 @@ type AuthProviderProps = {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
-    const [isAuthorised, setIsAuthorised] = useState<boolean | null>(null);
+    const [auth, setAuth] = useState<{accessToken: string} | null | undefined>(undefined);
 
     const refresh = async () => {
-        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
-        if (!refreshToken) {
-            setIsAuthorised(false);
-            return;
-        }
-
         try {
-            const response = await api.post('/api/token/refresh/', { 
-                refresh: refreshToken 
-            });
+            const response = await privateApi.post('/api/token/refresh/');
             
             if (response.status === 200) {
-                localStorage.setItem(ACCESS_TOKEN, response.data.access);
-                setIsAuthorised(true);
+                setAuth({accessToken: response.data.access});
                 return;
             } else {
-                setIsAuthorised(false);
+                setAuth(null);
                 return;
             }
         } catch (error) {
-            setIsAuthorised(false);
+            setAuth(null);
             return;
         }
     }
 
     useEffect(() => {
         
-        const auth = async () => {
+        const authorise = async () => {
         
-            const token = localStorage.getItem(ACCESS_TOKEN);
+            const token = auth?.accessToken;
             if (!token) {
                 refresh();
                 return;
@@ -64,28 +54,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
             }
             
             try {
-                const response = await api.post('/api/token/verify/', { 
+                const response = await privateApi.post('/api/token/verify/', { 
                     token: token
                 });
                 
                 if (response.status === 200) {
-                    setIsAuthorised(true);
+                    setAuth({accessToken: token});
                     return;
                 } else {
                     refresh();
                     return;
                 }
             } catch (error) {
-                setIsAuthorised(false);
+                setAuth(null);
                 return;
             }
         }
         
-        auth();
+        authorise();
     }, []);
 
     return (
-        <AuthContext value={{isAuthorised, setIsAuthorised}}>
+        <AuthContext value={{auth: auth, setAuth: setAuth}}>
             {children}
         </AuthContext>
     );

@@ -1,48 +1,26 @@
-import { refreshApi } from "../api";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
+import { privateApi } from "../api";
 import { useToast } from "../components/toast/toast";
 import { useAuth } from "./AuthContext";
-import { jwtDecode, type JwtPayload } from "jwt-decode";
 
 export default function useRefreshToken() {
-    const {setIsAuthorised} = useAuth();
+    const { setAuth } = useAuth();
     const toast = useToast();
 
-    const refresh: () => Promise<string | null> = async () => {
-        let token = localStorage.getItem(REFRESH_TOKEN);
-        if (!token) {
-            setIsAuthorised(false);
-            return;
-        }
-        let decodedToken: JwtPayload;
-        
+    const refresh = async () => {
         try {
-            decodedToken = jwtDecode(token);
 
-            const tokenExp = decodedToken.exp;
-            const now = Date.now() / 1000;
-            
-            if (!tokenExp || now > tokenExp) {
-                setIsAuthorised(false);
-                toast?.addToast({message: "Your session has expired, please sign in again", type: "error"});
-                return;
-            }
-
-            const response = await refreshApi.post('/api/token/refresh/', { 
-                refresh: token 
-            });
+            const response = await privateApi.post('/api/token/refresh/');
             
             if (response.status === 200) {
-                setIsAuthorised(true);
-                localStorage.setItem(ACCESS_TOKEN, response.data.access);
+                setAuth({accessToken: response.data.access});
                 return response.data.access;
             } else {
-                setIsAuthorised(false);
+                setAuth(null);
                 return;
             }
 
         } catch (error) {
-            setIsAuthorised(false);
+            setAuth(null);
             toast?.addToast({message: "Something went wrong whilst refreshing your session, please sign in again", type: "error"});
             return;
         }
