@@ -69,6 +69,8 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        token = RefreshToken(request.COOKIES.get("refresh"))
+        token.blacklist()
         response = Response()
         response.delete_cookie('refresh')
         return response
