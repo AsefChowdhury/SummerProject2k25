@@ -8,7 +8,7 @@ function ProtectedRoute() {
         return <h1>Loading...</h1>
     }
 
-    return auth !== null ? <Outlet /> : <Navigate to="/sign-in" />
+    return auth !== null ? <Outlet /> : <Navigate to="/auth/sign-in" />
 
 }
 
