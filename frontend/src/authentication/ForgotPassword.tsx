@@ -4,6 +4,7 @@ import arrow_back from "../assets/arrow_back.svg?react"
 import InputField from "../components/input-field/InputField"
 import { useState } from "react";
 import Button from "../components/button/Button";
+import api from "../api";
 
 function ForgotPassword() {
     const [email, setEmail] = useState("");
@@ -27,6 +28,9 @@ function ForgotPassword() {
         }
         console.log(email)
         setLoading(true);
+        await api.post('api/user/reset-password/', {email: email}).then(response => {
+            console.log(response);
+        }).finally(() => setLoading(false));
         
     };
 

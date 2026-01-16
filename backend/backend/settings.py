@@ -38,6 +38,11 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 25
+
 # Application definition
 
 INSTALLED_APPS = [

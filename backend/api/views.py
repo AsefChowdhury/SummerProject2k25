@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import CustomTokenRefreshSerializer, DeckListSerializer, DeckSerializer, UserSerializer, CustomTokenObtainPairSerializer
+from .serializers import CustomTokenRefreshSerializer, DeckListSerializer, DeckSerializer, ForgotPasswordSerializer, UserSerializer, CustomTokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.core.mail import send_mail
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -11,6 +13,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from .models import Deck
 User = get_user_model()
+from rest_framework.decorators import api_view, permission_classes
 
 # Create your views here.
 
@@ -74,3 +77,18 @@ class LogoutView(APIView):
         response = Response()
         response.delete_cookie('refresh')
         return response
+
+def sendPasswordResetEmail(email):
+    user = User.objects.filter(email=email).first()
+    if user:
+        token = PasswordResetTokenGenerator().make_token(user)
+        send_mail('Password Reset', f'Hi {user.username}, Your password reset token is {token}', 'django@example.com', [email])
+        
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def passwordResetRequest(request):
+    email = request.data.get('email')
+    serializer = ForgotPasswordSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    sendPasswordResetEmail(email)
+    return Response({"message": "If the email exists, a reset link was sent"}, status=status.HTTP_200_OK)
