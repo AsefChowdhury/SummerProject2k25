@@ -12,6 +12,7 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from .models import Deck
+import threading
 User = get_user_model()
 from rest_framework.decorators import api_view, permission_classes
 
@@ -90,5 +91,5 @@ def passwordResetRequest(request):
     email = request.data.get('email')
     serializer = ForgotPasswordSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    sendPasswordResetEmail(email)
+    threading.Thread(target=sendPasswordResetEmail, args=(email,)).start()
     return Response({"message": "If the email exists, a reset link was sent"}, status=status.HTTP_200_OK)
