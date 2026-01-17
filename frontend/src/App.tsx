@@ -15,6 +15,7 @@ import ManageDeck from "./flashcards/ManageDeck";
 import FlashcardTest from "./flashcards/FlashcardTest";
 import { AuthProvider } from "./authentication/AuthProvider";
 import ForgotPassword from "./authentication/ForgotPassword";
+import ResetPassword from "./authentication/ResetPassword";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
             <Route path="sign-in" element={<AuthPage mode="sign-in"/>}></Route>
             <Route path="sign-up" element={<AuthPage mode="sign-up"/>}></Route>
             <Route path="forgot-password" element={<ForgotPassword/>}></Route>
+            <Route path="reset-password/:uid/:token" element={<ResetPassword/>}></Route>
           </Route>
         </Routes>
       </BrowserRouter>

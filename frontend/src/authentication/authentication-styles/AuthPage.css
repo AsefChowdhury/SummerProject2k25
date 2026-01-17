@@ -68,6 +68,10 @@
     backdrop-filter: blur(0.5em);
 }
 
+.forgot-password-success{
+    text-align: center;
+}
+
 .auth-page-form label{
     margin-bottom: 0.5em;
 }

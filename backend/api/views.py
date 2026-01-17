@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .serializers import CustomTokenRefreshSerializer, DeckListSerializer, DeckSerializer, ForgotPasswordSerializer, UserSerializer, CustomTokenObtainPairSerializer
+from .serializers import CustomTokenRefreshSerializer, DeckListSerializer, DeckSerializer, ForgotPasswordSerializer, ResetPasswordSerializer, UserSerializer, CustomTokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -83,13 +83,27 @@ def sendPasswordResetEmail(email):
     user = User.objects.filter(email=email).first()
     if user:
         token = PasswordResetTokenGenerator().make_token(user)
-        send_mail('Password Reset', f'Hi {user.username}, Your password reset token is {token}', 'django@example.com', [email])
-        
+        send_mail('Password Reset', f'Hi {user.username}, Your password reset link is http://localhost:5173/auth/reset-password/{user.id}/{token}', 'django@example.com', [email])
+
+def resetPassword(uid, token, password):
+    user = User.objects.filter(id=uid).first()
+    if user and PasswordResetTokenGenerator().check_token(user, token):
+        user.set_password(password)
+        user.save()
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def passwordForgotRequest(request):
+    serializer = ForgotPasswordSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    email = request.data.get('email')
+    threading.Thread(target=sendPasswordResetEmail, args=(email,)).start()
+    return Response({"message": "If the email exists, a reset link was sent"}, status=status.HTTP_200_OK)
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def passwordResetRequest(request):
-    email = request.data.get('email')
-    serializer = ForgotPasswordSerializer(data=request.data)
+    serializer = ResetPasswordSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    threading.Thread(target=sendPasswordResetEmail, args=(email,)).start()
-    return Response({"message": "If the email exists, a reset link was sent"}, status=status.HTTP_200_OK)
+    threading.Thread(target=resetPassword, args=(request.data.get('uid'), request.data.get('token'), request.data.get('password'),)).start()
+    return Response({"message": "If the user exists, their password has been reset"}, status=status.HTTP_200_OK)
