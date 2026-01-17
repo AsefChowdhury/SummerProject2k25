@@ -45,8 +45,8 @@ function App() {
             <Route path="sign-in" element={<AuthPage mode="sign-in"/>}></Route>
             <Route path="sign-up" element={<AuthPage mode="sign-up"/>}></Route>
             <Route path="forgot-password" element={<ForgotPassword/>}></Route>
-            <Route path="reset-password/:uid/:token" element={<ResetPassword/>}></Route>
           </Route>
+          <Route path="reset-password/:uid/:token" element={<ResetPassword/>}></Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -100,7 +100,7 @@ function AuthPage(props: AuthPageProps) {
                 });
                 
             }
-            if(response?.status === 200) {
+            if((response?.status === 200) || (response?.status === 201)) {
                 const check = (document.getElementById("remember-checkbox") as HTMLInputElement)?.checked
                 localStorage.setItem('persist', check ? "true" : "false");
                 setAuth({accessToken: response.data.access});

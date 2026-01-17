@@ -15,6 +15,11 @@ from .models import Deck
 import threading
 User = get_user_model()
 from rest_framework.decorators import api_view, permission_classes
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 
 # Create your views here.
 
@@ -83,7 +88,7 @@ def sendPasswordResetEmail(email):
     user = User.objects.filter(email=email).first()
     if user:
         token = PasswordResetTokenGenerator().make_token(user)
-        send_mail('Password Reset', f'Hi {user.username}, Your password reset link is http://localhost:5173/auth/reset-password/{user.id}/{token}', 'django@example.com', [email])
+        send_mail('Password Reset', f'Hi {user.username}, Your password reset link is http://localhost:5173/reset-password/{user.id}/{token}', f'django@{os.getenv("EMAIL_DOMAIN", "example.com")}', [email])
 
 def resetPassword(uid, token, password):
     user = User.objects.filter(id=uid).first()
