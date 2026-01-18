@@ -74,6 +74,13 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 class CustomTokenRefreshView(TokenRefreshView):
     serializer_class = CustomTokenRefreshSerializer
 
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        refresh = response.data['refresh']
+        response = Response({"access": response.data['access']}, status=status.HTTP_200_OK)
+        response.set_cookie(key='refresh', value=refresh, httponly=True)
+        return response
+
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 

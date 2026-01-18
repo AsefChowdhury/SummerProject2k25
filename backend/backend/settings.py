@@ -74,7 +74,9 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "TOKEN_OBTAIN_SERIALIZER": "api.serializers.CustomTokenObtainPairSerializer"
+    "TOKEN_OBTAIN_SERIALIZER": "api.serializers.CustomTokenObtainPairSerializer",
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True
 }
 
 MIDDLEWARE = [
