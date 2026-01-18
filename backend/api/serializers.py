@@ -1,9 +1,9 @@
+import datetime
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer, TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from .models import CustomUser, Deck, Flashcard
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import AuthenticationFailed
+import jwt
 
 class FlashcardSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
@@ -63,39 +63,44 @@ class UserSerializer(serializers.ModelSerializer):
         user = CustomUser.objects.create_user(**validated_data)
         return user
 
-class CustomTokenObtainPairSerializer(serializers.Serializer):
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     identifier = serializers.CharField(max_length=254)
-    password = serializers.CharField(write_only=True)
 
-    def validate(self, data):
-        identifier = data.get('identifier')
-        password = data.get('password')
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.username_field in self.fields:
+            del self.fields[self.username_field]
 
-        user = CustomUser.objects.filter(email=identifier).first() or CustomUser.objects.filter(username=identifier).first()
-        if not user or not user.check_password(password):
-            raise serializers.ValidationError("Invalid credentials")
-        
-        if not user.is_active:
-            raise AuthenticationFailed("User is not active")
-        
-        refresh = RefreshToken.for_user(user)
+    def validate(self, attrs):
+        identifier = attrs.get("identifier")
+        user = CustomUser.objects.filter(email=identifier).first() or \
+               CustomUser.objects.filter(username=identifier).first()
 
-        return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        }
+        if user and user.check_password(attrs.get("password")):
+            attrs[self.username_field] = identifier
+            
+            data = super().validate(attrs)
+            return data
+
+        raise serializers.ValidationError("Invalid credentials")
 
 class CustomTokenRefreshSerializer(TokenRefreshSerializer):
     refresh = serializers.CharField(required=False)
 
     def validate(self, attrs):
         request = self.context['request']
-
         refresh_token = request.COOKIES.get("refresh")
 
         if not refresh_token:
             raise serializers.ValidationError("Refresh token cookie missing.")
 
+        payload = jwt.decode(refresh_token, options={"verify_signature": False})
+        iat = payload.get("iat")
+        user = CustomUser.objects.filter(id=payload.get("user_id")).first()
+        token_time = datetime.datetime.fromtimestamp(iat, tz=datetime.timezone.utc)
+        if user.password_changed_date and token_time < user.password_changed_date:
+            raise serializers.ValidationError("The password has been changed since the token was issued.")
+        
         attrs['refresh'] = refresh_token
 
         return super().validate(attrs)

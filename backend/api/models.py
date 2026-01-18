@@ -9,6 +9,7 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
+    password_changed_date = models.DateTimeField(null=True, blank=True)
 
 class Deck(models.Model):
     title = models.CharField(max_length=100)

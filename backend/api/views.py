@@ -17,6 +17,7 @@ User = get_user_model()
 from rest_framework.decorators import api_view, permission_classes
 from dotenv import load_dotenv
 import os
+import datetime
 
 load_dotenv()
 
@@ -82,7 +83,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         return response
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         token = RefreshToken(request.COOKIES.get("refresh"))
@@ -101,6 +102,7 @@ def resetPassword(uid, token, password):
     user = User.objects.filter(id=uid).first()
     if user and PasswordResetTokenGenerator().check_token(user, token):
         user.set_password(password)
+        user.password_changed_date = datetime.datetime.now(tz=datetime.timezone.utc)
         user.save()
 
 @api_view(['POST'])
