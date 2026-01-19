@@ -68,6 +68,10 @@
     backdrop-filter: blur(0.5em);
 }
 
+.forgot-password-success{
+    text-align: center;
+}
+
 .auth-page-form label{
     margin-bottom: 0.5em;
 }
@@ -100,6 +104,13 @@ h1{
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1em;
+    .forgot-password{
+        color: var(--secondary-text-color);
+    }
+    .forgot-password:hover{
+        color: var(--hover-border);
+        cursor: pointer;
+    }
 }
 
 

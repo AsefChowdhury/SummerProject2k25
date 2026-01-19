@@ -7,13 +7,12 @@ import logoutIcon from '../../assets/logout.svg?react'
 import Dropdown from '../../components/dropdown/Dropdown';
 import DropdownItem from '../../components/dropdown/DropdownItem';
 import { useAuth } from '../../authentication/AuthContext';
-import useApi from '../../authentication/useApi';
 import { useToast } from '../../components/toast/toast';
+import api from '../../api';
 
 function Profile() {
     const { setAuth } = useAuth();
     const toast = useToast();
-    const api = useApi();
     const [dropdownAnchor, setDropdownAnchor] = useState<null | HTMLElement>(null);
 
     const logoutUser = async () => {

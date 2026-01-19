@@ -61,7 +61,7 @@ function CorePagesLayout(){
                 </div>
 
                 <div className="auth-link">
-                    <Button text="Login" variant="filled" to="/sign-in" />
+                    <Button text="Login" variant="filled" to="/auth/sign-in" />
                 </div>              
             </NavigationBar>  
             <CorePagesDropDown open={openDrawer} onClose={() => {setOpenDrawer(false)}}>

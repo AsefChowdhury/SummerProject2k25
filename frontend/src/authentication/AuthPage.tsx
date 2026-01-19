@@ -13,6 +13,7 @@ import Button from "../components/button/Button"
 import { useToast } from "../components/toast/toast"
 import { useAuth } from "./AuthContext"
 import { privateApi } from "../api"
+import { Link } from "react-router-dom"
 
 type AuthPageProps = {
     mode: "sign-in" | "sign-up"
@@ -99,7 +100,7 @@ function AuthPage(props: AuthPageProps) {
                 });
                 
             }
-            if(response?.status === 200) {
+            if((response?.status === 200) || (response?.status === 201)) {
                 const check = (document.getElementById("remember-checkbox") as HTMLInputElement)?.checked
                 localStorage.setItem('persist', check ? "true" : "false");
                 setAuth({accessToken: response.data.access});
@@ -129,7 +130,7 @@ function AuthPage(props: AuthPageProps) {
                 </div>
                 <div className="auth-link">
                     <p>{props.mode === "sign-in" ? "Not a member?" : "Already a member?"}</p>
-                    <Button text={props.mode === "sign-in" ? "Sign up" : "Sign in"} variant="filled" to={props.mode === "sign-in" ? "/sign-up" : "/sign-in"}/>
+                    <Button text={props.mode === "sign-in" ? "Sign up" : "Sign in"} variant="filled" to={props.mode === "sign-in" ? "/auth/sign-up" : "/auth/sign-in"}/>
                 </div>
             </NavigationBar>
             <div className="auth-page-body">
@@ -178,7 +179,7 @@ function AuthPage(props: AuthPageProps) {
                                     <input type="checkbox" id="remember-checkbox" className="remember-checkbox"/>
                                     <label>Remember me</label>
                                 </div>
-                                <a className="forgot-password">Forgot Password?</a>
+                                <Link to="/auth/forgot-password" className="forgot-password">Forgot Password?</Link>
                             </div>
                         }
                         <Button loading={loading} type="submit" id="auth-page-submit-button" text={props.mode === "sign-in" ? "Sign in" : "Sign up"} variant="filled"/>
