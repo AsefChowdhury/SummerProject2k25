@@ -30,15 +30,13 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
     const animations = useRef<Map<string, Animation>>(new Map())
 
     useEffect(() => {
-        if (draggingItem) {
-            window.addEventListener("mousemove", handleDragging);
-            window.addEventListener("mouseup", handleDragEnd);
-            return () => {
-                window.removeEventListener("mousemove", handleDragging);
-                window.removeEventListener("mouseup", handleDragEnd);
-            };
-        }
-    }, [draggingItem]);
+        window.addEventListener("mousemove", handleDragging);
+        window.addEventListener("mouseup", handleDragEnd);
+        return () => {
+            window.removeEventListener("mousemove", handleDragging);
+            window.removeEventListener("mouseup", handleDragEnd);
+        };
+    }, []);
 
     const handleDragStart = (id: string, e: React.MouseEvent) => {
         const listElement = (e.target as HTMLElement).closest('ol');
@@ -123,7 +121,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
         const minTranslate = container.current.top - origTop; 
         const maxTranslate = container.current.bottom - (origTop + height);
 
-        let translate = mouseY - draggingItem.current.startPos.y + (window.scrollY - scroll.current);
+        let translate = mouseY;
 
         if (translate < minTranslate) {
             translate = minTranslate;
@@ -179,7 +177,7 @@ function Reorderlist<T extends ReorderableItem>(props: ReorderListProps<T>) {
         const mouseY = e.clientY;
         if(!draggingItem.current || !container.current) return;
         mousePos.current.y = mouseY;
-        applyDragTranslation(mouseY);
+        applyDragTranslation(mouseY - draggingItem.current.startPos.y + (window.scrollY - scroll.current));
         checkReordering(mouseY);
         
         const scrollDelta = checkAutoScroll(mouseY);
