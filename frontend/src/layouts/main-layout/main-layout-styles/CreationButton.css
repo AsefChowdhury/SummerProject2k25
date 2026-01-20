@@ -5,14 +5,14 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    .creation-button .button{
+    .creation-button{
         background: var(--accent-color);
         .icon-image{
             color: var(--text-color);
         }
     }
     
-    .creation-button .button:hover{
+    .creation-button:hover{
         background: var(--secondary-hover-fill);
     }
 }
