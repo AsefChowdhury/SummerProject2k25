@@ -1,10 +1,6 @@
 import { Outlet } from "react-router-dom"
 import SideDrawer from "../../components/side-drawer/SideDrawer"
-import dashboard from '../../assets/dashboard.svg?react'
-import notes from '../../assets/notes.svg?react'
 import menu from '../../assets/menu.svg?react'
-import flashcards from '../../assets/flashcards.svg?react'
-import quizzes from "../../assets/quizzes.svg?react"
 import DrawerItem from "../../components/side-drawer/DrawerItem"
 import './main-layout-styles/MainLayout.css'
 import ButtonSearchField from "../../components/button-search-field/ButtonSearchField"
@@ -14,8 +10,10 @@ import NavigationBar from "../../components/navigation-bar/NavigationBar"
 import IconButton from "../../components/IconButton/IconButton"
 import { useState } from "react"
 import CreationButton from "./CreationButton"
+import arrow_back from "../../assets/arrow_back.svg?react"
+import manage_account from "../../assets/manage_account.svg?react"
 
-function MainLayout() {
+function SettingsLayout() {
     const [openDrawer, setOpenDrawer] = useState(false);
     
     return (
@@ -41,16 +39,12 @@ function MainLayout() {
             </NavigationBar>
             <div className="content-container">
                 <SideDrawer type="temporary" open={openDrawer} onClose={() => {setOpenDrawer(false)}}>
-                    <DrawerItem to="/dashboard" icon={dashboard} text={'Dashboard'} onClick={() => {setOpenDrawer(false)}}/>
-                    <DrawerItem to="/flashcards" icon={flashcards} text={'Flashcards'} onClick={() => {setOpenDrawer(false)}}/>
-                    <DrawerItem to="/notes" icon={notes} text={'Notes'} onClick={() => {setOpenDrawer(false)}}/>
-                    <DrawerItem to="/quizzes" icon={quizzes} text={'Quizzes'} onClick={() => {setOpenDrawer(false)}}/>
+                    <DrawerItem to="/dashboard" icon={arrow_back} text={'Back to dashboard'} onClick={() => {setOpenDrawer(false)}}/>
+                    <DrawerItem to="/settings/account" icon={manage_account} text={'Account'} onClick={() => {setOpenDrawer(false)}}/>
                 </SideDrawer>
                 <SideDrawer type="permanent" open={openDrawer}>
-                    <DrawerItem to="/dashboard" icon={dashboard} text={'Dashboard'} />
-                    <DrawerItem to="/flashcards" icon={flashcards} text={'Flashcards'}/>
-                    <DrawerItem to="/notes" icon={notes} text={'Notes'}/>
-                    <DrawerItem to="/quizzes" icon={quizzes} text={'Quizzes'}/>
+                    <DrawerItem to="/dashboard" icon={arrow_back} text={'Back to dashboard'} />
+                    <DrawerItem to="/settings/account" icon={manage_account} text={'Account'}/>
                 </SideDrawer>
                 <div className="page-content">
                     <Outlet />
@@ -60,4 +54,4 @@ function MainLayout() {
     )
 }
 
-export default MainLayout
+export default SettingsLayout

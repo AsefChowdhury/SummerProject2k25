@@ -16,6 +16,8 @@ import FlashcardTest from "./flashcards/FlashcardTest";
 import { AuthProvider } from "./authentication/AuthProvider";
 import ForgotPassword from "./authentication/ForgotPassword";
 import ResetPassword from "./authentication/ResetPassword";
+import SettingsLayout from "./layouts/main-layout/SettingsLayout";
+import Account from "./settings/Account";
 
 function App() {
   return (
@@ -38,6 +40,10 @@ function App() {
               </Route>
               <Route path="quizzes" element={<MyQuizzes />} />
               <Route path="notes" element={<MyNotes />} />
+            </Route>
+            <Route path="settings" element={<SettingsLayout />}>
+              <Route index element={<Navigate to="account" replace/>}></Route>
+              <Route path="account" element={<Account />} />
             </Route>
             <Route path="flashcards/test/:deckId" element={<FlashcardTest />} />
           </Route>
