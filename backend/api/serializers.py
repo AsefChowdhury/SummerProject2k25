@@ -77,8 +77,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
                CustomUser.objects.filter(username=identifier).first()
 
         if user and user.check_password(attrs.get("password")):
-            attrs[self.username_field] = identifier
-            
+            attrs[self.username_field] = user.email
             data = super().validate(attrs)
             return data
 
