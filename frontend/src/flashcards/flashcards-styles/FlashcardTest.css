@@ -179,15 +179,12 @@
             width: 100%;
             align-items: center;
             justify-content: center;
-            .button-container{
-                width: 100%;
-                #end-test-button, #keep-going-button{
-                    font-size: 1rem;
-                }
-                #end-test-button:hover{
-                    background: var(--error-hover-fill);
-                    color: var(--text-color);
-                }
+            #end-test-button, #keep-going-button{
+                font-size: 1rem;
+            }
+            #end-test-button:hover{
+                background: var(--error-hover-fill);
+                color: var(--text-color);
             }
         }
     }

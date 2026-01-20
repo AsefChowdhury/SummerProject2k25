@@ -1,3 +1,7 @@
+.input-field-label{
+    display: block;
+    margin-bottom: 0.5em;
+}
 .input-field-container{
     width: 100%;
     display: flex;
@@ -24,7 +28,6 @@
             padding-right: 0.5em;
         }
     }
-
     .error-message {
         color: var(--error-color);
         font-size: 0.8em;

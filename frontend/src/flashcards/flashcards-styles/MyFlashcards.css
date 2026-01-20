@@ -50,15 +50,12 @@
             width: 100%;
             align-items: center;
             justify-content: center;
-            .button-container{
-                width: 100%;
-                #confirm-delete, #cancel-delete{
-                    font-size: 1rem;
-                }
-                #confirm-delete:hover{
-                    background: var(--error-hover-fill);
-                    color: var(--text-color);
-                }
+            #confirm-delete, #cancel-delete{
+                font-size: 1rem;
+            }
+            #confirm-delete:hover{
+                background: var(--error-hover-fill);
+                color: var(--text-color);
             }
         }
     }
