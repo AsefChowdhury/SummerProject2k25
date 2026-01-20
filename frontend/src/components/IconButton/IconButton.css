@@ -1,33 +1,14 @@
-.icon-button-container{
+.icon-button{
     position: relative;
     height: 100%;
-
-    .button{
-        height: 100%;
-        border-radius: 50%;
-        aspect-ratio: 1 / 1;
-        background-color: transparent;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        cursor: pointer;
-    }
-    
-    .button:disabled {
-        cursor: not-allowed;
-        pointer-events: none;
-    }
-    
-    .button:disabled .icon-image {
-        color: gray;
-    }
-    
-    
-    .button:hover{
-        background-color: var(--secondary-accent-color);
-    }
-    
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
     
     .icon-image{
         height: 60%;
@@ -36,7 +17,7 @@
         border: none;
         color: var(--text-color);
     }
-    
+
     .tooltiptext {
         visibility: hidden;
         width: max-content;
@@ -51,10 +32,7 @@
         left: 50%;
         transform: translateX(-50%);
         margin-top: 5px;
-    }
-      
-    .button:hover .tooltiptext {
-        visibility: visible;
+        pointer-events: none;
     }
     
     .tooltiptext::after {
@@ -66,5 +44,24 @@
         border-width: 5px;
         border-style: solid;
         border-color: transparent transparent black transparent;
+        pointer-events: none;
     }
+}
+
+.icon-button:disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.icon-button:disabled .icon-image {
+    color: gray;
+}
+
+
+.icon-button:hover{
+    background-color: var(--secondary-accent-color);
+}
+  
+.icon-button:hover .tooltiptext {
+    visibility: visible;
 }

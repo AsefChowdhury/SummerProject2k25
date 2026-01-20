@@ -48,10 +48,11 @@
         .card-actions{
             display: flex;
             flex-direction: row;
-            .delete-button .button:hover .icon-image{
+            .delete-button:hover .icon-image{
                 color: var(--error-color);
+                transition: none;
             }
-            .drag-button .button:hover{
+            .drag-button:hover{
                 background-color: transparent;
                 cursor: grab;
             }
