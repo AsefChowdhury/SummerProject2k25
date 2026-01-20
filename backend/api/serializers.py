@@ -106,9 +106,9 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
         return super().validate(attrs)
 
 class ForgotPasswordSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    email = serializers.EmailField(required=True)
 
 class ResetPasswordSerializer(serializers.Serializer):
-    uid = serializers.CharField(write_only=True)
-    token = serializers.CharField(write_only=True)
-    password = serializers.CharField(write_only=True)
+    uid = serializers.CharField(write_only=True, required=True)
+    token = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=True)
