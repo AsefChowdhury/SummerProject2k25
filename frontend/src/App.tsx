@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter } from "react-router";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router";
 import Dashboard from './dashboard/Dashboard';
 import MainLayout from "./layouts/main-layout/MainLayout";
 import AuthPage from './authentication/AuthPage'
@@ -42,6 +42,7 @@ function App() {
             <Route path="flashcards/test/:deckId" element={<FlashcardTest />} />
           </Route>
           <Route path="auth" element={<PublicRoute/>}>
+            <Route index element={<Navigate to="sign-in" replace/>}></Route>
             <Route path="sign-in" element={<AuthPage mode="sign-in"/>}></Route>
             <Route path="sign-up" element={<AuthPage mode="sign-up"/>}></Route>
             <Route path="forgot-password" element={<ForgotPassword/>}></Route>
