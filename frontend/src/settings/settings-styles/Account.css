@@ -1,0 +1,25 @@
+.account-page{
+    .page-header{
+        margin-bottom: 0.5em;
+    }
+    .account-form{
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        margin-bottom: 1em;
+    }
+    #save-button{
+        align-self: flex-start;
+        width: auto;
+    }
+    #delete-account-button{
+        color: var(--error-color);
+        outline-color: var(--error-color);
+        width: auto;
+    }
+    #delete-account-button:hover{
+        background-color: var(--error-color);
+        color: white;
+    }
+
+}
