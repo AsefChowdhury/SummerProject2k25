@@ -10,7 +10,7 @@ import { useAuth } from '../../authentication/AuthContext';
 import { useToast } from '../../components/toast/toast';
 import api from '../../api';
 
-function Profile() {
+function ProfileButton() {
     const { setAuth } = useAuth();
     const toast = useToast();
     const [dropdownAnchor, setDropdownAnchor] = useState<null | HTMLElement>(null);
@@ -44,7 +44,7 @@ function Profile() {
         <div className="profile-container">
             <button className='profile-button' onClick={handleClick}></button>
             <Dropdown anchor={dropdownAnchor as HTMLElement} open={dropdownAnchor !== null} onClose={handleClose} >
-                <DropdownItem text={'Settings'} icon={settings} onClick={handleClose}/>
+                <DropdownItem text={'Settings'} icon={settings} to='settings' onClick={handleClose}/>
                 <DropdownItem text={'Light mode'} icon={light}/>
                 <DropdownItem className='logout' text={'Logout'} icon={logoutIcon} onClick={logoutUser}/>
             </Dropdown>
@@ -52,4 +52,4 @@ function Profile() {
     )
 }
 
-export default Profile
+export default ProfileButton
